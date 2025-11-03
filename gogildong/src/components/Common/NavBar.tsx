@@ -27,7 +27,7 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
   return (
     <div className="relative flex justify-center items-center">
       {/* 배경 바 */}
-      <div className="flex justify-center items-center w-80 h-[3.75rem] gap-[1.1875rem] shrink-0 rounded-[1.875rem] bg-white shadow-[0_0_12px_rgba(0,0,0,0.1)]">
+      <div className="flex justify-center items-center w-80 h-15 gap-4.75 shrink-0 rounded-[1.875rem] bg-white shadow-[0_0_12px_rgba(0,0,0,0.1)]">
         {/* 홈 */}
         <div
           className="relative grid place-items-center cursor-pointer"
