@@ -1,14 +1,16 @@
 // src/Home/Home.tsx
 import React from "react";
-import NavBar from "../../components/Common/NavBar";
-import type { NavKey } from "../../components/Common/NavBar"; // 👈 타입 전용 import
+import NavBar from "../../common/components/NavBar";
+import type { NavKey } from "../../common/components/NavBar";
 
 function Home() {
   const [active, setActive] = React.useState<NavKey>("home");
 
   return (
-    <div className="w-91 h-223 flex flex-col justify-end items-center pb-10 bg-slate-100">
-      <NavBar active={active} onChange={setActive} />
+    <div className="flex flex-col justify-end items-center">
+      <div className="fixed bottom-6 left-[1.38rem] right-[1.38rem] z-50">
+        <NavBar active={active} onChange={setActive} />
+      </div>
     </div>
   );
 }

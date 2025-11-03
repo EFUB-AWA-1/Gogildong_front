@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import iconHome from "../../assets/Common/icon_home.svg";
 import iconBoard from "../../assets/Common/icon_board.svg";
 import iconCamera from "../../assets/Common/icon_camera.svg";
@@ -21,7 +23,11 @@ const ICONS: Record<NavKey, string> = {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
-  const handleClick = (key: NavKey) => () => onChange?.(key);
+  const navigate = useNavigate();
+  const handleClick = (key: NavKey) => () => {
+    onChange?.(key);
+    if (key === "home") navigate("/home");
+  };
   const isActive = (key: NavKey) => active === key;
 
   return (
@@ -30,13 +36,13 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
       <div className="flex justify-center items-center w-80 h-15 gap-4.75 shrink-0 rounded-[1.875rem] bg-white shadow-[0_0_12px_rgba(0,0,0,0.1)]">
         {/* 홈 */}
         <div
-          className="relative grid place-items-center cursor-pointer"
+          className="relative grid place-items-center cursor-pointer mr-4"
           onClick={handleClick("home")}
         >
           <img
             src={ICONS.home}
             alt="home"
-            className={`w-7 h-7  ${
+            className={`w-7 h-7 ${
               isActive("home") ? "opacity-100" : "opacity-40"
             } `}
           />
@@ -83,7 +89,7 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
 
         {/* 마이페이지 */}
         <div
-          className="relative grid place-items-center cursor-pointer"
+          className="relative grid place-items-center cursor-pointer ml-4"
           onClick={handleClick("mypage")}
         >
           <img
