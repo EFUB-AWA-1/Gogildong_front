@@ -1,7 +1,7 @@
 // src/Home/Home.tsx
 import React from "react";
-import NavBar from "../components/Common/NavBar";
-import type { NavKey } from "../components/Common/NavBar"; // 👈 타입 전용 import
+import NavBar from "../../components/Common/NavBar";
+import type { NavKey } from "../../components/Common/NavBar"; // 👈 타입 전용 import
 
 function Home() {
   const [active, setActive] = React.useState<NavKey>("home");
