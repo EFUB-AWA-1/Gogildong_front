@@ -1,4 +1,4 @@
-import DisabilityIcon from '../assets/disability.svg?react';
+import DisabilityIcon from '../assets/svgs/disability.svg?react';
 
 interface ReportCardProps {
   title: string;

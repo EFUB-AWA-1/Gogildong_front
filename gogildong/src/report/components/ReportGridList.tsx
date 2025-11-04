@@ -26,10 +26,16 @@ export default function ReportGridList() {
       location: '엘리베이터 옆',
       isDisability: true,
     },
+    {
+      title: '1-E',
+      date: '25.09.21',
+      location: '엘리베이터 옆',
+      isDisability: true,
+    },
   ];
 
   return (
-    <div className='grid w-full gap-4 grid-cols-2'>
+    <div className='grid w-full gap-4 grid-cols-2 '>
       {reports.map((r) => (
         <ReportCard
           key={r.title}
