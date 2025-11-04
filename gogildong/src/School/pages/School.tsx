@@ -4,7 +4,7 @@ import ReportGridList from '../components/ReportGridList';
 import LocationTab from '../components/LocationTab';
 import SchoolInfo from '../components/SchoolInfo';
 import ewha from '../assets/imgs/ewha.png';
-import ActionButton from '../../common/components/ActionButton';
+import ActionButton from '@/common/components/ActionButton';
 
 export default function School() {
   const [selectedTab, setSelectedTab] = useState('화장실');
