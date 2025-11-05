@@ -11,12 +11,24 @@ export default function PhotoReport() {
   useEffect(() => {
     const localVideoRef = videoRef.current;
 
+    const constraints = {
+      audio: false,
+      video: {
+        facingMode: { ideal: 'environment' },
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      },
+    };
+
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia(constraints)
       .then((stream) => {
         if (localVideoRef) localVideoRef.srcObject = stream;
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error('카메라 접근 오류:', err);
+        alert('카메라를 사용할 수 없습니다. 브라우저 권한을 확인해주세요.');
+      });
 
     return () => {
       if (localVideoRef?.srcObject) {
