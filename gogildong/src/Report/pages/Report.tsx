@@ -11,7 +11,14 @@ import Step3 from './steps/Step3';
 export default function Report() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  const handleNext = () => setStep((prev) => Math.min(prev + 1, 3));
+  const handleNext = () => {
+    if (step === 3) {
+      navigate('/school/report/camera');
+    } else {
+      setStep((prev) => Math.min(prev + 1, 3));
+    }
+  };
+
   const handlePrev = () => {
     if (step === 0) navigate(-1);
     else setStep((prev) => prev - 1);
