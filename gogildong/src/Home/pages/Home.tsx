@@ -2,7 +2,6 @@ import React from "react";
 import NavBar from "../../common/components/NavBar";
 import type { NavKey } from "../../common/components/NavBar";
 import SearchBar from "../components/SearchBar";
-import InfoRequestHeader from "../components/InfoRequestHeader";
 
 export default function Home() {
   const [active, setActive] = React.useState<NavKey>("home");
