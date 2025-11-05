@@ -1,4 +1,3 @@
-import React from "react";
 import InfoRequestHeader from "../components/InfoRequestHeader";
 
 export default function InfoRequest() {

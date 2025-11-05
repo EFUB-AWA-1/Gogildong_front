@@ -1,4 +1,3 @@
-import React from "react";
 import iconBack from "../../assets/Home/icon_back.svg";
 
 export default function InfoRequestHeader() {
