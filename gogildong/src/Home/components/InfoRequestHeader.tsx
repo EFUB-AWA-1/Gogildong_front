@@ -1,5 +1,5 @@
 import React from "react";
-import iconBack from "../../assets/Common/icon_back.svg";
+import iconBack from "../../assets/Home/icon_back.svg";
 
 export default function InfoRequestHeader() {
   const handleBack = () => {

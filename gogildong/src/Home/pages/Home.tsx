@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className="flex flex-col justify-end items-center">
       <div className="fixed top-18 z-50">
-        <SearchBar />
+        <SearchBar variant="home" />
       </div>
       <div className="fixed bottom-6 left-[1.38rem] right-[1.38rem] z-50">
         <NavBar active={active} onChange={setActive} />
