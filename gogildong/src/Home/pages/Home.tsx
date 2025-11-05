@@ -1,10 +1,10 @@
-// src/Home/Home.tsx
 import React from "react";
 import NavBar from "../../common/components/NavBar";
 import type { NavKey } from "../../common/components/NavBar";
 import SearchBar from "../components/SearchBar";
+import InfoRequestHeader from "../components/InfoRequestHeader";
 
-function Home() {
+export default function Home() {
   const [active, setActive] = React.useState<NavKey>("home");
 
   return (
@@ -18,5 +18,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;
