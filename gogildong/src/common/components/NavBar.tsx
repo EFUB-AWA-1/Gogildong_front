@@ -108,7 +108,7 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
       {/* 카메라 */}
       <div
         onClick={handleClick("camera")}
-        className="absolute flex w-18 h-18 p-4.5 items-center justify-center gap-2 shrink-0 
+        className="absolute flex w-18 h-18 p-4.5 cursor-pointer items-center justify-center gap-2 shrink-0 
         rounded-full bg-[#AAEB2F] shadow-[0_0_12px_rgba(0,0,0,0.25)] active:scale-95 transition-transform"
       >
         <img src={ICONS.camera} alt="camera" className="w-8.5 h-8.5" />
