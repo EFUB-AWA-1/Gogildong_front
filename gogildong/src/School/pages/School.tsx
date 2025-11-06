@@ -5,10 +5,16 @@ import LocationTab from '../components/LocationTab';
 import SchoolInfo from '../components/SchoolInfo';
 import ewha from '../assets/imgs/ewha.png';
 import ActionButton from '@/common/components/ActionButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function School() {
+  const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState('화장실');
   const [selectedFloor, setSelectedFloor] = useState('본관 1층');
+
+  const handleReportClick = () => {
+    navigate('/school/report');
+  };
 
   return (
     <div className='bg-gray-10  w-full flex flex-col items-center '>
@@ -32,7 +38,7 @@ export default function School() {
         </div>
       </section>
       <div className='w-full p-4 fixed bottom-0 bg-gray-10'>
-        <ActionButton label='제보하기' />
+        <ActionButton label='제보하기' onClick={handleReportClick} />
       </div>
     </div>
   );
