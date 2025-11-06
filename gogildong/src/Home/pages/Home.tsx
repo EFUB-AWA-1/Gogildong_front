@@ -64,15 +64,6 @@ export default function Home() {
     } else if (markerPositions.length > 1) {
       map.setBounds(bounds);
     }
-    {
-      /*}
-    const marker = new kakao.maps.Marker({
-      position: markerPosition,
-      image: markerImage,
-    });
-
-    marker.setMap(map);*/
-    }
   }, []);
 
   return (
