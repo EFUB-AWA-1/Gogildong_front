@@ -15,8 +15,8 @@ const { kakao } = window;
 
 export default function Home() {
   const [active, setActive] = React.useState<NavKey>("home");
-
   const mapRef = useRef(null);
+  const markersRef = useRef<(any | undefined)[]>([]);
 
   useEffect(() => {
     const position = new kakao.maps.LatLng(37.5618588, 126.9468339);
@@ -33,38 +33,101 @@ export default function Home() {
       { offset: new kakao.maps.Point(24, 24) }
     );
 
-    const bounds = new kakao.maps.LatLngBounds();
-
     const markerPositions = [
       {
-        title: "이화여자대학교부속초등학교",
-        lat: 37.5611732,
-        lng: 126.9428198,
+        title: "이화여자대학교",
+        lat: 37.56446452,
+        lng: 126.9502888,
       },
       {
-        title: "세브란스병원",
-        lat: 37.5623371,
-        lng: 126.9408692,
+        title: "이화초등학교",
+        lat: 35.66117868,
+        lng: 129.344286,
+      },
+      {
+        title: "이화여자대학교사범대학부속이화금란고등학교",
+        lat: 37.56638886,
+        lng: 126.9473028,
+      },
+      {
+        title: "이화초등학교",
+        lat: 36.15098525,
+        lng: 127.0719047,
+      },
+      {
+        title: "이화여자고등학교",
+        lat: 37.56617664,
+        lng: 126.9713244,
+      },
+      {
+        title: "이화중학교",
+        lat: 35.65832707,
+        lng: 129.3391358,
+      },
+      {
+        title: "이화여자대학교사범대학부속초등학교",
+        lat: 37.56115022,
+        lng: 126.9427504,
+      },
+      {
+        title: "이화여자외국어고등학교",
+        lat: 37.56557732,
+        lng: 126.9696417,
+      },
+      {
+        title: "이화여자대학교병설미디어고등학교",
+        lat: 37.6031324,
+        lng: 127.1053324,
+      },
+      {
+        title: "이화여자대학교사범대학부속이화·금란중학교",
+        lat: 37.56264282,
+        lng: 126.9444886,
+      },
+      {
+        title: "평택이화초등학교",
+        lat: 37.00356166,
+        lng: 127.1082237,
+      },
+      {
+        title: "서울대신초등학교",
+        lat: 37.55795026,
+        lng: 126.9480572,
       },
     ];
 
-    markerPositions.forEach((data) => {
-      const pos = new kakao.maps.LatLng(data.lat, data.lng);
-      new kakao.maps.Marker({
-        map: map,
-        position: pos,
-        title: data.title,
-        image: markerImage,
-      });
-      bounds.extend(pos);
-    });
+    const updateMarkersInView = () => {
+      const bounds = map.getBounds();
+      markerPositions.forEach((data, idx) => {
+        const pos = new kakao.maps.LatLng(data.lat, data.lng);
+        const inView = bounds.contain(pos);
+        const existing = markersRef.current[idx];
 
-    if (markerPositions.length === 1) {
-      const { lat, lng } = markerPositions[0];
-      map.panTo(new kakao.maps.LatLng(lat, lng));
-    } else if (markerPositions.length > 1) {
-      map.setBounds(bounds);
-    }
+        if (inView && !existing) {
+          const marker = new kakao.maps.Marker({
+            map,
+            position: pos,
+            title: data.title,
+            image: markerImage,
+          });
+          markersRef.current[idx] = marker;
+        } else if (!inView && existing) {
+          existing.setMap(null);
+          markersRef.current[idx] = undefined;
+        }
+      });
+    };
+
+    // 초기 1회 적용
+    kakao.maps.event.addListener(map, "tilesloaded", updateMarkersInView);
+    // 이동/확대/축소 후 갱신
+    kakao.maps.event.addListener(map, "idle", updateMarkersInView);
+
+    return () => {
+      kakao.maps.event.removeListener(map, "tilesloaded", updateMarkersInView);
+      kakao.maps.event.removeListener(map, "idle", updateMarkersInView);
+      markersRef.current.forEach((m) => m && m.setMap(null));
+    };
   }, []);
 
   return (
