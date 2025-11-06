@@ -3,6 +3,7 @@ import NavBar from "../../common/components/NavBar";
 import type { NavKey } from "../../common/components/NavBar";
 import SearchBar from "../components/SearchBar";
 import customMarker from "../assets/icon_marker.svg";
+import BottomSheet from "../components/BottomSheet";
 
 declare global {
   interface Window {
@@ -72,6 +73,9 @@ export default function Home() {
         <SearchBar variant="home" />
       </div>
       <div ref={mapRef} className="w-full h-screen"></div>
+      <div>
+        <BottomSheet />
+      </div>
       <div className="fixed bottom-6 left-[1.38rem] right-[1.38rem] z-50">
         <NavBar active={active} onChange={setActive} />
       </div>
