@@ -23,7 +23,7 @@ export default function Home() {
       level: 3,
     };
 
-    const map = new kakao.maps.Map(mapRef.current, options);
+     new kakao.maps.Map(mapRef.current, options);
   }, []);
 
   return (
