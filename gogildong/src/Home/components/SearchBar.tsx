@@ -1,8 +1,8 @@
 import React from "react";
-import iconSearch from "../../assets/Home/icon_search.svg";
-import Logo from "../../assets/Home/logo.svg";
-import iconSdelete from "../../assets/Home/icon_sdelete.svg";
-import iconBack from "../../assets/Home/icon_back.svg";
+import iconSearch from "../assets/icon_search.svg";
+import Logo from "../assets/logo.svg";
+import iconSdelete from "../assets/icon_sdelete.svg";
+import iconBack from "../../assets/backIcon.svg";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -43,18 +43,18 @@ const SearchBar: React.FC<Props> = ({
   return (
     <div
       className="flex justify-between items-center shrink-0 
-                 w-[20.75rem] h-12 px-2 
+                 w-83 h-12 px-2 
                  rounded-[1.25rem] 
-                 bg-(--color-white) 
+                 bg-white 
                  shadow-[0_0_12px_rgba(0,0,0,0.10)]"
     >
-      {/*로고*/}
+      {/*로고 및 뒤로가기*/}
       {variant === "detail" ? (
         <img
           src={iconBack}
           alt="back"
           onClick={handleBack}
-          className="w-11 h-11 shrink-0 cursor-pointer"
+          className="w-11 h-11 shrink-0 cursor-pointer mr-2"
         />
       ) : (
         <img src={Logo} alt="logo" className="w-11 h-11 mr-2" />
@@ -72,7 +72,7 @@ const SearchBar: React.FC<Props> = ({
         autoFocus={variant === "detail"}
         className="w-50 mx-2 text-left shrink-0
                    text-body-md font-medium leading-6
-                   text-(--color-black) placeholder-(--color-gray-60)
+                   text-black placeholder-gray-60
                    font-[Pretendard Variable] 
                    bg-transparent outline-none"
       />

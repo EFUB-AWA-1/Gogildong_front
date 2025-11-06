@@ -1,12 +1,12 @@
-import iconBack from "../../assets/Home/icon_back.svg";
+import iconBack from "../../assets/backIcon.svg";
 
 export default function InfoRequestHeader() {
   const handleBack = () => {
-    window.history.back(); // 나중에 navigate("/InfoRequest")로 교체해야할 수도..? 일단 해보고 수정
+    window.history.back();
   };
 
   return (
-    <div className="flex flex-row w-91 h-30 min-w-2 p-4 justify-between items-end shrink-0">
+    <div className="flex flex-row w-full h-30 min-w-2 p-4 j items-end shrink-0">
       <div className="flex w-full items-center justify-between">
         <img
           src={iconBack}
