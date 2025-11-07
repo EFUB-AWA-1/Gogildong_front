@@ -3,9 +3,10 @@ import Header from '@/common/components/Header';
 import ActionButton from '@/common/components/ActionButton';
 
 export default function PhotoReport() {
-  const [status, setStatus] = useState<'capture' | 'processing' | 'failed'>(
-    'capture'
-  );
+  const [status, setStatus] = useState<
+    'capture' | 'processing' | 'captured' | 'failed'
+  >('capture');
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -49,10 +50,12 @@ export default function PhotoReport() {
     const ctx = canvas.getContext('2d');
     ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+    const imageData = canvas.toDataURL('image/png');
+    setCapturedImage(imageData);
+
     setTimeout(() => {
-      const success = Math.random() > 0.5;
-      setStatus(success ? 'capture' : 'failed');
-    }, 2000);
+      setStatus('captured');
+    }, 1000);
   };
 
   return (
@@ -61,31 +64,35 @@ export default function PhotoReport() {
 
       <div className='flex-1 w-full flex flex-col justify-center items-center mt-16'>
         {status === 'capture' && (
-          <div className='relative flex flex-col items-center'>
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border-[3px] border-neon-100 object-cover bg-black'
-            />
-          </div>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border-[3px] border-neon-100 object-cover bg-black'
+          />
         )}
 
         {status === 'processing' && (
-          <div className='flex flex-col items-center justify-center'>
-            <div className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border border-neon-60 flex flex-col justify-center items-center whitespace-nowrap'>
-              <p className='text-neon-100 text-body-bold-md mb-2 '>
-                인식 중...
-              </p>
-              <div className='w-1/2 h-0.5 bg-neon-100 animate-pulse' />
-            </div>
+          <div className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border border-neon-60 flex flex-col justify-center items-center whitespace-nowrap'>
+            <p className='text-neon-100 text-body-bold-md mb-2'>인식 중...</p>
+            <div className='w-1/2 h-0.5 bg-neon-100 animate-pulse' />
+          </div>
+        )}
+
+        {status === 'captured' && capturedImage && (
+          <div className='relative flex flex-col items-center'>
+            <img
+              src={capturedImage}
+              alt='촬영된 이미지'
+              className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border-[3px] border-neon-100 object-cover'
+            />
           </div>
         )}
 
         {status === 'failed' && (
           <div className='flex flex-col items-center justify-center'>
-            <div className='w-[80%] max-w-xs aspect-9/16 rounded-2xl border border-neon-60 flex flex-col justify-center items-center'>
+            <div className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border border-neon-60 flex flex-col justify-center items-center'>
               <p className='text-neon-100 text-body-bold-md mb-2'>인식 실패</p>
               <p className='text-white text-body-sm text-center leading-tight'>
                 가이드에 맞춰 <br /> 다시 촬영해 주세요
@@ -94,6 +101,7 @@ export default function PhotoReport() {
           </div>
         )}
       </div>
+
 
       <div className='w-full fixed bottom-8 flex justify-center items-center'>
         {status === 'capture' && (
@@ -107,6 +115,13 @@ export default function PhotoReport() {
           <ActionButton
             label='다시 촬영하기'
             onClick={() => setStatus('capture')}
+          />
+        )}
+
+        {status === 'captured' && (
+          <ActionButton
+            label='다음'
+            onClick={() => console.log('다음 단계로 이동')}
           />
         )}
       </div>
