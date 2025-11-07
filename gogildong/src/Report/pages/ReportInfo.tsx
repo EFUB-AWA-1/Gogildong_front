@@ -40,7 +40,7 @@ export default function ReportInfo() {
             <p className='border border-gray-40 rounded-xl px-2 py-1 inline-block'>
               <input
                 className='text-center outline-none bg-transparent'
-                type='number'
+                type='tel'
                 ref={widthInputRef}
                 value={width}
                 onChange={(e) => setWidth(e.target.value)}
@@ -56,7 +56,7 @@ export default function ReportInfo() {
             <p className='border border-gray-40 rounded-xl px-2 py-1 inline-block'>
               <input
                 className='text-center outline-none bg-transparent'
-                type='number'
+                type='tel'
                 ref={heightInputRef}
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
