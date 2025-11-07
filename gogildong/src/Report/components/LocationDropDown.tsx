@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import DownIcon from '@/Report/assets/svgs/down.svg?react';
+import { useState } from "react";
+import DownIcon from "@/Report/assets/svgs/down.svg?react";
 
 interface LocationDropDownProps {
   label?: string; // 선택 전에 표시할 레이블링
@@ -14,22 +14,21 @@ export default function LocationDropDown({
   options,
   value,
   onChange,
-  disabled = true,
+  disabled = true
 }: LocationDropDownProps) {
   const [open, setOpen] = useState(false);
   return (
-    <div className='relative '>
+    <div className="relative w-full">
       <button
         disabled={disabled}
         onClick={() => !disabled && setOpen((prev) => !prev)}
-        className={`flex justify-between items-center border border-gray-40 rounded-[1.25rem] py-[18px] pl-[37px] pr-[13px] transition
-          ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}
-        `}>
+        className={`z-50 flex w-full flex-1 items-center justify-between rounded-[1.25rem] border border-gray-40 py-[18px] pr-[13px] pl-[37px] whitespace-nowrap transition ${disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer"} `}
+      >
         <span>{value || label}</span>
         <DownIcon />
       </button>
       {open && (
-        <ul className='absolute z-10 top-14 w-full border-x border-gray-20 rounded-b-xl shadow-md'>
+        <ul className="border-gray-30 animate-fadeIn absolute top-[calc(100%+4px)] left-0 z-10 w-full overflow-hidden rounded-2xl border bg-white shadow-lg">
           {options.map((opt) => (
             <li
               key={opt}
@@ -37,7 +36,8 @@ export default function LocationDropDown({
                 onChange(opt);
                 setOpen(false);
               }}
-              className='px-4 py-3 '>
+              className="px-4 py-3"
+            >
               {opt}
             </li>
           ))}

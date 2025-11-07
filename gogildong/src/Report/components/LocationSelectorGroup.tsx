@@ -50,7 +50,7 @@ export default function LocationSelectorGroup({
   };
 
   return (
-    <div className='flex justify-center gap-4 mt-2'>
+    <div className='flex flex-1 w-full justify-around gap-4 mt-2'>
       <LocationDropDown
         label='건물'
         options={Object.keys(floorOptionsMap)}
