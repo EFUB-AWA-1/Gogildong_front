@@ -1,44 +1,73 @@
-import { useState } from 'react';
-import FloorSelector from '../components/FloorSelector';
-import ReportGridList from '../components/ReportGridList';
-import LocationTab from '../components/LocationTab';
-import SchoolInfo from '../components/SchoolInfo';
-import ewha from '../assets/imgs/ewha.png';
-import ActionButton from '@/common/components/ActionButton';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import FloorSelector from "../components/FloorSelector";
+import ReportGridList from "../components/ReportGridList";
+import LocationTab from "../components/LocationTab";
+import SchoolInfo from "../components/SchoolInfo";
+import ewha from "../assets/imgs/ewha.png";
+import ActionButton from "@/common/components/ActionButton";
+import { useNavigate, useParams } from "react-router-dom";
+import AccessRestricted from "@/Home/components/AccessRestricted";
+
+const dummyUser = {
+  userId: 1,
+  name: "이화 학생",
+  schoolId: 8026
+};
 
 export default function School() {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState('화장실');
-  const [selectedFloor, setSelectedFloor] = useState('본관 1층');
+  const { id } = useParams();
+  const viewingId = Number(id);
+  const [selectedTab, setSelectedTab] = useState("화장실");
+  const [selectedFloor, setSelectedFloor] = useState("본관 1층");
+
+  const isInternal = viewingId === dummyUser.schoolId;
 
   const handleReportClick = () => {
-    navigate('/school/report');
+    navigate("/school/report");
+  };
+  const handleRequestClick = () => {
+    navigate("/school/request");
   };
 
   return (
-    <div className='bg-gray-10  w-full flex flex-col items-center '>
+    <div
+      className={`flex min-h-screen w-full flex-col items-center pb-28 ${isInternal ? "bg-gray-10" : "bg-gray-20"}`}
+    >
       <SchoolInfo
         img={ewha}
-        name='이화여자대학교부속초등학교'
-        address='서울 서대문구 성산로 512'
-        description='설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명'
+        name="이화여자대학교부속초등학교"
+        address="서울 서대문구 성산로 512"
+        description="설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명"
       />
       <LocationTab
         selectedTab={selectedTab}
         onSelect={(location) => setSelectedTab(location)}
+        disabled={!isInternal}
       />
-      <section className='w-full flex flex-col items-center gap-[27px] px-[15px] mt-4 '>
+      <section className="mt-4 flex w-full flex-col items-center gap-[27px] px-[15px]">
         <FloorSelector
           selectedFloor={selectedFloor}
           onSelect={(floor) => setSelectedFloor(floor)}
+          disabled={!isInternal}
         />
-        <div className='flex flex-col w-full items-center mb-24 '>
-          <ReportGridList />
+        <div className="mb-24 flex w-full flex-col items-center">
+          {isInternal ? <ReportGridList /> : <AccessRestricted />}
         </div>
       </section>
-      <div className='w-full p-4 fixed bottom-0 bg-gray-10'>
-        <ActionButton label='제보하기' onClick={handleReportClick} />
+
+      <div
+        className={`sticky bottom-0 w-full p-4 ${
+          isInternal
+            ? "bg-gray-10"
+            : "bg-[linear-gradient(184deg,rgba(255,255,255,0)_24.88%,#fff_93.89%)]"
+        }`}
+      >
+        {isInternal ? (
+          <ActionButton label="제보하기" onClick={handleReportClick} />
+        ) : (
+          <ActionButton label="열람 신청" onClick={handleRequestClick} />
+        )}
       </div>
     </div>
   );

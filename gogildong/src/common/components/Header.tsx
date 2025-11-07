@@ -23,8 +23,8 @@ export default function Header({
 
   return (
     <header
-      className={`fixed top-0 grid grid-cols-3 items-center w-full px-4 py-2 ${
-        darkMode ? 'text-white' : 'text-black'
+      className={`sticky top-0 grid grid-cols-3 items-center w-full  px-4 py-2 ${
+        darkMode ? 'text-white' : 'text-black bg-white'
       }`}>
       {showBack && (
         <button
