@@ -1,11 +1,12 @@
-import { createBrowserRouter } from "react-router-dom";
-import MainLayout from "./common/layout/MainLayout";
-import Home from "./Home/pages/Home";
-import InfoRequest from "./Home/pages/InfoRequest";
-import SearchDetail from "./Home/pages/SearchDetail";
-import PhotoReport from "./Report/pages/PhotoReport";
-import Report from "./Report/pages/Report";
-import School from "./School/pages/School";
+import { createBrowserRouter } from 'react-router-dom';
+import MainLayout from './common/layout/MainLayout';
+import Home from './Home/pages/Home';
+import InfoRequest from './Home/pages/InfoRequest';
+import SearchDetail from './Home/pages/SearchDetail';
+import PhotoReport from './Report/pages/PhotoReport';
+import Report from './Report/pages/Report';
+import School from './School/pages/School';
+import ReportInfo from './Report/pages/ReportInfo';
 
 const router = createBrowserRouter([
   {
@@ -21,8 +22,9 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: "/school/report", element: <Report /> },
-  { path: "/school/report/camera", element: <PhotoReport /> },
+  { path: '/school/report', element: <Report /> },
+  { path: '/school/report/camera', element: <PhotoReport /> },
+  { path: '/school/report/info', element: <ReportInfo /> },
 ]);
 
 export default router;

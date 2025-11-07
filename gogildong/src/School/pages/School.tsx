@@ -11,7 +11,7 @@ import AccessRestricted from "@/Home/components/AccessRestricted";
 const dummyUser = {
   userId: 1,
   name: "이화 학생",
-  schoolId: 8026,
+  schoolId: 8026
 };
 
 export default function School() {
@@ -32,8 +32,7 @@ export default function School() {
 
   return (
     <div
-      className={`w-full flex flex-col items-center min-h-screen pb-28
-        ${isInternal ? "bg-gray-10" : "bg-gray-20"}`}
+      className={`flex min-h-screen w-full flex-col items-center pb-28 ${isInternal ? "bg-gray-10" : "bg-gray-20"}`}
     >
       <SchoolInfo
         img={ewha}
@@ -46,19 +45,19 @@ export default function School() {
         onSelect={(location) => setSelectedTab(location)}
         disabled={!isInternal}
       />
-      <section className="w-full flex flex-col items-center gap-[27px] px-[15px] mt-4 ">
+      <section className="mt-4 flex w-full flex-col items-center gap-[27px] px-[15px]">
         <FloorSelector
           selectedFloor={selectedFloor}
           onSelect={(floor) => setSelectedFloor(floor)}
           disabled={!isInternal}
         />
-        <div className="flex flex-col w-full items-center mb-24 ">
+        <div className="mb-24 flex w-full flex-col items-center">
           {isInternal ? <ReportGridList /> : <AccessRestricted />}
         </div>
       </section>
 
       <div
-        className={`w-full p-4 fixed bottom-0 ${
+        className={`sticky bottom-0 w-full p-4 ${
           isInternal
             ? "bg-gray-10"
             : "bg-[linear-gradient(184deg,rgba(255,255,255,0)_24.88%,#fff_93.89%)]"
