@@ -95,7 +95,6 @@ export default function BottomSheet({
         <BottomSheetContent
           schools={filteredSchools}
           onToggleLike={onToggleLike}
-          selectedFilter={selectedFilter}
         />
       </div>
     </div>
