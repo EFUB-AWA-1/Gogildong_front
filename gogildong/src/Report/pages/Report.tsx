@@ -50,11 +50,11 @@ export default function Report() {
         darkMode={step !== 0}
       />
 
-      <div className='w-full my-20 flex flex-1 justify-center items-center'>
+      <div className='w-full flex flex-1 justify-center items-center'>
         {renderStep()}
       </div>
 
-      <div className='w-full fixed bottom-0 px-6 py-4'>
+      <div className='w-full sticky bottom-0 px-6 py-4'>
         <ActionButton label={buttonLabel} onClick={handleNext} />
       </div>
     </div>

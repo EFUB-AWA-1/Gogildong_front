@@ -37,7 +37,7 @@ export default function School() {
           <ReportGridList />
         </div>
       </section>
-      <div className='w-full p-4 fixed bottom-0 bg-gray-10'>
+      <div className='w-full p-4 sticky bottom-0 bg-gray-10'>
         <ActionButton label='제보하기' onClick={handleReportClick} />
       </div>
     </div>
