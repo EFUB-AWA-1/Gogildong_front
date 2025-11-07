@@ -44,6 +44,7 @@ export default function School() {
       <LocationTab
         selectedTab={selectedTab}
         onSelect={(location) => setSelectedTab(location)}
+        disabled={!isInternal}
       />
       <section className="w-full flex flex-col items-center gap-[27px] px-[15px] mt-4 ">
         <FloorSelector
