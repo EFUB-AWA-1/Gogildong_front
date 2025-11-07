@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ActionButton from '@/common/components/ActionButton';
 
-import Step0 from './steps/Step0';
-import Step1 from './steps/Step1';
-import Step2 from './steps/Step2';
-import Step3 from './steps/Step3';
+import Step0 from '../components/steps/Step0';
+import Step1 from '../components/steps/Step1';
+import Step2 from '../components/steps/Step2';
+import Step3 from '../components/steps/Step3';
 
 export default function Report() {
   const navigate = useNavigate();
