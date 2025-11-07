@@ -10,14 +10,14 @@ import ReportInfo from './Report/pages/ReportInfo';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <MainLayout />,
     children: [
-      { path: '/home', element: <Home /> },
-      { path: '/request', element: <InfoRequest /> },
-      { path: '/search', element: <SearchDetail /> },
+      { path: "/home", element: <Home /> },
+      { path: "/school/request", element: <InfoRequest /> },
+      { path: "/search", element: <SearchDetail /> },
       {
-        path: '/school',
+        path: "/school/:id",
         element: <School />,
       },
     ],

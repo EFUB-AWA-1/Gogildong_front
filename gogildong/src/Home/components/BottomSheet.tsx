@@ -1,9 +1,27 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import FilterSelector from "./FilterSelector";
 import BottomSheetContent from "./BottomSheetContent";
 import { useBottomSheet } from "../hooks/useBottomSheet";
 
-export default function BottomSheet() {
+export type School = {
+  schoolId: number;
+  schoolName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  tag: string[];
+  bookmarked: boolean;
+};
+
+type BottomSheetProps = {
+  schools: School[];
+  onToggleLike?: (id: number, liked: boolean) => void;
+};
+
+export default function BottomSheet({
+  schools,
+  onToggleLike,
+}: BottomSheetProps) {
   const [selectedFilter, setSelectedFilter] = useState("전체");
 
   const {
@@ -16,6 +34,16 @@ export default function BottomSheet() {
     onHandleTouchStart,
     toggle,
   } = useBottomSheet(35, 11);
+
+  const filteredSchools = useMemo(() => {
+    // '전체'이면 그대로 반환
+    if (!selectedFilter || selectedFilter === "전체") return schools;
+
+    // 일반 태그 필터: 해당 태그를 포함한 학교만
+    return schools.filter(
+      (s) => Array.isArray(s.tag) && s.tag.includes(selectedFilter)
+    );
+  }, [schools, selectedFilter]);
 
   return (
     <div
@@ -50,7 +78,8 @@ export default function BottomSheet() {
       >
         <div className=" w-18 h-1 rounded-sm bg-[#E4E4E4]" />
       </div>
-      <div className="w-full flex flex-col items-center gap-[27px] px-[15px]  ">
+
+      <div className="w-full flex flex-col items-center gap-[27px] px-[15px] ">
         <FilterSelector
           selectedFilter={selectedFilter}
           onSelect={(filter) => setSelectedFilter(filter)}
@@ -59,11 +88,14 @@ export default function BottomSheet() {
 
       <div
         ref={contentRef}
-        className={`w-full flex-1 px-4 py-3 ${
+        className={`mt-4 w-full flex-1 px-4 py-2 pb-30 ${
           isOpen ? "overflow-auto" : "overflow-hidden"
         }`}
       >
-        <BottomSheetContent />
+        <BottomSheetContent
+          schools={filteredSchools}
+          onToggleLike={onToggleLike}
+        />
       </div>
     </div>
   );
