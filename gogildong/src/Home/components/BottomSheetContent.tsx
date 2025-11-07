@@ -24,6 +24,7 @@ export default function BottomSheetContent({
         {schools.map((s) => (
           <SchoolCard
             key={s.schoolId}
+            schoolId={s.schoolId}
             schoolName={s.schoolName}
             address={s.address}
             defaultBookmarked={s.bookmarked}

@@ -6,7 +6,7 @@ import Tag from "./Tag";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-  schoolId?: number;
+  schoolId: number;
   schoolName: string;
   address: string;
   defaultBookmarked?: boolean;
@@ -39,8 +39,7 @@ export default function SchoolCard({
   };
 
   const handleCardClick = () => {
-    if (schoolId) navigate(`/school/${schoolId}`);
-    else navigate(`/school`);
+    navigate(`/school/${schoolId}`);
   };
 
   return (
