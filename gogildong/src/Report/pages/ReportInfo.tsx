@@ -1,9 +1,9 @@
 import Header from '@/common/components/Header';
-import { useLocation } from 'react-router-dom';
 import SampleImg from '@/Report/assets/imgs/img_sample.png';
 import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 import { useEffect, useRef, useState } from 'react';
-import LocationDropDown from '../components/LocationDropDown';
+import { useLocation } from 'react-router-dom';
+import LocationSelectorGroup from '../components/LocationSelectorGroup';
 
 export default function ReportInfo() {
   const location = useLocation();
@@ -31,49 +31,11 @@ export default function ReportInfo() {
     }
   }, [width]);
 
-  const [formData, setFormData] = useState({
+  const [locationData, setLocationData] = useState({
     building: '',
     floor: '',
     facility: '',
   });
-
-  //*건물별로 층수 옵션을 매치
-  const floorOptionsMap: Record<string, string[]> = {
-    본관: ['1층', '2층', '3층'],
-    신관: ['지하 1층', '1층', '2층'],
-    체육관: ['1층'],
-  };
-
-  //*층별로 시설 옵션
-  const facilityOptionsMap: Record<string, string[]> = {
-    '1층': ['1-A', '1-B'],
-    '2층': ['1-C'],
-    '3층': ['1-D'],
-    '지하 1층': ['1-E'],
-  };
-
-  const handleBuildingChange = (val: string) => {
-    setFormData({
-      building: val,
-      floor: '',
-      facility: '',
-    });
-  };
-
-  const handleFloorChange = (val: string) => {
-    setFormData({
-      ...formData,
-      floor: val,
-      facility: '',
-    });
-  };
-
-  const handleFacilityChange = (val: string) => {
-    setFormData({
-      ...formData,
-      facility: val,
-    });
-  };
 
   return (
     <div className='bg-white '>
@@ -141,31 +103,7 @@ export default function ReportInfo() {
           이화여자대학교부속초등학교
         </div>
       </div>
-      <div className='flex justify-center gap-4 mt-2'>
-        <LocationDropDown
-          label='건물'
-          options={['본관', '신관', '체육관']}
-          value={formData.building}
-          onChange={handleBuildingChange}
-          disabled={false}
-        />
-
-        <LocationDropDown
-          label='층수'
-          options={floorOptionsMap[formData.building] || []}
-          value={formData.floor}
-          onChange={handleFloorChange}
-          disabled={!formData.building}
-        />
-
-        <LocationDropDown
-          label='시설'
-          options={facilityOptionsMap[formData.floor] || []}
-          value={formData.facility}
-          onChange={handleFacilityChange}
-          disabled={!formData.floor}
-        />
-      </div>
+      <LocationSelectorGroup onChange={setLocationData} />
     </div>
   );
 }
