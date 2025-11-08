@@ -1,0 +1,21 @@
+export interface FacilityDetail {
+  buildingName: string;
+  floorName: string;
+  facilityId: number;
+  facilityName: string;
+  facilityNiceName: string;
+  facilityType: string;
+  reviewSummary: string | null;
+  createdAt: string;
+}
+
+export type Gender = 'female' | 'male';
+export type DoorType = 'sliding' | 'hinged' | 'automatic';
+
+export interface FacilityInfo {
+  facilityDetail: FacilityDetail;
+  doorWidth: number;
+  gender: Gender;
+  isAccessible: boolean;
+  doorType: DoorType;
+}
