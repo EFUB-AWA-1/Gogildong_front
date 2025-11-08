@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import DisabilityIcon from "../assets/svgs/disability.svg?react";
 
 interface FacilityCardProps {
+  id: number;
   title: string;
   date: string;
   location: string;
@@ -8,13 +10,23 @@ interface FacilityCardProps {
 }
 
 export default function FacilityCard({
+  id,
   title,
   date,
   location,
   isDisability
 }: FacilityCardProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/school/facility/${id}`);
+  };
+
   return (
-    <div className="flex h-40 w-full flex-col justify-between rounded-xl bg-white px-3 py-2">
+    <div
+      onClick={handleClick}
+      className="flex h-40 w-full flex-col justify-between rounded-xl bg-white px-3 py-2"
+    >
       <div className="flex items-center justify-between">
         <p className="text-heading-lg text-black">{title}</p>
         {isDisability && <DisabilityIcon />}

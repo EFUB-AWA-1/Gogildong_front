@@ -8,7 +8,7 @@ import ReportSuccess from "../components/ReportSuccess";
 import ReportForm2 from "../components/ReportForm2";
 import ReportForm1 from "../components/ReportForm1";
 
-export default function ReportInfo() {
+export default function ReportFlow() {
   const [step, setStep] = useState(1);
   const [showAlert, setShowAlert] = useState(false);
   const [locationData, setLocationData] = useState({
