@@ -12,7 +12,7 @@ export default function Header({
   title,
   showBack = true,
   onBackClick,
-  darkMode = false,
+  darkMode = false
 }: HeaderProps) {
   const navigate = useNavigate();
 
@@ -23,21 +23,23 @@ export default function Header({
 
   return (
     <header
-      className={`sticky top-0 grid grid-cols-3 items-center w-full  px-4 py-2 ${
-        darkMode ? 'text-white' : 'text-black bg-white'
-      }`}>
+      className={`sticky top-0 grid h-14 w-full grid-cols-3 items-center px-4 py-2 ${
+        darkMode ? 'text-white' : 'bg-white text-black'
+      }`}
+    >
       {showBack && (
         <button
-          className='cursor-pointer'
+          className="cursor-pointer"
           onClick={handleBack}
-          aria-label='뒤로 가기'>
+          aria-label="뒤로 가기"
+        >
           <BackIcon
             className={darkMode ? '[&_path]:fill-white' : '[&_path]:fill-black'}
           />
         </button>
       )}
-      <div className='flex justify-center'>
-        <p className='text-body-bold-lg'>{title}</p>
+      <div className="flex justify-center">
+        <p className="text-body-bold-lg">{title}</p>
       </div>
     </header>
   );
