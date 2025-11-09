@@ -38,7 +38,6 @@ export default function School() {
         img={ewha}
         name="이화여자대학교부속초등학교"
         address="서울 서대문구 성산로 512"
-        description="설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명"
       />
       <LocationTab
         selectedTab={selectedTab}
