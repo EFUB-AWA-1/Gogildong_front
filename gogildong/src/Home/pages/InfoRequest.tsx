@@ -19,6 +19,7 @@ export default function InfoRequest() {
     [phone, purpose]
   );
 
+  //확인 팝업만 뜨게. (실제 제출x)
   const handleSubmit = () => {
     if (!isValid) return;
     setOpenPopup(true);
@@ -31,16 +32,16 @@ export default function InfoRequest() {
   };
 
   return (
-    <div className="relative flex flex-col justify-end items-center">
+    <div className="relative flex flex-col items-center justify-end">
       <div className="w-full">
         <InfoRequestHeader />
       </div>
-      <div className="w-full px-[1.37rem] mb-6">
+      <div className="mb-6 w-full px-[1.37rem]">
         <SmallSchoolCard />
       </div>
 
       {/*정보입력*/}
-      <div className="w-full px-[1.37rem] mt-6 pb-28 flex flex-col gap-[1.19rem]">
+      <div className="mt-6 flex w-full flex-col gap-[1.19rem] px-[1.37rem] pb-28">
         <RequestForm
           label="연락처"
           placeholder="예) 010-1234-5678"
@@ -57,7 +58,7 @@ export default function InfoRequest() {
         />
       </div>
 
-      <div className="w-full p-4 fixed bottom-0 ">
+      <div className="fixed bottom-0 w-full p-4">
         <ActionButton
           label="신청하기"
           onClick={handleSubmit}
