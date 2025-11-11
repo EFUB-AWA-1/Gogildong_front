@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 
-type ConfirmModalProps = {
+type SingleBtnModalProps = {
   open: boolean;
   title: string;
-  message: string;
-  confirmLabel?: string;
+  message?: string;
+  label?: string;
   onClose: () => void;
   onConfirm?: () => void;
 };
 
-export default function ConfirmModal({
+export default function SingleBtnModal({
   open,
   title,
   message,
-  confirmLabel = "확인",
+  label,
   onClose,
   onConfirm
-}: ConfirmModalProps) {
+}: SingleBtnModalProps) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     if (open) {
@@ -40,7 +40,7 @@ export default function ConfirmModal({
     >
       {/* 모달 카드 */}
       <div
-        className="flex w-75 flex-col items-center gap-4 rounded-[1.25rem] bg-white pt-5.25 pr-11 pb-5 pl-10.75 shadow-[0_0_12px_rgba(170,235,47,0.30)]"
+        className="flex w-75 flex-col items-center rounded-[1.25rem] bg-white pt-5.25 pr-11 pb-5 pl-10.75 shadow-[0_0_12px_rgba(170,235,47,0.30)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 제목+내용*/}
@@ -48,21 +48,39 @@ export default function ConfirmModal({
           <div className="w-full text-center text-[1.125rem] leading-6.75 font-bold text-black">
             {title}
           </div>
-          <div className="h-21 w-full text-center text-[0.875rem] leading-5.25 font-medium whitespace-pre-line text-black">
-            {message}
-          </div>
+          {message && (
+            <div className="h-21 w-full text-center text-[0.875rem] leading-5.25 font-medium whitespace-pre-line text-black">
+              {message}
+            </div>
+          )}
         </div>
 
         <button
-          className="flex h-9 w-18 cursor-pointer items-center justify-center rounded-[1.25rem] bg-neon-100 text-[0.875rem] leading-5.25 font-bold text-black"
+          className="flex h-9 cursor-pointer items-center justify-center self-stretch rounded-[1.25rem] bg-neon-100 text-[0.875rem] leading-5.25 font-bold text-black"
           onClick={() => {
             onConfirm?.();
             onClose();
           }}
         >
-          {confirmLabel}
+          {label}
         </button>
       </div>
     </div>
   );
+}
+
+{
+  /* 사용 
+
+
+    <SingleBtnModal
+        open={openPopup}
+        title="신고가 제출되었습니다"
+        message={"신고 3회 이상 누적 시 \n검토 후 게시글이 차단됩니다."}
+        label="확인"
+        onClose={() => setOpenPopup(false)}
+      />
+      
+      
+*/
 }
