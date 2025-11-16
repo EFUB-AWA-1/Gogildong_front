@@ -5,10 +5,14 @@ import InfoRequest from "./Home/pages/InfoRequest";
 import SearchDetail from "./Home/pages/SearchDetail";
 import PhotoReport from "./Report/pages/PhotoReport";
 import Report from "./Report/pages/Report";
-import School from "./School/pages/School";
 import ReportInfo from "./Report/pages/ReportInfo";
-import PhotoList from "./ReportView/pages/PhotoList";
 import PhotoDetail from "./ReportView/pages/PhotoDetail";
+import PhotoList from "./ReportView/pages/PhotoList";
+import School from "./School/pages/School";
+import SignupAdmin from "./Signup/pages/SignupAdmin";
+import SignupExternal from "./Signup/pages/SignupExternal";
+import SignupInternal from "./Signup/pages/SignupInternal";
+import SignupSelectRole from "./Signup/pages/SignupSelectRole";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +32,12 @@ const router = createBrowserRouter([
   },
   { path: "/school/report", element: <Report /> },
   { path: "/school/report/camera", element: <PhotoReport /> },
-  { path: "/school/report/info", element: <ReportInfo /> }
+  { path: "/school/report/info", element: <ReportInfo /> },
+
+  { path: "/signup", element: <SignupSelectRole /> },
+  { path: "/signup/admin", element: <SignupAdmin /> },
+  { path: "/signup/internal", element: <SignupInternal /> },
+  { path: "/signup/external", element: <SignupExternal /> }
 ]);
 
 export default router;
