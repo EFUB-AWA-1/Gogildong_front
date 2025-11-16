@@ -12,18 +12,8 @@ export default function SignupStepIndicator({
 }: SignupStepIndicatorProps) {
   const steps = Array.from({ length: totalSteps }, (_, index) => index + 1);
 
-  const getStepState = (step: number) => {
-    if (step < currentStep) return "complete";
-    if (step === currentStep) return "active";
-    return "upcoming";
-  };
-
   const getCircleClassName = (step: number) => {
-    const state = getStepState(step);
-    if (state === "complete") {
-      return "bg-neon-100 border-neon-100 text-black";
-    }
-    if (state === "active") {
+    if (step === currentStep) {
       return "bg-neon-100 border-neon-100 text-white";
     }
     return "bg-gray-10 border-gray-20 text-gray-40";
