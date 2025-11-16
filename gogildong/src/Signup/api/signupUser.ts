@@ -42,7 +42,7 @@ export const signupInternal = async (payload: SignupInternalRequest) => {
 
 export const signupExternal = async (payload: SignupBaseRequest) => {
   const { data } = await axiosInstance.post<SignupResponse>(
-    "users/signup/external",
+    "/users/signup/external",
     payload
   );
   return data;

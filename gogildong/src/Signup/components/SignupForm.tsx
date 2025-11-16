@@ -1,6 +1,11 @@
 import SignupTextField from "./SignupTextField";
 import ActionButton from "@/common/components/ActionButton";
 import { useState } from "react";
+import {
+  signupAdmin,
+  signupExternal,
+  signupInternal
+} from "../api/signupUser";
 
 interface SignupFormValues {
   id: string;
@@ -23,7 +28,9 @@ const INITIAL_VALUES: SignupFormValues = {
   name: "",
   phone: "",
   email: "",
-  emailCode: ""
+  emailCode: "",
+  schoolCode: "",
+  adminCode: ""
 };
 
 const REQUIRED_BY_ROLE = {
@@ -89,6 +96,7 @@ export default function SignupForm({
 }) {
   const [values, setValues] = useState(INITIAL_VALUES);
   const [errors, setErrors] = useState<SignupFormErrors>({});
+  const [submitting, setSubmitting] = useState(false);
 
   const requiredFields: (keyof SignupFormValues)[] = [
     ...BASE_REQUIRED_FIELDS,
@@ -127,10 +135,49 @@ export default function SignupForm({
     return validator ? Boolean(validator(values)) : false;
   });
 
-  const submitDisabled = hasEmptyRequired || hasValidationError;
+  const submitDisabled = hasEmptyRequired || hasValidationError || submitting;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const hasErrors = requiredFields.some((field) =>
+      Boolean(runValidation(field, values))
+    );
+    if (hasErrors) return;
+
+    const basePayload = {
+      loginId: values.id,
+      password: values.password,
+      username: values.name,
+      email: values.email,
+      phone: values.phone
+    };
+
+    try {
+      setSubmitting(true);
+      if (role === "admin") {
+        await signupAdmin({
+          ...basePayload,
+          schoolCode: values.schoolCode ?? "",
+          adminCode: values.adminCode ?? ""
+        });
+      } else if (role === "internal") {
+        await signupInternal({
+          ...basePayload,
+          schoolCode: values.schoolCode ?? ""
+        });
+      } else {
+        await signupExternal(basePayload);
+      }
+      console.log("signup success");
+    } catch (error) {
+      console.error("signup failed", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
-    <form className="flex flex-col gap-6">
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
       {/* 기본 필드들 */}
       <SignupTextField
         label="아이디"
@@ -231,7 +278,7 @@ export default function SignupForm({
         />
       )}
 
-      <ActionButton label="회원가입" disabled={submitDisabled} />
+      <ActionButton label="회원가입" type="submit" disabled={submitDisabled} />
     </form>
   );
 }
