@@ -5,10 +5,11 @@ import InfoRequest from "./Home/pages/InfoRequest";
 import SearchDetail from "./Home/pages/SearchDetail";
 import PhotoReport from "./Report/pages/PhotoReport";
 import Report from "./Report/pages/Report";
-import School from "./School/pages/School";
 import ReportInfo from "./Report/pages/ReportInfo";
-import PhotoList from "./ReportView/pages/PhotoList";
 import PhotoDetail from "./ReportView/pages/PhotoDetail";
+import PhotoList from "./ReportView/pages/PhotoList";
+import School from "./School/pages/School";
+import SignupSelectRole from "./Signup/pages/SignupSelectRole";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,9 @@ const router = createBrowserRouter([
   },
   { path: "/school/report", element: <Report /> },
   { path: "/school/report/camera", element: <PhotoReport /> },
-  { path: "/school/report/info", element: <ReportInfo /> }
+  { path: "/school/report/info", element: <ReportInfo /> },
+
+  { path: "/signup", element: <SignupSelectRole /> }
 ]);
 
 export default router;
