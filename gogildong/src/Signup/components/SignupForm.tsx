@@ -80,7 +80,7 @@ const validators: Partial<
       : "유효한 이메일 주소를 입력해 주세요.",
 
   emailCode: ({ emailCode }) =>
-    /^[0-9]{4,}$/.test(emailCode) ? "" : "유효한 이메일 코드입니다.",
+    /^[0-9]{4,}$/.test(emailCode) ? "" : "유효하지 않은 이메일 코드입니다.",
 
   schoolCode: ({ schoolCode }) =>
     !schoolCode?.trim() ? "학교 코드를 입력해 주세요." : "",
@@ -229,7 +229,7 @@ export default function SignupForm({
       <SignupTextField
         label="휴대폰 번호"
         type="tel"
-        placeholder="예) 010-0000-0000"
+        placeholder="예) 01012345678"
         value={values.phone}
         onChange={handleChange("phone")}
         error={Boolean(errors.phone)}
