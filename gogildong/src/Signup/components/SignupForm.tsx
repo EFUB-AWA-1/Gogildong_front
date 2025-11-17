@@ -2,6 +2,8 @@ import SignupTextField from "./SignupTextField";
 import ActionButton from "@/common/components/ActionButton";
 import { useState } from "react";
 import { signupAdmin, signupExternal, signupInternal } from "../api/signupUser";
+import EmailVerificationResendModal from "./modals/EmailVerificationResendModal";
+import EmailField from "./EmailField";
 
 interface SignupFormValues {
   id: string;
@@ -100,6 +102,8 @@ export default function SignupForm({
     Partial<Record<keyof SignupFormValues, boolean>>
   >({});
   const [submitting, setSubmitting] = useState(false);
+  const [emailRequested, setEmailRequested] = useState(false);
+  const [resendOpen, setResendOpen] = useState(false);
 
   const requiredFields: (keyof SignupFormValues)[] = [
     ...BASE_REQUIRED_FIELDS,
@@ -145,6 +149,19 @@ export default function SignupForm({
   };
   const submitDisabled = hasEmptyRequired || hasValidationError || submitting;
 
+  const handleEmailRequestClick = () => {
+    setTouched((prev) => ({ ...prev, email: true }));
+    const emailError = runValidation("email", values);
+    if (emailError) return;
+
+    if (!emailRequested) {
+      console.log("request verification email");
+      setEmailRequested(true);
+      return;
+    }
+    setResendOpen(true);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const hasErrors = requiredFields.some((field) =>
@@ -186,7 +203,6 @@ export default function SignupForm({
 
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-      {/* 기본 필드들 */}
       <SignupTextField
         label="아이디"
         placeholder="최소 6글자 이상"
@@ -236,26 +252,14 @@ export default function SignupForm({
         hint={errors.phone}
       />
 
-      <div className="flex items-end gap-[11px]">
-        <div className="flex-1">
-          <SignupTextField
-            label="이메일"
-            type="email"
-            placeholder="예) 123456@domain.com"
-            value={values.email}
-            onChange={handleChange("email")}
-            error={Boolean(errors.email)}
-            hint={errors.email}
-          />
-        </div>
-        <div className="w-fit shrink-0">
-          <ActionButton
-            label="인증 요청"
-            className="rounded-[1.25rem] px-4 py-4 text-body-sm"
-          />
-        </div>
-      </div>
-
+      <EmailField
+        value={values.email}
+        onChange={handleChange("email")}
+        hint={errors.email}
+        error={Boolean(errors.email)}
+        requested={emailRequested}
+        onRequestClick={handleEmailRequestClick}
+      />
       <SignupTextField
         label="이메일 확인"
         placeholder="인증 코드를 입력해 주세요."
@@ -288,6 +292,14 @@ export default function SignupForm({
       )}
 
       <ActionButton label="회원가입" type="submit" disabled={submitDisabled} />
+      <EmailVerificationResendModal
+        open={resendOpen}
+        onClose={() => setResendOpen(false)}
+        onConfirm={() => {
+          console.log("resend verification email");
+          setResendOpen(false);
+        }}
+      />
     </form>
   );
 }
