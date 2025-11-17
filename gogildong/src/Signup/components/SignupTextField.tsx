@@ -6,6 +6,7 @@ interface SignupTextFieldProps
   hint?: string;
   error?: boolean;
   onChange: (value: string) => void;
+  onBlur?: () => void;
 }
 
 export default function SignupTextField({
@@ -14,6 +15,7 @@ export default function SignupTextField({
   error = false,
   value,
   onChange,
+  onBlur,
   ...rest
 }: SignupTextFieldProps) {
   return (
@@ -23,6 +25,7 @@ export default function SignupTextField({
         {...rest}
         value={value}
         onChange={(event) => onChange(event.target.value)}
+        onBlur={() => onBlur?.()}
         className={`rounded-[1.25rem] border px-6 py-4 text-body-sm text-black placeholder:text-gray-40 focus:outline-none ${
           error
             ? "border-warning-100 focus:ring-0"

@@ -1,11 +1,7 @@
 import SignupTextField from "./SignupTextField";
 import ActionButton from "@/common/components/ActionButton";
 import { useState } from "react";
-import {
-  signupAdmin,
-  signupExternal,
-  signupInternal
-} from "../api/signupUser";
+import { signupAdmin, signupExternal, signupInternal } from "../api/signupUser";
 
 interface SignupFormValues {
   id: string;
@@ -65,7 +61,11 @@ const validators: Partial<
       : "영문과 숫자를 포함하여 8자 이상 입력해 주세요.",
 
   passwordConfirm: ({ passwordConfirm, password }) =>
-    passwordConfirm !== password ? "동일한 비밀번호를 다시 입력해 주세요." : "",
+    !passwordConfirm
+      ? ""
+      : passwordConfirm !== password
+        ? "동일한 비밀번호를 다시 입력해 주세요."
+        : "",
 
   name: ({ name }) => (!name.trim() ? "이름을 입력해 주세요." : ""),
 
@@ -96,6 +96,9 @@ export default function SignupForm({
 }) {
   const [values, setValues] = useState(INITIAL_VALUES);
   const [errors, setErrors] = useState<SignupFormErrors>({});
+  const [touched, setTouched] = useState<
+    Partial<Record<keyof SignupFormValues, boolean>>
+  >({});
   const [submitting, setSubmitting] = useState(false);
 
   const requiredFields: (keyof SignupFormValues)[] = [
@@ -119,7 +122,9 @@ export default function SignupForm({
       runValidation(field, nextValues);
 
       if (field === "password") {
-        runValidation("passwordConfirm", nextValues);
+        if (touched.passwordConfirm) {
+          runValidation("passwordConfirm", nextValues);
+        }
       }
       return nextValues;
     });
@@ -134,7 +139,10 @@ export default function SignupForm({
     const validator = validators[field];
     return validator ? Boolean(validator(values)) : false;
   });
-
+  const handleBlur = (field: keyof SignupFormValues) => () => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    runValidation(field, values);
+  };
   const submitDisabled = hasEmptyRequired || hasValidationError || submitting;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -206,6 +214,7 @@ export default function SignupForm({
         onChange={handleChange("passwordConfirm")}
         error={Boolean(errors.passwordConfirm)}
         hint={errors.passwordConfirm}
+        onBlur={handleBlur("passwordConfirm")}
       />
 
       <SignupTextField
