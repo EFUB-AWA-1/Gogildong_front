@@ -13,6 +13,7 @@ import SignupAdmin from "./Signup/pages/SignupAdmin";
 import SignupExternal from "./Signup/pages/SignupExternal";
 import SignupInternal from "./Signup/pages/SignupInternal";
 import SignupSelectRole from "./Signup/pages/SignupSelectRole";
+import SignupSuccess from "./Signup/pages/SignupSuccess";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,8 @@ const router = createBrowserRouter([
   { path: "/signup", element: <SignupSelectRole /> },
   { path: "/signup/admin", element: <SignupAdmin /> },
   { path: "/signup/internal", element: <SignupInternal /> },
-  { path: "/signup/external", element: <SignupExternal /> }
+  { path: "/signup/external", element: <SignupExternal /> },
+  { path: "/signup/success", element: <SignupSuccess /> }
 ]);
 
 export default router;
