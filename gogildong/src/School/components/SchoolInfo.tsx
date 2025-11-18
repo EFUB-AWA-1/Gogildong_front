@@ -43,7 +43,16 @@ export default function SchoolInfo({
   return (
     <div className="w-full">
       <div className="relative">
-        <div ref={roadviewRef} className="h-90 object-cover" />
+        <div
+          ref={roadviewRef}
+          className="h-90 object-cover"
+          onTouchStart={() => {
+            document.body.style.overflow = "hidden";
+          }}
+          onTouchEnd={() => {
+            document.body.style.overflow = "";
+          }}
+        />
         <TopActionButtons name={name} />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/70 via-white/30 to-transparent" />
       </div>
