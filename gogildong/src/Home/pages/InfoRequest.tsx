@@ -69,7 +69,7 @@ export default function InfoRequest() {
         />
       </div>
 
-      <div className="fixed bottom-0 w-full p-4">
+      <div className="fixed bottom-0 w-full max-w-[480px] p-4">
         <ActionButton
           label="신청하기"
           onClick={handleSubmit}
