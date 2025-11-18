@@ -1,18 +1,29 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import ActionButton from "@/common/components/ActionButton";
 import InfoRequestHeader from "../components/InfoRequestHeader";
 import SmallSchoolCard from "../components/SmallSchoolCard";
 import RequestForm from "../components/RequestForm";
 import ConfirmModal from "../components/ConfirmModal";
+import { useLocation } from "react-router-dom";
+
+type RequestLocationState = {
+  name?: string;
+  address?: string;
+  schoolId?: number;
+};
 
 export default function InfoRequest() {
   const [phone, setPhone] = useState("");
   const [purpose, setPurpose] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
 
-  const navigate = useNavigate();
+  const { state } = useLocation();
+  const schoolState = (state || {}) as RequestLocationState;
+
+  const schoolName = schoolState.name ?? "개발용기본중학교고등학교";
+  const schoolAddress =
+    schoolState.address ?? "아무주소나넣어보자서대문구3로드뷰는이대부초";
 
   const isValid = useMemo(
     () => phone.trim().length > 0 && purpose.trim().length > 0,
@@ -28,7 +39,7 @@ export default function InfoRequest() {
   const handleConfirm = () => {
     // 실제 제출/요청 API 호출 시엔 여기서
     console.log("SUBMIT:", { phone, purpose });
-    navigate("/home");
+    window.history.back();
   };
 
   return (
@@ -37,7 +48,7 @@ export default function InfoRequest() {
         <InfoRequestHeader />
       </div>
       <div className="mb-6 w-full px-[1.37rem]">
-        <SmallSchoolCard />
+        <SmallSchoolCard name={schoolName} address={schoolAddress} />
       </div>
 
       {/*정보입력*/}

@@ -29,7 +29,15 @@ export default function School() {
     navigate("/school/report");
   };
   const handleRequestClick = () => {
-    navigate("/school/request");
+    navigate(`/school/{id}/request`, {
+      state: {
+        name: schoolState.name ?? "개발용기본중학교고등학교",
+        address:
+          schoolState.address ?? "아무주소나넣어보자서대문구3로드뷰는이대부초",
+        latitude: schoolState.latitude ?? 37.56115022,
+        longitude: schoolState.longitude ?? 126.9427504
+      }
+    });
   };
 
   return (
