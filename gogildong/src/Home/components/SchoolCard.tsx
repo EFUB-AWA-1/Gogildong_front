@@ -9,6 +9,8 @@ type Props = {
   schoolId: number;
   schoolName: string;
   address: string;
+  latitude: number;
+  longitude: number;
   defaultBookmarked?: boolean;
   onToggleLike?: (liked: boolean) => void;
   tags?: string[];
@@ -18,6 +20,8 @@ export default function SchoolCard({
   schoolId,
   schoolName,
   address,
+  latitude,
+  longitude,
   defaultBookmarked = false,
   onToggleLike,
   tags = []
@@ -39,7 +43,15 @@ export default function SchoolCard({
   };
 
   const handleCardClick = () => {
-    navigate(`/school/${schoolId}`);
+    navigate(`/school/${schoolId}`, {
+      state: {
+        schoolId,
+        name: schoolName,
+        address,
+        latitude,
+        longitude
+      }
+    });
   };
 
   return (

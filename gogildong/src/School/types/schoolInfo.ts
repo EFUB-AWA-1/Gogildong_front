@@ -1,5 +1,6 @@
 export interface SchoolInfoProps {
-  img?: string;
   name?: string;
   address?: string;
+  latitude?: number;
+  longitude?: number;
 }
