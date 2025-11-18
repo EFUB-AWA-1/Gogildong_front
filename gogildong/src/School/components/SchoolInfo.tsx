@@ -34,7 +34,7 @@ export default function SchoolInfo({
     const position = new kakao.maps.LatLng(latitude, longitude);
 
     // 특정 위치 기준으로 가장 가까운 panoId 가져와서 로드뷰 띄우기
-    roadviewClient.getNearestPanoId(position, 50, (panoId: number) => {
+    roadviewClient.getNearestPanoId(position, 100, (panoId: number) => {
       if (!panoId) return;
       roadview.setPanoId(panoId, position);
     });
