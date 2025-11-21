@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @theme {
   /* Colors */
   --color-black: #282828;
@@ -160,7 +160,7 @@
 }
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

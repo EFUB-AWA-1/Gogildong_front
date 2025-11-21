@@ -1,8 +1,8 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
   return (
-    <main className=' w-full h-full border border-gray-300'>
+    <main className="mx-auto max-w-[480px] min-w-[320px] border border-gray-300">
       <Outlet />
     </main>
   );
