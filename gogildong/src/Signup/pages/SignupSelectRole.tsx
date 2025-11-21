@@ -45,30 +45,28 @@ export default function SignupSelectRole() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-1 flex-col bg-white">
       <Header title="회원가입" />
-      <div className="flex flex-col gap-6">
-        <section className="flex flex-1 flex-col gap-6 px-6">
-          <SignupStepIndicator currentStep={1} totalSteps={3} />
-          <div className="flex flex-col gap-2">
-            <p className="text-heading-md text-black">
-              가입 목적을 <br />
-              선택해 주세요
-            </p>
-          </div>
-          <SignupRoleOptions
-            options={PURPOSE_OPTIONS}
-            selectedId={selectedPurpose}
-            onSelect={setSelectedPurpose}
-          />
-        </section>
-        <div className="sticky bottom-0 w-full bg-white px-5 pt-4">
-          <ActionButton
-            label="다음"
-            onClick={handleNext}
-            disabled={!selectedPurpose}
-          />
-        </div>
+      <section className="flex flex-1 flex-col gap-6 px-6">
+        <SignupStepIndicator currentStep={1} totalSteps={3} />
+
+        <p className="text-heading-md text-black">
+          가입 목적을 <br />
+          선택해 주세요
+        </p>
+
+        <SignupRoleOptions
+          options={PURPOSE_OPTIONS}
+          selectedId={selectedPurpose}
+          onSelect={setSelectedPurpose}
+        />
+      </section>
+      <div className="sticky bottom-0 bg-white px-5 py-4">
+        <ActionButton
+          label="다음"
+          onClick={handleNext}
+          disabled={!selectedPurpose}
+        />
       </div>
     </div>
   );
