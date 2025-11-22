@@ -14,6 +14,7 @@ import SignupExternal from "./Signup/pages/SignupExternal";
 import SignupInternal from "./Signup/pages/SignupInternal";
 import SignupSelectRole from "./Signup/pages/SignupSelectRole";
 import SignupSuccess from "./Signup/pages/SignupSuccess";
+import Login from "./Login/pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -28,18 +29,22 @@ const router = createBrowserRouter([
         element: <School />
       },
       { path: "/school/view/photos", element: <PhotoList /> },
-      { path: "/school/view/photos/detail", element: <PhotoDetail /> }
-    ]
-  },
-  { path: "/school/report", element: <Report /> },
-  { path: "/school/report/camera", element: <PhotoReport /> },
-  { path: "/school/report/info", element: <ReportInfo /> },
+      { path: "/school/view/photos/detail", element: <PhotoDetail /> },
+      { path: "/school/report", element: <Report /> },
+      { path: "/school/report/camera", element: <PhotoReport /> },
+      { path: "/school/report/info", element: <ReportInfo /> },
 
-  { path: "/signup", element: <SignupSelectRole /> },
-  { path: "/signup/admin", element: <SignupAdmin /> },
-  { path: "/signup/internal", element: <SignupInternal /> },
-  { path: "/signup/external", element: <SignupExternal /> },
-  { path: "/signup/success", element: <SignupSuccess /> }
+      { path: "/signup", element: <SignupSelectRole /> },
+      { path: "/signup/admin", element: <SignupAdmin /> },
+      { path: "/signup/internal", element: <SignupInternal /> },
+      { path: "/signup/external", element: <SignupExternal /> },
+      { path: "/signup/success", element: <SignupSuccess /> },
+
+      { path: "/login", element: <Login /> }
+      // { path: "/find-id", element: <Login /> }
+      // { path: "/find-password", element: <Login /> }
+    ]
+  }
 ]);
 
 export default router;

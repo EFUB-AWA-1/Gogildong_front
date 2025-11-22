@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signupAdmin, signupExternal, signupInternal } from "../api/signupUser";
 import EmailVerificationResendModal from "./modals/EmailVerificationResendModal";
 import EmailField from "./EmailField";
+import formatPhoneNumeber from "../utils/formatPhoneNumber";
 
 interface SignupFormValues {
   id: string;
@@ -169,30 +170,33 @@ export default function SignupForm({
     );
     if (hasErrors) return;
 
-    const basePayload = {
-      loginId: values.id,
-      password: values.password,
-      username: values.name,
-      email: values.email,
-      phone: values.phone
-    };
-
     try {
       setSubmitting(true);
+      const basePayload = {
+        loginId: values.id,
+        password: values.password,
+        username: values.name,
+        email: values.email,
+        phone: values.phone
+      };
+
       if (role === "admin") {
-        await signupAdmin({
+        const payload = {
           ...basePayload,
           schoolCode: values.schoolCode ?? "",
           adminCode: values.adminCode ?? ""
-        });
+        };
+        console.log("signup admin payload", payload);
+        await signupAdmin(payload);
       } else if (role === "internal") {
-        await signupInternal({
-          ...basePayload,
-          schoolCode: values.schoolCode ?? ""
-        });
+        const payload = { ...basePayload, schoolCode: values.schoolCode ?? "" };
+        console.log("signup internal payload", payload);
+        await signupInternal(payload);
       } else {
+        console.log("signup external payload", basePayload);
         await signupExternal(basePayload);
       }
+
       console.log("signup success");
     } catch (error) {
       console.error("signup failed", error);
@@ -245,9 +249,9 @@ export default function SignupForm({
       <SignupTextField
         label="휴대폰 번호"
         type="tel"
-        placeholder="예) 01012345678"
+        placeholder="예) 010-1234-5678"
         value={values.phone}
-        onChange={handleChange("phone")}
+        onChange={(v) => handleChange("phone")(formatPhoneNumeber(v))}
         error={Boolean(errors.phone)}
         hint={errors.phone}
       />
@@ -291,7 +295,13 @@ export default function SignupForm({
         />
       )}
 
-      <ActionButton label="회원가입" type="submit" disabled={submitDisabled} />
+      <div className="sticky bottom-0 bg-white py-6">
+        <ActionButton
+          label="회원가입"
+          type="submit"
+          disabled={submitDisabled}
+        />
+      </div>
       <EmailVerificationResendModal
         open={resendOpen}
         onClose={() => setResendOpen(false)}
