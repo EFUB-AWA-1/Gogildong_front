@@ -54,7 +54,7 @@ export default function ConfirmModal({
         </div>
 
         <button
-          className="flex h-9 w-18 cursor-pointer items-center justify-center rounded-[1.25rem] bg-neon-100 text-[0.875rem] leading-5.25 font-bold text-black"
+          className="flex h-9 w-full cursor-pointer items-center justify-center rounded-[1.25rem] bg-neon-100 text-[0.875rem] leading-5.25 font-bold text-black"
           onClick={() => {
             onConfirm?.();
             onClose();

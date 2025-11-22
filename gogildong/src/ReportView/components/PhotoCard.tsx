@@ -3,11 +3,15 @@ type PhotoCardProps = {
   userName?: String;
   reportId: number;
   facilityImage?: string;
+  onClick?: () => void;
 };
 
-export default function PhotoCard({ facilityImage }: PhotoCardProps) {
+export default function PhotoCard({ facilityImage, onClick }: PhotoCardProps) {
   return (
-    <div className="h-42 w-40 shrink-0 rounded-lg">
+    <div
+      className="h-42 w-40 shrink-0 cursor-pointer rounded-lg"
+      onClick={onClick}
+    >
       {facilityImage ? (
         <img
           src={facilityImage}

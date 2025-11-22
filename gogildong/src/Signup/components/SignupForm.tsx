@@ -1,11 +1,10 @@
 import SignupTextField from "./SignupTextField";
 import ActionButton from "@/common/components/ActionButton";
 import { useState } from "react";
-import {
-  signupAdmin,
-  signupExternal,
-  signupInternal
-} from "../api/signupUser";
+import { signupAdmin, signupExternal, signupInternal } from "../api/signupUser";
+import EmailVerificationResendModal from "./modals/EmailVerificationResendModal";
+import EmailField from "./EmailField";
+import formatPhoneNumeber from "../utils/formatPhoneNumber";
 
 interface SignupFormValues {
   id: string;
@@ -65,7 +64,11 @@ const validators: Partial<
       : "영문과 숫자를 포함하여 8자 이상 입력해 주세요.",
 
   passwordConfirm: ({ passwordConfirm, password }) =>
-    passwordConfirm !== password ? "동일한 비밀번호를 다시 입력해 주세요." : "",
+    !passwordConfirm
+      ? ""
+      : passwordConfirm !== password
+        ? "동일한 비밀번호를 다시 입력해 주세요."
+        : "",
 
   name: ({ name }) => (!name.trim() ? "이름을 입력해 주세요." : ""),
 
@@ -80,7 +83,7 @@ const validators: Partial<
       : "유효한 이메일 주소를 입력해 주세요.",
 
   emailCode: ({ emailCode }) =>
-    /^[0-9]{4,}$/.test(emailCode) ? "" : "유효한 이메일 코드입니다.",
+    /^[0-9]{4,}$/.test(emailCode) ? "" : "유효하지 않은 이메일 코드입니다.",
 
   schoolCode: ({ schoolCode }) =>
     !schoolCode?.trim() ? "학교 코드를 입력해 주세요." : "",
@@ -96,7 +99,12 @@ export default function SignupForm({
 }) {
   const [values, setValues] = useState(INITIAL_VALUES);
   const [errors, setErrors] = useState<SignupFormErrors>({});
+  const [touched, setTouched] = useState<
+    Partial<Record<keyof SignupFormValues, boolean>>
+  >({});
   const [submitting, setSubmitting] = useState(false);
+  const [emailRequested, setEmailRequested] = useState(false);
+  const [resendOpen, setResendOpen] = useState(false);
 
   const requiredFields: (keyof SignupFormValues)[] = [
     ...BASE_REQUIRED_FIELDS,
@@ -119,7 +127,9 @@ export default function SignupForm({
       runValidation(field, nextValues);
 
       if (field === "password") {
-        runValidation("passwordConfirm", nextValues);
+        if (touched.passwordConfirm) {
+          runValidation("passwordConfirm", nextValues);
+        }
       }
       return nextValues;
     });
@@ -134,8 +144,24 @@ export default function SignupForm({
     const validator = validators[field];
     return validator ? Boolean(validator(values)) : false;
   });
-
+  const handleBlur = (field: keyof SignupFormValues) => () => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    runValidation(field, values);
+  };
   const submitDisabled = hasEmptyRequired || hasValidationError || submitting;
+
+  const handleEmailRequestClick = () => {
+    setTouched((prev) => ({ ...prev, email: true }));
+    const emailError = runValidation("email", values);
+    if (emailError) return;
+
+    if (!emailRequested) {
+      console.log("request verification email");
+      setEmailRequested(true);
+      return;
+    }
+    setResendOpen(true);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -144,30 +170,33 @@ export default function SignupForm({
     );
     if (hasErrors) return;
 
-    const basePayload = {
-      loginId: values.id,
-      password: values.password,
-      username: values.name,
-      email: values.email,
-      phone: values.phone
-    };
-
     try {
       setSubmitting(true);
+      const basePayload = {
+        loginId: values.id,
+        password: values.password,
+        username: values.name,
+        email: values.email,
+        phone: values.phone
+      };
+
       if (role === "admin") {
-        await signupAdmin({
+        const payload = {
           ...basePayload,
           schoolCode: values.schoolCode ?? "",
           adminCode: values.adminCode ?? ""
-        });
+        };
+        console.log("signup admin payload", payload);
+        await signupAdmin(payload);
       } else if (role === "internal") {
-        await signupInternal({
-          ...basePayload,
-          schoolCode: values.schoolCode ?? ""
-        });
+        const payload = { ...basePayload, schoolCode: values.schoolCode ?? "" };
+        console.log("signup internal payload", payload);
+        await signupInternal(payload);
       } else {
+        console.log("signup external payload", basePayload);
         await signupExternal(basePayload);
       }
+
       console.log("signup success");
     } catch (error) {
       console.error("signup failed", error);
@@ -178,7 +207,6 @@ export default function SignupForm({
 
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-      {/* 기본 필드들 */}
       <SignupTextField
         label="아이디"
         placeholder="최소 6글자 이상"
@@ -206,6 +234,7 @@ export default function SignupForm({
         onChange={handleChange("passwordConfirm")}
         error={Boolean(errors.passwordConfirm)}
         hint={errors.passwordConfirm}
+        onBlur={handleBlur("passwordConfirm")}
       />
 
       <SignupTextField
@@ -220,33 +249,21 @@ export default function SignupForm({
       <SignupTextField
         label="휴대폰 번호"
         type="tel"
-        placeholder="예) 010-0000-0000"
+        placeholder="예) 010-1234-5678"
         value={values.phone}
-        onChange={handleChange("phone")}
+        onChange={(v) => handleChange("phone")(formatPhoneNumeber(v))}
         error={Boolean(errors.phone)}
         hint={errors.phone}
       />
 
-      <div className="flex items-end gap-[11px]">
-        <div className="flex-1">
-          <SignupTextField
-            label="이메일"
-            type="email"
-            placeholder="예) 123456@domain.com"
-            value={values.email}
-            onChange={handleChange("email")}
-            error={Boolean(errors.email)}
-            hint={errors.email}
-          />
-        </div>
-        <div className="w-fit shrink-0">
-          <ActionButton
-            label="인증 요청"
-            className="rounded-[1.25rem] px-4 py-4 text-body-sm"
-          />
-        </div>
-      </div>
-
+      <EmailField
+        value={values.email}
+        onChange={handleChange("email")}
+        hint={errors.email}
+        error={Boolean(errors.email)}
+        requested={emailRequested}
+        onRequestClick={handleEmailRequestClick}
+      />
       <SignupTextField
         label="이메일 확인"
         placeholder="인증 코드를 입력해 주세요."
@@ -278,7 +295,21 @@ export default function SignupForm({
         />
       )}
 
-      <ActionButton label="회원가입" type="submit" disabled={submitDisabled} />
+      <div className="sticky bottom-0 bg-white py-6">
+        <ActionButton
+          label="회원가입"
+          type="submit"
+          disabled={submitDisabled}
+        />
+      </div>
+      <EmailVerificationResendModal
+        open={resendOpen}
+        onClose={() => setResendOpen(false)}
+        onConfirm={() => {
+          console.log("resend verification email");
+          setResendOpen(false);
+        }}
+      />
     </form>
   );
 }
