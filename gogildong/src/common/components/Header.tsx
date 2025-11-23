@@ -25,7 +25,7 @@ export default function Header({
 
   return (
     <header
-      className={`sticky top-0 mt-11 grid w-full grid-cols-3 items-center px-4 py-2 ${
+      className={`sticky top-0 z-10 grid w-full grid-cols-3 items-center px-4 py-2 ${
         darkMode ? "text-white" : "bg-white text-black"
       }`}
     >
