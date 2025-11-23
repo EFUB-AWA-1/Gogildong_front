@@ -14,6 +14,7 @@ import SignupExternal from "./Signup/pages/SignupExternal";
 import SignupInternal from "./Signup/pages/SignupInternal";
 import SignupSelectRole from "./Signup/pages/SignupSelectRole";
 import SignupSuccess from "./Signup/pages/SignupSuccess";
+import ReviewWrite from "./ReportView/pages/ReviewWrite";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,8 @@ const router = createBrowserRouter([
         element: <School />
       },
       { path: "/school/view/photos", element: <PhotoList /> },
-      { path: "/school/view/photos/detail", element: <PhotoDetail /> }
+      { path: "/school/view/photos/detail", element: <PhotoDetail /> },
+      { path: "/school/view/review/write", element: <ReviewWrite /> }
     ]
   },
   { path: "/school/report", element: <Report /> },
