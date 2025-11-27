@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 
 import ActionButton from "@/common/components/ActionButton";
-import InfoRequestHeader from "../components/InfoRequestHeader";
 import SmallSchoolCard from "../components/SmallSchoolCard";
 import RequestForm from "../components/RequestForm";
 import ConfirmModal from "../components/ConfirmModal";

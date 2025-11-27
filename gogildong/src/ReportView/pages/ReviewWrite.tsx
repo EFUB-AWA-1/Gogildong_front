@@ -42,6 +42,13 @@ export default function ReviewWrite() {
   const submitReview = () => {
     // TODO: API 호출
     // 성공 후 이동 등 처리
+    navigate("/school/view/review", {
+      //경로 수정 필요
+      state: {
+        fromWrite: true // 작성 페이지에서 넘어왔다는 표시
+        // reviewId: newReviewId, // 나중에 상세 페이지에서 사용할 id
+      }
+    });
   };
 
   const closeModal = () => setModalType(null);
