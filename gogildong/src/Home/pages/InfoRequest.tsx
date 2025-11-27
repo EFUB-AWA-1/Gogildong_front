@@ -6,6 +6,7 @@ import SmallSchoolCard from "../components/SmallSchoolCard";
 import RequestForm from "../components/RequestForm";
 import ConfirmModal from "../components/ConfirmModal";
 import { useLocation } from "react-router-dom";
+import Header from "@/common/components/Header";
 
 type RequestLocationState = {
   name?: string;
@@ -43,12 +44,10 @@ export default function InfoRequest() {
   };
 
   return (
-    <div className="flex h-full flex-col items-center">
+    <div className="flex min-h-screen w-full flex-col items-center">
+      <Header title="정보 열람 신청" />
       <div className="w-full flex-1">
-        <div className="w-full">
-          <InfoRequestHeader />
-        </div>
-        <div className="mb-6 w-full px-[1.37rem]">
+        <div className="mt-2 mb-6 w-full px-[1.37rem]">
           <SmallSchoolCard name={schoolName} address={schoolAddress} />
         </div>
 
