@@ -201,7 +201,8 @@ export default function SignupForm({
         password: values.password,
         username: values.name,
         email: values.email,
-        phone: values.phone
+        phone: values.phone,
+        verificationCode: values.emailCode
       };
 
       if (role === "admin") {

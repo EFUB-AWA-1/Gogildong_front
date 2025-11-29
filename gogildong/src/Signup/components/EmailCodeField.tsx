@@ -21,7 +21,7 @@ export default function EmailCodeField({
         <div className="flex-1">
           <div className="relative">
             <input
-              type="email"
+              type="text"
               value={value}
               placeholder="인증 코드를 입력해주세요."
               onChange={(e) => onChange(e.target.value)}

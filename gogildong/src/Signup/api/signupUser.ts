@@ -6,6 +6,7 @@ export interface SignupBaseRequest {
   username: string;
   email: string;
   phone: string;
+  verificationCode: string
 }
 
 export interface EmailVerificationCodeRequest {
