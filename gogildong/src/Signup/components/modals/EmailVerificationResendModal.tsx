@@ -41,7 +41,7 @@ export default function EmailVerificationResendModal({
           </button>
           <button
             type="button"
-            className="text-body-bold-sm flex-1 rounded-full bg-neon-100 py-3 text-black"
+            className="text-body-bold-sm flex-1 cursor-pointer rounded-full bg-neon-100 py-3 text-black"
             onClick={onConfirm}
           >
             재요청
