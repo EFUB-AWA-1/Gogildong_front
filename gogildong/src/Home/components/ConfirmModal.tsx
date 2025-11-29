@@ -15,7 +15,7 @@ export default function ConfirmModal({
   message,
   confirmLabel = "확인",
   onClose,
-  onConfirm,
+  onConfirm
 }: ConfirmModalProps) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -40,31 +40,21 @@ export default function ConfirmModal({
     >
       {/* 모달 카드 */}
       <div
-        className="
-          w-75
-          rounded-[1.25rem] bg-white
-          pt-5.25 pr-11 pb-5 pl-10.75
-          shadow-[0_0_12px_rgba(170,235,47,0.30)]
-          flex flex-col items-center gap-4
-        "
+        className="flex w-75 flex-col items-center gap-4 rounded-[1.25rem] bg-white pt-5.25 pr-11 pb-5 pl-10.75 shadow-[0_0_12px_rgba(170,235,47,0.30)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 제목+내용*/}
-        <div className="flex w-53.25 flex-col items-center gap-4 shrink-0">
-          <div className="w-full text-center text-black text-[1.125rem] font-bold leading-6.75">
+        <div className="flex w-53.25 shrink-0 flex-col items-center gap-4">
+          <div className="w-full text-center text-[1.125rem] leading-6.75 font-bold text-black">
             {title}
           </div>
-          <div className="h-21 w-full text-center text-black text-[0.875rem] font-medium leading-5.25 whitespace-pre-line">
+          <div className="h-21 w-full text-center text-[0.875rem] leading-5.25 font-medium whitespace-pre-line text-black">
             {message}
           </div>
         </div>
 
         <button
-          className="
-            w-18 h-9 rounded-[1.25rem] bg-neon-100
-            flex items-center justify-center cursor-pointer
-            text-black text-[0.875rem] font-bold leading-5.25
-          "
+          className="flex h-9 w-full cursor-pointer items-center justify-center rounded-[1.25rem] bg-neon-100 text-[0.875rem] leading-5.25 font-bold text-black"
           onClick={() => {
             onConfirm?.();
             onClose();

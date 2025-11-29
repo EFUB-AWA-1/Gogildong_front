@@ -9,6 +9,8 @@ type Props = {
   schoolId: number;
   schoolName: string;
   address: string;
+  latitude: number;
+  longitude: number;
   defaultBookmarked?: boolean;
   onToggleLike?: (liked: boolean) => void;
   tags?: string[];
@@ -18,9 +20,11 @@ export default function SchoolCard({
   schoolId,
   schoolName,
   address,
+  latitude,
+  longitude,
   defaultBookmarked = false,
   onToggleLike,
-  tags = [],
+  tags = []
 }: Props) {
   const [liked, setLiked] = useState(defaultBookmarked);
   const navigate = useNavigate();
@@ -39,21 +43,28 @@ export default function SchoolCard({
   };
 
   const handleCardClick = () => {
-    navigate(`/school/${schoolId}`);
+    navigate(`/school/${schoolId}`, {
+      state: {
+        schoolId,
+        name: schoolName,
+        address,
+        latitude,
+        longitude
+      }
+    });
   };
 
   return (
     <div
-      className="flex flex-col w-full h-32.75 rounded-2xl bg-white 
-                    justify-center py-2.75 px-3 shadow-[0_0_8px_0_rgba(0,0,0,0.08)] "
+      className="flex h-[6.31rem] w-full flex-col justify-center rounded-2xl bg-white px-3 py-2.75 shadow-[0_0_8px_0_rgba(0,0,0,0.08)]"
       onClick={handleCardClick}
     >
-      <div className="w-full flex flex-row justify-between items-center mb-3 ">
-        <div className="flex flex-col items-start ml-4 ">
-          <p className="text-[#000000] font-pretendard text-[0.875rem] font-bold leading-150 self-stretch">
+      <div className="mb-4 ml-1 flex w-full flex-row items-center justify-between">
+        <div className="flex flex-col items-start">
+          <p className="font-pretendard mb-1 self-stretch text-[0.875rem] leading-150 font-bold text-[#000000]">
             {schoolName}
           </p>
-          <p className="text-[#000000] font-pretendard text-caption-sm font-normal leading-150 self-stretch">
+          <p className="font-pretendard self-stretch text-caption-sm leading-150 font-normal text-[#000000]">
             {address}
           </p>
         </div>
@@ -61,7 +72,7 @@ export default function SchoolCard({
           {liked ? <HeartOnIcon /> : <HeartIcon />}{" "}
         </button>
       </div>
-      <div className="flex items-center gap-1 ml-4 min-h-4">
+      <div className="ml-1 flex min-h-4 items-center gap-1">
         {tags.length > 0 && tags.map((t) => <Tag key={t} tag={t} />)}
       </div>
     </div>
