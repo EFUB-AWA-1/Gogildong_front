@@ -6,6 +6,16 @@ export interface SignupBaseRequest {
   username: string;
   email: string;
   phone: string;
+  verificationCode: string
+}
+
+export interface EmailVerificationCodeRequest {
+  email: string;
+}
+
+export interface EmailVerficationRequest {
+  email: string;
+  verificationCode: number;
 }
 
 export interface SignupAdminRequest extends SignupBaseRequest {
@@ -23,6 +33,18 @@ export interface SignupResponse {
   schoolCode?: string;
   schoolName?: string;
 }
+
+export const sendVerificationCode = async (
+  payload: EmailVerificationCodeRequest
+) => {
+  const { data } = await axiosInstance.post("/auth/email/code", payload);
+  return data;
+};
+
+export const verifyEmailCode = async (payload: EmailVerficationRequest) => {
+  const { data } = await axiosInstance.post("/auth/email/verify", payload);
+  return data;
+};
 
 export const signupAdmin = async (payload: SignupAdminRequest) => {
   const { data } = await axiosInstance.post<SignupResponse>(

@@ -59,7 +59,7 @@ export default function PhotoDetail() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col bg-black">
+    <div className="flex h-screen w-full flex-col bg-black">
       <Header
         title="1-A"
         darkMode={true}
@@ -88,7 +88,7 @@ export default function PhotoDetail() {
         className="flex flex-1 flex-col items-center justify-center overflow-hidden"
       >
         {src && (
-          <div className="relative mx-auto w-full max-w-[480px]">
+          <div className="relative mx-auto w-full">
             <img
               src={src}
               alt="시설 제보 사진"
