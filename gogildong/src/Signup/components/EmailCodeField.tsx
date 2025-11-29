@@ -1,31 +1,29 @@
-interface EmailFieldProps {
+interface EmailCodeFieldProps {
   value: string;
   hint?: string;
   error?: boolean;
   onChange: (value: string) => void;
-  onRequestClick: () => void;
-  requested: boolean;
+  onVerifyClick: () => void;
 }
 
-export default function EmailField({
+export default function EmailCodeField({
   value,
   hint,
   error,
   onChange,
-  onRequestClick,
-  requested
-}: EmailFieldProps) {
+  onVerifyClick
+}: EmailCodeFieldProps) {
   return (
     <label className="flex flex-col gap-2">
-      <span className="pl-4 text-body-xs text-black">이메일</span>
+      <span className="pl-4 text-body-xs text-black">이메일 확인</span>
 
       <div className="flex gap-[11px]">
         <div className="flex-1">
           <div className="relative">
             <input
-              type="email"
+              type="text"
               value={value}
-              placeholder="예) 123456@domain.com"
+              placeholder="인증 코드를 입력해주세요."
               onChange={(e) => onChange(e.target.value)}
               className={`w-full rounded-[1.25rem] border px-6 py-4 pr-12 text-body-sm text-black placeholder:text-gray-40 focus:outline-none ${
                 error
@@ -48,12 +46,10 @@ export default function EmailField({
 
         <button
           type="button"
-          onClick={onRequestClick}
-          className={`text-body-bold-sm h-14 shrink-0 cursor-pointer rounded-[1.25rem] px-4 py-3 ${
-            requested ? "bg-gray-20 text-gray-60" : "bg-neon-100 text-black"
-          }`}
+          onClick={onVerifyClick}
+          className="text-body-bold-sm h-14 shrink-0 rounded-[1.25rem] bg-neon-100 px-4 py-3 text-black"
         >
-          {requested ? "재요청" : "인증 요청"}
+          코드 확인
         </button>
       </div>
     </label>

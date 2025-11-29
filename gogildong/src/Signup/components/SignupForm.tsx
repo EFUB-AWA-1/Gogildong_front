@@ -1,10 +1,19 @@
-import SignupTextField from "./SignupTextField";
 import ActionButton from "@/common/components/ActionButton";
+import { extractErrorMessage } from "@/common/utils/handleAxiosError";
+import axios from "axios";
 import { useState } from "react";
-import { signupAdmin, signupExternal, signupInternal } from "../api/signupUser";
-import EmailVerificationResendModal from "./modals/EmailVerificationResendModal";
-import EmailField from "./EmailField";
+import {
+  sendVerificationCode,
+  signupAdmin,
+  signupExternal,
+  signupInternal,
+  verifyEmailCode
+} from "../api/signupUser";
 import formatPhoneNumeber from "../utils/formatPhoneNumber";
+import EmailCodeField from "./EmailCodeField";
+import EmailField from "./EmailField";
+import EmailVerificationResendModal from "./modals/EmailVerificationResendModal";
+import SignupTextField from "./SignupTextField";
 
 interface SignupFormValues {
   id: string;
@@ -103,7 +112,8 @@ export default function SignupForm({
     Partial<Record<keyof SignupFormValues, boolean>>
   >({});
   const [submitting, setSubmitting] = useState(false);
-  const [emailRequested, setEmailRequested] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [hasSentVerificationCode, setHasSentVerificationCode] = useState(false);
   const [resendOpen, setResendOpen] = useState(false);
 
   const requiredFields: (keyof SignupFormValues)[] = [
@@ -150,21 +160,35 @@ export default function SignupForm({
   };
   const submitDisabled = hasEmptyRequired || hasValidationError || submitting;
 
-  const handleEmailRequestClick = () => {
+  const handleSendVerificationCode = async () => {
     setTouched((prev) => ({ ...prev, email: true }));
+
     const emailError = runValidation("email", values);
     if (emailError) return;
 
-    if (!emailRequested) {
-      console.log("request verification email");
-      setEmailRequested(true);
-      return;
+    try {
+      await sendVerificationCode({ email: values.email });
+      setHasSentVerificationCode(true);
+    } catch (err) {
+      setSubmitError(extractErrorMessage(err));
     }
-    setResendOpen(true);
+  };
+
+  const handleVerifyEmailCode = async () => {
+    try {
+      await verifyEmailCode({
+        email: values.email,
+        verificationCode: Number(values.emailCode)
+      });
+      console.log("🎉 이메일 인증 성공");
+    } catch (err) {
+      setSubmitError(extractErrorMessage(err));
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitError(null);
     const hasErrors = requiredFields.some((field) =>
       Boolean(runValidation(field, values))
     );
@@ -177,7 +201,8 @@ export default function SignupForm({
         password: values.password,
         username: values.name,
         email: values.email,
-        phone: values.phone
+        phone: values.phone,
+        verificationCode: values.emailCode
       };
 
       if (role === "admin") {
@@ -199,7 +224,10 @@ export default function SignupForm({
 
       console.log("signup success");
     } catch (error) {
-      console.error("signup failed", error);
+      if (axios.isAxiosError(error)) {
+        console.log("⚠️ 에러 메세지:", error.response?.data);
+        setSubmitError(extractErrorMessage(error));
+      }
     } finally {
       setSubmitting(false);
     }
@@ -261,16 +289,15 @@ export default function SignupForm({
         onChange={handleChange("email")}
         hint={errors.email}
         error={Boolean(errors.email)}
-        requested={emailRequested}
-        onRequestClick={handleEmailRequestClick}
+        requested={hasSentVerificationCode}
+        onRequestClick={handleSendVerificationCode}
       />
-      <SignupTextField
-        label="이메일 확인"
-        placeholder="인증 코드를 입력해 주세요."
+      <EmailCodeField
         value={values.emailCode}
         onChange={handleChange("emailCode")}
         error={Boolean(errors.emailCode)}
         hint={errors.emailCode}
+        onVerifyClick={handleVerifyEmailCode}
       />
 
       {(role === "internal" || role === "admin") && (
@@ -295,6 +322,12 @@ export default function SignupForm({
         />
       )}
 
+      {submitError && (
+        <p className="pl-1 text-body-sm text-warning-100" role="alert">
+          {submitError}
+        </p>
+      )}
+
       <div className="sticky bottom-0 bg-white py-6">
         <ActionButton
           label="회원가입"
@@ -305,8 +338,8 @@ export default function SignupForm({
       <EmailVerificationResendModal
         open={resendOpen}
         onClose={() => setResendOpen(false)}
-        onConfirm={() => {
-          console.log("resend verification email");
+        onConfirm={async () => {
+          await sendVerificationCode({ email: values.email });
           setResendOpen(false);
         }}
       />
