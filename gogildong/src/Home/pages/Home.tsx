@@ -5,7 +5,9 @@ import SearchBar from "../components/search/SearchBar";
 import customMarker from "../assets/icon_marker.svg";
 import BottomSheet from "../components/BottomSheet";
 import useGeolocation from "../hooks/useGeolocation";
-import type { School, NearbySchoolResponse } from "../types/school";
+import type { NearbySchoolResponse } from "../types/school-nearby";
+import type { School } from "../types/school";
+import { useLocation as useRouterLocation } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -138,7 +140,7 @@ const MOCK_NEARBY_SCHOOLS: NearbySchoolResponse = {
   ]
 };
 
-//좋아요 수정 필요함
+//좋아요 수정 필요함!
 export default function Home() {
   const [active, setActive] = React.useState<NavKey>("home");
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -147,6 +149,16 @@ export default function Home() {
   const [visibleSchools, setVisibleSchools] = useState<School[]>([]);
 
   const location = useGeolocation(); //사용자 위치 가져오기
+  const routerLocation = useRouterLocation();
+
+  const searchState = (routerLocation.state || {}) as {
+    keyword?: string;
+    schools?: School[];
+  };
+
+  const searchKeyword = searchState.keyword ?? "";
+  const searchSchools = searchState.schools ?? null;
+  const isSearchMode = !!(searchSchools && searchSchools.length > 0);
 
   useEffect(() => {
     if (!location.loaded) return;
@@ -154,7 +166,6 @@ export default function Home() {
 
     const centerLat = location.coordinates?.lat ?? DEFAULT_CENTER.lat;
     const centerLng = location.coordinates?.lng ?? DEFAULT_CENTER.lng;
-
     const position = new kakao.maps.LatLng(centerLat, centerLng);
     const options = {
       center: position,
@@ -171,8 +182,22 @@ export default function Home() {
       { offset: new kakao.maps.Point(24, 24) }
     );
 
-    const schoolList = MOCK_NEARBY_SCHOOLS.schools;
+    // 검색 모드이면: SearchDetail에서 넘어온 학교들만 사용, 아니면 주변 학교
+    const schoolList: School[] =
+      searchSchools && searchSchools.length > 0
+        ? searchSchools
+        : MOCK_NEARBY_SCHOOLS.schools;
 
+    if (searchSchools && searchSchools.length > 0) {
+      const bounds = new kakao.maps.LatLngBounds();
+      schoolList.forEach((data) => {
+        const pos = new kakao.maps.LatLng(data.latitude, data.longitude);
+        bounds.extend(pos);
+      });
+      map.setBounds(bounds);
+    }
+
+    // ✅ 공통 로직: 현재 화면 안에 들어오는 학교만 마커 + visibleSchools
     const updateMarkersInView = () => {
       const bounds = map.getBounds();
 
@@ -203,6 +228,9 @@ export default function Home() {
       setVisibleSchools(inViewList);
     };
 
+    // 초기 한 번 세팅
+    updateMarkersInView();
+
     kakao.maps.event.addListener(map, "tilesloaded", updateMarkersInView);
     kakao.maps.event.addListener(map, "idle", updateMarkersInView);
 
@@ -210,14 +238,15 @@ export default function Home() {
       kakao.maps.event.removeListener(map, "tilesloaded", updateMarkersInView);
       kakao.maps.event.removeListener(map, "idle", updateMarkersInView);
       markersRef.current.forEach((m) => m && m.setMap(null));
+      markersRef.current = [];
       mapInstanceRef.current = null;
     };
-  }, [location.loaded, location.coordinates]);
+  }, [location.loaded, location.coordinates, searchSchools]);
 
   return (
     <div className="flex flex-col items-center justify-end">
       <div className="fixed top-18 z-50">
-        <SearchBar variant="home" />
+        <SearchBar variant="home" value={isSearchMode ? searchKeyword : ""} />
       </div>
       <div ref={mapRef} className="h-screen w-full"></div>
       <div>
