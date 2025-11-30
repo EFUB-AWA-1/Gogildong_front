@@ -1,8 +1,8 @@
 import React from "react";
-import iconSearch from "../../assets/icon_search.svg";
-import Logo from "../../assets/logo.svg";
-import iconSdelete from "../../assets/icon_sdelete.svg";
-import iconBack from "../../../assets/backIcon.svg";
+import iconSearch from "../assets/icon_search.svg";
+import Logo from "../assets/logo.svg";
+import iconSdelete from "../assets/icon_sdelete.svg";
+import iconBack from "../../assets/backIcon.svg";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -11,6 +11,7 @@ type Props = {
   value?: string;
   onChangeQuery?: (value: string) => void;
   onSubmit?: (value: string) => void;
+  onClear?: () => void;
 };
 
 const SearchBar: React.FC<Props> = ({
@@ -18,7 +19,8 @@ const SearchBar: React.FC<Props> = ({
   placeholder = "학교, 주소, 시설 검색",
   value,
   onChangeQuery,
-  onSubmit
+  onSubmit,
+  onClear
 }) => {
   const navigate = useNavigate();
   const [internalQuery, setInternalQuery] = React.useState("");
@@ -41,7 +43,11 @@ const SearchBar: React.FC<Props> = ({
 
   const handleClear = () => {
     updateQuery("");
-    inputRef.current?.focus();
+    if (variant === "detail") {
+      inputRef.current?.focus();
+    } else {
+      onClear?.();
+    }
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
@@ -84,7 +90,7 @@ const SearchBar: React.FC<Props> = ({
       />
 
       {/* 검색 및 삭제 아이콘 */}
-      {variant === "detail" && query.length > 0 ? (
+      {query.length > 0 ? (
         <img
           src={iconSdelete}
           alt="search delete"
