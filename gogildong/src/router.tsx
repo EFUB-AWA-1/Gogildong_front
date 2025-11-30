@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import MainLayout from "./common/layout/MainLayout";
 import Home from "./Home/pages/Home";
 import InfoRequest from "./Home/pages/InfoRequest";
@@ -17,36 +17,40 @@ import SignupSuccess from "./Signup/pages/SignupSuccess";
 import ReviewWrite from "./ReportView/pages/ReviewWrite";
 import Login from "./Login/pages/Login";
 import ReviewDetail from "./ReportView/pages/ReviewDetail";
+import ProtectedRoute from "@/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
-      { path: "/home", element: <Home /> },
-      { path: "/school/:id/request", element: <InfoRequest /> },
-      { path: "/search", element: <SearchDetail /> },
-      {
-        path: "/school/:id",
-        element: <School />
-      },
-      { path: "/school/view/photos", element: <PhotoList /> },
-      { path: "/school/view/photos/detail", element: <PhotoDetail /> },
-      { path: "/school/view/review/write", element: <ReviewWrite /> },
-      { path: "/school/view/review", element: <ReviewDetail /> },
-      { path: "/school/report", element: <Report /> },
-      { path: "/school/report/camera", element: <PhotoReport /> },
-      { path: "/school/report/info", element: <ReportInfo /> },
-
+      { path: "/login", element: <Login /> },
       { path: "/signup", element: <SignupSelectRole /> },
       { path: "/signup/admin", element: <SignupAdmin /> },
       { path: "/signup/internal", element: <SignupInternal /> },
       { path: "/signup/external", element: <SignupExternal /> },
       { path: "/signup/success", element: <SignupSuccess /> },
 
-      { path: "/login", element: <Login /> }
-      // { path: "/find-id", element: <Login /> }
-      // { path: "/find-password", element: <Login /> }
+      {
+        element: (
+          <ProtectedRoute>
+            <Outlet />
+          </ProtectedRoute>
+        ),
+        children: [
+          { path: "/home", element: <Home /> },
+          { path: "/school/:id/request", element: <InfoRequest /> },
+          { path: "/search", element: <SearchDetail /> },
+          { path: "/school/:id", element: <School /> },
+          { path: "/school/view/photos", element: <PhotoList /> },
+          { path: "/school/view/photos/detail", element: <PhotoDetail /> },
+          { path: "/school/view/review/write", element: <ReviewWrite /> },
+          { path: "/school/view/review", element: <ReviewDetail /> },
+          { path: "/school/report", element: <Report /> },
+          { path: "/school/report/camera", element: <PhotoReport /> },
+          { path: "/school/report/info", element: <ReportInfo /> }
+        ]
+      }
     ]
   }
 ]);

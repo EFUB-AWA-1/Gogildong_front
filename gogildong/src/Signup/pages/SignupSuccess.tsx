@@ -13,10 +13,10 @@ export default function SignupSuccess() {
   const { name } = (state as SignupSuccessState) ?? {};
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col bg-white">
       <Header title="회원가입" />
-      <div className="flex min-h-screen flex-col bg-white px-6">
-        <div className="mt-6 flex flex-1 flex-col gap-6">
+      <div className="flex flex-1 flex-col px-6">
+        <div className="mt-6 flex flex-col gap-6">
           <SignupStepIndicator currentStep={3} totalSteps={3} />
           <div className="flex flex-col gap-2">
             <p className="text-heading-md text-black">회원가입 완료!</p>
@@ -26,7 +26,7 @@ export default function SignupSuccess() {
           </div>
         </div>
 
-        <div className="sticky bottom-0">
+        <div className="mt-auto bg-white py-6">
           <ActionButton
             label="홈으로"
             onClick={() => navigate("/home")}
@@ -34,6 +34,6 @@ export default function SignupSuccess() {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }

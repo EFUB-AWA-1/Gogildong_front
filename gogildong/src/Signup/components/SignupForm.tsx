@@ -2,6 +2,7 @@ import ActionButton from "@/common/components/ActionButton";
 import { extractErrorMessage } from "@/common/utils/handleAxiosError";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   sendVerificationCode,
   signupAdmin,
@@ -106,6 +107,7 @@ export default function SignupForm({
 }: {
   role: "admin" | "internal" | "external";
 }) {
+  const navigate = useNavigate();
   const [values, setValues] = useState(INITIAL_VALUES);
   const [errors, setErrors] = useState<SignupFormErrors>({});
   const [touched, setTouched] = useState<
@@ -115,6 +117,7 @@ export default function SignupForm({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [hasSentVerificationCode, setHasSentVerificationCode] = useState(false);
   const [resendOpen, setResendOpen] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const requiredFields: (keyof SignupFormValues)[] = [
     ...BASE_REQUIRED_FIELDS,
@@ -158,7 +161,8 @@ export default function SignupForm({
     setTouched((prev) => ({ ...prev, [field]: true }));
     runValidation(field, values);
   };
-  const submitDisabled = hasEmptyRequired || hasValidationError || submitting;
+  const submitDisabled =
+    !isEmailVerified || hasEmptyRequired || hasValidationError || submitting;
 
   const handleSendVerificationCode = async () => {
     setTouched((prev) => ({ ...prev, email: true }));
@@ -181,8 +185,10 @@ export default function SignupForm({
         verificationCode: Number(values.emailCode)
       });
       console.log("🎉 이메일 인증 성공");
+      setIsEmailVerified(true);
     } catch (err) {
       setSubmitError(extractErrorMessage(err));
+      setIsEmailVerified(false);
     }
   };
 
@@ -223,6 +229,7 @@ export default function SignupForm({
       }
 
       console.log("signup success");
+      navigate("/signup/success", { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("⚠️ 에러 메세지:", error.response?.data);
@@ -298,6 +305,8 @@ export default function SignupForm({
         error={Boolean(errors.emailCode)}
         hint={errors.emailCode}
         onVerifyClick={handleVerifyEmailCode}
+        isVerified={isEmailVerified}
+        disabled={isEmailVerified}
       />
 
       {(role === "internal" || role === "admin") && (
