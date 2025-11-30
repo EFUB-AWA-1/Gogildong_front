@@ -202,7 +202,7 @@ export default function SearchDetail() {
       {/* 자동완성 드롭다운 (검색바 바로 아래, 스타일은 새로만 추가) */}
       {suggestionsOpen && suggestions.length > 0 && (
         <div className="fixed top-[7.2rem] z-40 w-83">
-          <div className="mt-2 max-h-80 overflow-y-auto rounded-[1rem] bg-white shadow-[0_0_12px_rgba(0,0,0,0.10)]">
+          <div className="mt-2 max-h-80 overflow-y-auto rounded-2xl bg-white shadow-[0_0_12px_rgba(0,0,0,0.10)]">
             {suggestions.map((school) => (
               <button
                 key={school.schoolId}

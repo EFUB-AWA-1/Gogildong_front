@@ -146,6 +146,7 @@ export default function Home() {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<any | null>(null);
   const markersRef = useRef<(any | undefined)[]>([]);
+  const updateTimeoutRef = useRef<number | null>(null);
   const [visibleSchools, setVisibleSchools] = useState<School[]>([]);
 
   const location = useGeolocation(); //사용자 위치 가져오기
@@ -197,7 +198,7 @@ export default function Home() {
       map.setBounds(bounds);
     }
 
-    // ✅ 공통 로직: 현재 화면 안에 들어오는 학교만 마커 + visibleSchools
+    // 공통 로직: 현재 화면 안에 들어오는 학교만 마커 + visibleSchools
     const updateMarkersInView = () => {
       const bounds = map.getBounds();
 
@@ -228,15 +229,26 @@ export default function Home() {
       setVisibleSchools(inViewList);
     };
 
+    const throttledUpdate = () => {
+      if (updateTimeoutRef.current !== null) return;
+
+      updateTimeoutRef.current = window.setTimeout(() => {
+        updateMarkersInView();
+        updateTimeoutRef.current = null;
+      }, 150); // 150ms 안에 여러 번 idle이 들어와도 한 번만 실행
+    };
+
     // 초기 한 번 세팅
     updateMarkersInView();
 
-    kakao.maps.event.addListener(map, "tilesloaded", updateMarkersInView);
-    kakao.maps.event.addListener(map, "idle", updateMarkersInView);
+    kakao.maps.event.addListener(map, "idle", throttledUpdate);
 
     return () => {
-      kakao.maps.event.removeListener(map, "tilesloaded", updateMarkersInView);
       kakao.maps.event.removeListener(map, "idle", updateMarkersInView);
+      if (updateTimeoutRef.current !== null) {
+        window.clearTimeout(updateTimeoutRef.current);
+        updateTimeoutRef.current = null;
+      }
       markersRef.current.forEach((m) => m && m.setMap(null));
       markersRef.current = [];
       mapInstanceRef.current = null;
