@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import NavBar from "../../common/components/NavBar";
 import type { NavKey } from "../../common/components/NavBar";
-import SearchBar from "../components/search/SearchBar";
+import SearchBar from "../components/SearchBar";
 import customMarker from "../assets/icon_marker.svg";
 import BottomSheet from "../components/BottomSheet";
 import useGeolocation from "../hooks/useGeolocation";
 import type { NearbySchoolResponse } from "../types/school-nearby";
 import type { School } from "../types/school";
-import { useLocation as useRouterLocation } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation as useRouterLocation
+} from "react-router-dom";
 
 declare global {
   interface Window {
@@ -148,9 +151,10 @@ export default function Home() {
   const markersRef = useRef<(any | undefined)[]>([]);
   const updateTimeoutRef = useRef<number | null>(null);
   const [visibleSchools, setVisibleSchools] = useState<School[]>([]);
-
+  const [query, setQuery] = useState("");
   const location = useGeolocation(); //사용자 위치 가져오기
   const routerLocation = useRouterLocation();
+  const navigate = useNavigate();
 
   const searchState = (routerLocation.state || {}) as {
     keyword?: string;
@@ -161,10 +165,21 @@ export default function Home() {
   const searchSchools = searchState.schools ?? null;
   const isSearchMode = !!(searchSchools && searchSchools.length > 0);
 
+  //검색어 유지 로직
+  useEffect(() => {
+    if (isSearchMode) {
+      setQuery(searchKeyword); // 검색에서 넘어온 경우 검색어 채워주기
+    } else {
+      setQuery(""); // 기본 홈일 땐 비우기
+    }
+  }, [isSearchMode, searchKeyword]);
+
+  //지도
   useEffect(() => {
     if (!location.loaded) return;
     if (!mapRef.current) return;
 
+    //위치 지정
     const centerLat = location.coordinates?.lat ?? DEFAULT_CENTER.lat;
     const centerLng = location.coordinates?.lng ?? DEFAULT_CENTER.lng;
     const position = new kakao.maps.LatLng(centerLat, centerLng);
@@ -258,7 +273,15 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-end">
       <div className="fixed top-18 z-50">
-        <SearchBar variant="home" value={isSearchMode ? searchKeyword : ""} />
+        <SearchBar
+          variant="home"
+          value={query}
+          onClear={() => {
+            setQuery("");
+            navigate("/home", { replace: true });
+          }}
+          onChangeQuery={setQuery}
+        />
       </div>
       <div ref={mapRef} className="h-screen w-full"></div>
       <div>

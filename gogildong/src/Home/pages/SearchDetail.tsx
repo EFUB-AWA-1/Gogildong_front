@@ -1,4 +1,4 @@
-import SearchBar from "../components/search/SearchBar";
+import SearchBar from "../components/SearchBar";
 import HomeBlackIcon from "../assets/icon_home_black.svg?react";
 import DeleteIcon from "../assets/icon_delete.svg?react";
 import SearchIcon from "../assets/icon_search.svg?react";
