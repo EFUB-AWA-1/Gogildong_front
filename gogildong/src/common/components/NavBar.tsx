@@ -25,6 +25,7 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
   const handleClick = (key: NavKey) => () => {
     onChange?.(key);
     if (key === "home") navigate("/home");
+    if (key === "mypage") navigate("/mypage");
   };
   const isActive = (key: NavKey) => active === key;
 

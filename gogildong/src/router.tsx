@@ -18,6 +18,7 @@ import ReviewWrite from "./ReportView/pages/ReviewWrite";
 import Login from "./Login/pages/Login";
 import ReviewDetail from "./ReportView/pages/ReviewDetail";
 import ProtectedRoute from "@/ProtectedRoute";
+import Mypage from "./Mypage/pages/Mypage";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +49,8 @@ const router = createBrowserRouter([
           { path: "/school/view/review", element: <ReviewDetail /> },
           { path: "/school/report", element: <Report /> },
           { path: "/school/report/camera", element: <PhotoReport /> },
-          { path: "/school/report/info", element: <ReportInfo /> }
+          { path: "/school/report/info", element: <ReportInfo /> },
+          { path: "/mypage", element: <Mypage /> }
         ]
       }
     ]
