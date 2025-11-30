@@ -1,22 +1,30 @@
 import React from "react";
-import iconSearch from "../assets/icon_search.svg";
-import Logo from "../assets/logo.svg";
-import iconSdelete from "../assets/icon_sdelete.svg";
-import iconBack from "../../assets/backIcon.svg";
+import iconSearch from "../../assets/icon_search.svg";
+import Logo from "../../assets/logo.svg";
+import iconSdelete from "../../assets/icon_sdelete.svg";
+import iconBack from "../../../assets/backIcon.svg";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
   variant: "home" | "detail";
   placeholder?: string;
+  value?: string;
+  onChangeQuery?: (value: string) => void;
+  onSubmit?: (value: string) => void;
 };
 
 const SearchBar: React.FC<Props> = ({
   variant,
   placeholder = "학교, 주소, 시설 검색",
+  value,
+  onChangeQuery,
+  onSubmit
 }) => {
   const navigate = useNavigate();
-  const [query, setQuery] = React.useState("");
+  const [internalQuery, setInternalQuery] = React.useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const query = value !== undefined ? value : internalQuery;
 
   const handleFocus = () => {
     if (variant === "home") {
@@ -24,15 +32,23 @@ const SearchBar: React.FC<Props> = ({
     }
   };
 
+  const updateQuery = (next: string) => {
+    if (value === undefined) {
+      setInternalQuery(next);
+    }
+    onChangeQuery?.(next);
+  };
+
   const handleClear = () => {
-    setQuery("");
+    updateQuery("");
     inputRef.current?.focus();
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === "Enter") {
-      // TODO: 엔터 검색 로직 연결 (API 호출/페이지 이동 등)
-      // 예: navigate(`/search?query=${encodeURIComponent(query)}`)
+      const trimmed = query.trim();
+      if (!trimmed) return;
+      onSubmit?.(trimmed);
     }
   };
 
@@ -41,23 +57,17 @@ const SearchBar: React.FC<Props> = ({
   };
 
   return (
-    <div
-      className="flex justify-between items-center shrink-0 
-                 w-83 h-12 px-2 
-                 rounded-[1.25rem] 
-                 bg-white 
-                 shadow-[0_0_12px_rgba(0,0,0,0.10)]"
-    >
+    <div className="flex h-12 w-83 shrink-0 items-center justify-between rounded-[1.25rem] bg-white px-2 shadow-[0_0_12px_rgba(0,0,0,0.10)]">
       {/*로고 및 뒤로가기*/}
       {variant === "detail" ? (
         <img
           src={iconBack}
           alt="back"
           onClick={handleBack}
-          className="w-11 h-11 shrink-0 cursor-pointer mr-2"
+          className="mr-2 h-11 w-11 shrink-0 cursor-pointer"
         />
       ) : (
-        <img src={Logo} alt="logo" className="w-11 h-11 mr-2" />
+        <img src={Logo} alt="logo" className="mr-2 h-11 w-11" />
       )}
 
       {/* 입력창 */}
@@ -65,16 +75,12 @@ const SearchBar: React.FC<Props> = ({
         ref={inputRef}
         value={query}
         type="text"
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => updateQuery(e.target.value)}
         onFocus={handleFocus}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         autoFocus={variant === "detail"}
-        className="w-50 mx-2 text-left shrink-0
-                   text-body-md font-medium leading-6
-                   text-black placeholder-gray-60
-                   font-[Pretendard Variable] 
-                   bg-transparent outline-none"
+        className="font-[Pretendard Variable] mx-2 w-50 shrink-0 bg-transparent text-left text-body-md leading-6 font-medium text-black placeholder-gray-60 outline-none"
       />
 
       {/* 검색 및 삭제 아이콘 */}
@@ -83,10 +89,10 @@ const SearchBar: React.FC<Props> = ({
           src={iconSdelete}
           alt="search delete"
           onClick={handleClear}
-          className="w-4 h-4 mr-4 cursor-pointer"
+          className="mr-4 h-4 w-4 cursor-pointer"
         />
       ) : (
-        <img src={iconSearch} alt="search" className="w-11 h-11" />
+        <img src={iconSearch} alt="search" className="h-11 w-11" />
       )}
     </div>
   );

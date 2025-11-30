@@ -1,4 +1,3 @@
-// hooks/useBottomSheet.ts
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export function useBottomSheet(openRem = 35, closedRem = 11) {
@@ -137,6 +136,6 @@ export function useBottomSheet(openRem = 35, closedRem = 11) {
     contentRef,
     onHandleMouseDown,
     onHandleTouchStart,
-    toggle,
+    toggle
   };
 }
