@@ -1,5 +1,5 @@
 import SchoolCard from "./SchoolCard";
-import type { School } from "../pages/Home";
+import type { School } from "../types/school";
 
 type ContentProps = {
   schools: School[];
