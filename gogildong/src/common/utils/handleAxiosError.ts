@@ -1,10 +1,20 @@
 import axios from "axios";
+interface ServerFieldError {
+  field: string;
+  message: string;
+  code?: string;
+}
 export function extractErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const data = error.response?.data;
 
-    if (data?.message) return data.message;
-    if (data?.error) return data.error;
+    if (Array.isArray(data?.errors) && data.errors.length > 0) {
+      return data.errors.map((err: ServerFieldError) => err.message).join("\n");
+    }
+
+    if (typeof data?.message === "string") {
+      return data.message;
+    }
 
     return error.message;
   }
