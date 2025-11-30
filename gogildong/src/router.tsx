@@ -18,6 +18,7 @@ import ReviewWrite from "./ReportView/pages/ReviewWrite";
 import Login from "./Login/pages/Login";
 import ReviewDetail from "./ReportView/pages/ReviewDetail";
 import ProtectedRoute from "@/ProtectedRoute";
+import Mypage from "./Mypage/pages/Mypage";
 
 const router = createBrowserRouter([
   {
@@ -31,26 +32,28 @@ const router = createBrowserRouter([
       { path: "/signup/external", element: <SignupExternal /> },
       { path: "/signup/success", element: <SignupSuccess /> },
 
-      {
-        element: (
-          <ProtectedRoute>
-            <Outlet />
-          </ProtectedRoute>
-        ),
-        children: [
-          { path: "/home", element: <Home /> },
-          { path: "/school/:id/request", element: <InfoRequest /> },
-          { path: "/search", element: <SearchDetail /> },
-          { path: "/school/:id", element: <School /> },
-          { path: "/school/view/photos", element: <PhotoList /> },
-          { path: "/school/view/photos/detail", element: <PhotoDetail /> },
-          { path: "/school/view/review/write", element: <ReviewWrite /> },
-          { path: "/school/view/review", element: <ReviewDetail /> },
-          { path: "/school/report", element: <Report /> },
-          { path: "/school/report/camera", element: <PhotoReport /> },
-          { path: "/school/report/info", element: <ReportInfo /> }
-        ]
-      }
+      // {
+      //   element: (
+      //     <ProtectedRoute>
+      //       <Outlet />
+      //     </ProtectedRoute>
+      //   ),
+      //   children: [
+      { path: "/home", element: <Home /> },
+      { path: "/school/:id/request", element: <InfoRequest /> },
+      { path: "/search", element: <SearchDetail /> },
+      { path: "/school/:id", element: <School /> },
+      { path: "/school/view/photos", element: <PhotoList /> },
+      { path: "/school/view/photos/detail", element: <PhotoDetail /> },
+      { path: "/school/view/review/write", element: <ReviewWrite /> },
+      { path: "/school/view/review", element: <ReviewDetail /> },
+      { path: "/school/report", element: <Report /> },
+      { path: "/school/report/camera", element: <PhotoReport /> },
+      { path: "/school/report/info", element: <ReportInfo /> },
+      { path: "/mypage", element: <Mypage /> }
+
+      //   ]
+      // }
     ]
   }
 ]);
