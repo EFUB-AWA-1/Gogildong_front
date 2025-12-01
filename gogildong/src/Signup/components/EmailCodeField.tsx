@@ -4,6 +4,8 @@ interface EmailCodeFieldProps {
   error?: boolean;
   onChange: (value: string) => void;
   onVerifyClick: () => void;
+  isVerified?: boolean;
+  disabled?: boolean;
 }
 
 export default function EmailCodeField({
@@ -11,7 +13,9 @@ export default function EmailCodeField({
   hint,
   error,
   onChange,
-  onVerifyClick
+  onVerifyClick,
+  disabled,
+  isVerified
 }: EmailCodeFieldProps) {
   return (
     <label className="flex flex-col gap-2">
@@ -47,9 +51,14 @@ export default function EmailCodeField({
         <button
           type="button"
           onClick={onVerifyClick}
-          className="text-body-bold-sm h-14 shrink-0 rounded-[1.25rem] bg-neon-100 px-4 py-3 text-black"
+          disabled={disabled}
+          className={`text-body-bold-sm h-14 shrink-0 rounded-[1.25rem] px-4 py-3 ${
+            isVerified
+              ? "cursor-not-allowed bg-gray-200 text-gray-500"
+              : "bg-neon-100 text-black"
+          } `}
         >
-          코드 확인
+          {isVerified ? '인증 완료': '코드 확인'}
         </button>
       </div>
     </label>
