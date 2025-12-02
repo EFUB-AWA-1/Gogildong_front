@@ -19,18 +19,30 @@ import ReportStart from '@/Report/pages/ReportStart';
 import ReportFlow from '@/Report/pages/ReportFlow';
 import ProtectedRoute from '@/ProtectedRoute';
 import Mypage from './Mypage/pages/Mypage';
+import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
+import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
+import PublicRoute from '@/PublicRoute';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
     children: [
-      { path: '/login', element: <Login /> },
-      { path: '/signup', element: <SignupSelectRole /> },
-      { path: '/signup/admin', element: <SignupAdmin /> },
-      { path: '/signup/internal', element: <SignupInternal /> },
-      { path: '/signup/external', element: <SignupExternal /> },
-      { path: '/signup/success', element: <SignupSuccess /> },
+      {
+        element: (
+          <PublicRoute>
+            <Outlet />
+          </PublicRoute>
+        ),
+        children: [
+          { path: '/login', element: <Login /> },
+          { path: '/signup', element: <SignupSelectRole /> },
+          { path: '/signup/admin', element: <SignupAdmin /> },
+          { path: '/signup/internal', element: <SignupInternal /> },
+          { path: '/signup/external', element: <SignupExternal /> },
+          { path: '/signup/success', element: <SignupSuccess /> }
+        ]
+      },
 
       {
         element: (
@@ -43,6 +55,11 @@ const router = createBrowserRouter([
           { path: '/school/:id/request', element: <InfoRequest /> },
           { path: '/search', element: <SearchDetail /> },
           { path: '/school/:id', element: <School /> },
+          { path: '/school/facility/:id', element: <FacilityViewDetail /> },
+          {
+            path: '/school/facility/:id/reviews',
+            element: <FacilityReviewList />
+          },
           { path: '/school/view/photos', element: <PhotoList /> },
           { path: '/school/view/photos/detail', element: <PhotoDetail /> },
           { path: '/school/view/review/write', element: <ReviewWrite /> },
