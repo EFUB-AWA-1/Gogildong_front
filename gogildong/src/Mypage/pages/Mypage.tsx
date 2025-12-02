@@ -7,18 +7,6 @@ import { calculateJoinedDays } from "../utils/calculateJoinedDays";
 import { useUserStore } from "../stores/useUserStore";
 import { getUserInfo } from "../api/getUserInfo";
 
-type UserInfo = {
-  userId: number;
-  loginId: string;
-  password: string;
-  username: string;
-  role: "INTERNAL" | "EXTERNAL";
-  email: string;
-  phone: string;
-  createdAt: string; // "2025-01-01"
-  profileImageUrl: string | null;
-};
-
 export default function Mypage() {
   const [active, setActive] = React.useState<NavKey>("mypage");
 

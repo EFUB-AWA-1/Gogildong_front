@@ -11,6 +11,7 @@ export interface UserInfo {
   schoolCode: string;
   schoolName: string;
   createdAt: string;
+  profileImageUrl: string;
 }
 
 interface UserState {
