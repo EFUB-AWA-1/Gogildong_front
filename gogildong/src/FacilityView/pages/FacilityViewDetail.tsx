@@ -5,6 +5,7 @@ import InfoCard from '@/FacilityView/components/InfoCard';
 import ReviewList from '@/FacilityView/components/ReviewList';
 import type { FacilityInfo } from '@/FacilityView/types/facility';
 import type { ReviewResponse } from '@/FacilityView/types/review';
+import ActionButton from '@/common/components/ActionButton';
 
 export default function FacilityViewDetail() {
   const [facilityInfo, setFacilityInfo] = useState<FacilityInfo | null>(null);
@@ -85,7 +86,7 @@ export default function FacilityViewDetail() {
   return (
     <div className="flex flex-col">
       <Header title={headerTitle} />
-      <div className="flex flex-col gap-6 overflow-y-auto bg-white px-[30px] py-4">
+      <div className="flex flex-col gap-6 overflow-y-auto bg-white p-4">
         {facilityInfo && <InfoCard data={facilityInfo} />}
         <div className="flex flex-col gap-6 rounded-[20px] border border-gray-20 bg-linear-to-b from-white to-[#f2f2f2] px-4 py-6">
           <div className="flex flex-col gap-2">
@@ -106,6 +107,13 @@ export default function FacilityViewDetail() {
             total={mockResponse.total}
           />
         </div>
+      </div>
+      <div className="sticky bottom-0 bg-white p-4">
+        <ActionButton
+          type="button"
+          className="h-12 rounded-3xl bg-neon-100 text-white"
+          label="시뮬레이션"
+        ></ActionButton>
       </div>
     </div>
   );
