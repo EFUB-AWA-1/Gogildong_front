@@ -22,7 +22,7 @@ export default function InfoCard({ data }: InfoCardProps) {
   const doorText = doorTypeMap[doorType] || '기타';
 
   return (
-    <div className="border-gray-30 flex w-full flex-col gap-3 rounded-2xl border bg-white p-5 shadow-sm">
+    <div className="flex w-full flex-col gap-3 rounded-2xl border border-gray-20 bg-white p-5 shadow-sm">
       <p className="text-body-bold-lg text-black">화장실 정보</p>
 
       <div className="flex flex-wrap justify-between text-body-md text-black">

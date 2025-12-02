@@ -6,16 +6,18 @@ import { useState } from 'react';
 
 interface ReviewCardProps {
   review: Review;
+  onClick?: () => void;
 }
 
-export default function ReviewCard({ review }: ReviewCardProps) {
+export default function ReviewCard({ review, onClick }: ReviewCardProps) {
   const { userName, reviewText, likeCount, commentCount, createdAt } = review;
 
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(likeCount);
 
   // ✅ 추천 버튼 클릭 핸들러
-  const handleLikeClick = () => {
+  const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
   };
@@ -25,7 +27,14 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     : '2025-09-21';
 
   return (
-    <div className="rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">
+    <div
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onClick={onClick}
+      className={`rounded-2xl border border-gray-20 bg-white p-4 shadow-sm ${
+        onClick ? 'cursor-pointer transition hover:shadow-md' : ''
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           <div className="h-8 w-8 rounded-full bg-gray-20" />

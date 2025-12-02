@@ -39,8 +39,8 @@ export default function FacilityViewDetail() {
   }, []);
 
   const mockResponse: ReviewResponse = {
-    total: 2,
-    isLast: false,
+    total: 4,
+    isLast: true,
     reviews: [
       {
         userId: 1,
@@ -59,16 +59,51 @@ export default function FacilityViewDetail() {
         likeCount: 1,
         commentCount: 0,
         createdAt: '2025-10-31'
+      },
+      {
+        userId: 3,
+        userName: '신사임당',
+        reviewId: 25,
+        reviewText: '입구 턱이 낮아서 이동이 편했어요.',
+        likeCount: 5,
+        commentCount: 2,
+        createdAt: '2025-11-01'
+      },
+      {
+        userId: 4,
+        userName: '임꺽정',
+        reviewId: 26,
+        reviewText: '향기가 좋아요!',
+        likeCount: 0,
+        commentCount: 0,
+        createdAt: '2025-11-02'
       }
     ]
   };
+  const mockAiSummary = ['🚧좁음', '🧼청결함', '😃긍정적', '♿이동편의'];
 
   return (
     <div className="flex flex-col">
       <Header title={headerTitle} />
       <div className="flex flex-col gap-6 overflow-y-auto bg-white px-[30px] py-4">
         {facilityInfo && <InfoCard data={facilityInfo} />}
-        <ReviewList reviews={mockResponse.reviews} total={mockResponse.total} />
+        <div className="flex flex-col gap-6 rounded-[20px] border border-gray-20 bg-linear-to-b from-white to-[#f2f2f2] px-4 py-6">
+          <div className="flex flex-col gap-2">
+            <p className="text-heading-sm text-black">AI 분석 요약</p>
+            <div className="flex flex-1 justify-evenly gap-2">
+              {mockAiSummary.map((item) => (
+                <span key={item} className="text-caption-lg text-black">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+          <ReviewList
+            facilityId={facilityInfo?.facilityDetail.facilityId}
+            reviews={mockResponse.reviews}
+            total={mockResponse.total}
+          />
+        </div>
       </div>
     </div>
   );

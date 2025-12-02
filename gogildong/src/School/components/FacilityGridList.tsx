@@ -43,7 +43,7 @@ export default function FacilityGridList() {
     <div className="grid w-full grid-cols-2 gap-4">
       {reports.map((r) => (
         <FacilityCard
-          id={r.id}
+          facilityId={r.id}
           key={r.title}
           title={r.title}
           date={r.date}

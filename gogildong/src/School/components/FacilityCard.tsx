@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import DisabilityIcon from "../assets/svgs/disability.svg?react";
+import { useNavigate } from 'react-router-dom';
+import DisabilityIcon from '../assets/svgs/disability.svg?react';
 
 interface FacilityCardProps {
-  id: number;
+  facilityId: number;
   title: string;
   date: string;
   location: string;
@@ -10,7 +10,7 @@ interface FacilityCardProps {
 }
 
 export default function FacilityCard({
-  id,
+  facilityId,
   title,
   date,
   location,
@@ -19,7 +19,7 @@ export default function FacilityCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/school/facility/${id}`);
+    navigate(`/school/facility/${facilityId}`);
   };
 
   return (
