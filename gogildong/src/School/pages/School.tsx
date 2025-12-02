@@ -1,12 +1,13 @@
 import { useState } from "react";
 import FloorSelector from "../components/FloorSelector";
-import ReportGridList from "../components/ReportGridList";
+
 import LocationTab from "../components/LocationTab";
 import SchoolInfo from "../components/SchoolInfo";
 import ActionButton from "@/common/components/ActionButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AccessRestricted from "@/Home/components/AccessRestricted";
 import type { SchoolInfoProps } from "../types/schoolInfo";
+import FacilityGridList from "@/School/components/FacilityGridList";
 
 const dummyUser = {
   userId: 1,
@@ -63,7 +64,7 @@ export default function School() {
             disabled={!isInternal}
           />
           <div className="mb-24 flex w-full flex-col items-center">
-            {isInternal ? <ReportGridList /> : <AccessRestricted />}
+            {isInternal ? <FacilityGridList /> : <AccessRestricted />}
           </div>
         </section>
       </div>
