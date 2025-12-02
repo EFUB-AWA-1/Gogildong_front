@@ -6,11 +6,16 @@ import MenuList from "../components/MenuList";
 import { calculateJoinedDays } from "../utils/calculateJoinedDays";
 import { useUserStore } from "../stores/useUserStore";
 import { getUserInfo } from "../api/getUserInfo";
+import { useAuthStore } from "./../../Login/stores/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Mypage() {
+  const navigate = useNavigate();
   const [active, setActive] = React.useState<NavKey>("mypage");
 
   const user = useUserStore((state) => state.user);
+  const logoutUser = useUserStore((state) => state.logout);
+  const clearTokens = useAuthStore((state) => state.clearTokens);
 
   useEffect(() => {
     getUserInfo();
@@ -30,7 +35,13 @@ export default function Mypage() {
   }
 
   const handleLogout = () => {
-    // 로그아웃 로직
+    logoutUser();
+    clearTokens();
+
+    localStorage.removeItem("user-storage");
+    localStorage.removeItem("auth-storage");
+
+    navigate("/login");
   };
 
   return (
