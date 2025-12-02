@@ -7,6 +7,8 @@ export interface FacilityDetail {
   facilityType: string;
   reviewSummary: string | null;
   createdAt: string;
+  facilityImage?: string;
+  facilityImages?: string[];
 }
 
 export type Gender = 'female' | 'male';

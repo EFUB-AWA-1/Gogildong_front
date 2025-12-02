@@ -1,14 +1,24 @@
 import Header from '@/common/components/Header';
+import ImgSample from '@/Report/assets/imgs/img_sample.png';
+
 import { useEffect, useState } from 'react';
 
+import ActionButton from '@/common/components/ActionButton';
+import FacilityHeader from '@/FacilityView/components/FacilityHeader';
 import InfoCard from '@/FacilityView/components/InfoCard';
 import ReviewList from '@/FacilityView/components/ReviewList';
 import type { FacilityInfo } from '@/FacilityView/types/facility';
 import type { ReviewResponse } from '@/FacilityView/types/review';
-import ActionButton from '@/common/components/ActionButton';
 
 export default function FacilityViewDetail() {
   const [facilityInfo, setFacilityInfo] = useState<FacilityInfo | null>(null);
+  const mockFacilityImages = [
+    ImgSample,
+    ImgSample,
+    ImgSample,
+    ImgSample,
+    ImgSample
+  ];
 
   const facilityTypeLabel: Record<string, string> = {
     restroom: '화장실'
@@ -28,7 +38,8 @@ export default function FacilityViewDetail() {
         facilityNickName: '미술실 옆 여자화장실',
         facilityType: 'restroom',
         reviewSummary: null,
-        createdAt: '2025-11-03T21:55:41.000996'
+        createdAt: '2025-11-03T21:55:41.000996',
+        facilityImages: mockFacilityImages
       },
       doorWidth: 85.0,
       gender: 'female',
@@ -82,12 +93,25 @@ export default function FacilityViewDetail() {
     ]
   };
   const mockAiSummary = ['🚧좁음', '🧼청결함', '😃긍정적', '♿이동편의'];
+  const displayImages =
+    facilityInfo?.facilityDetail.facilityImages ??
+    (facilityInfo?.facilityDetail.facilityImage
+      ? [facilityInfo.facilityDetail.facilityImage]
+      : mockFacilityImages);
 
   return (
     <div className="flex flex-col">
       <Header title={headerTitle} />
       <div className="flex flex-col gap-6 overflow-y-auto bg-white p-4">
-        {facilityInfo && <InfoCard data={facilityInfo} />}
+        {facilityInfo && (
+          <>
+            <FacilityHeader
+              detail={facilityInfo.facilityDetail}
+              images={displayImages}
+            />
+            <InfoCard data={facilityInfo} />
+          </>
+        )}
         <div className="flex flex-col gap-6 rounded-[20px] border border-gray-20 bg-linear-to-b from-white to-[#f2f2f2] px-4 py-6">
           <div className="flex flex-col gap-2">
             <p className="text-heading-sm text-black">AI 분석 요약</p>
