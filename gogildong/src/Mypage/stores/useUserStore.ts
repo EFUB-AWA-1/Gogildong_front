@@ -17,7 +17,7 @@ export interface UserInfo {
 interface UserState {
   user: UserInfo | null;
   setUser: (user: UserInfo) => void;
-  clearUser: () => void;
+  logout: () => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -25,7 +25,7 @@ export const useUserStore = create<UserState>()(
     (set) => ({
       user: null,
       setUser: (user) => set({ user }),
-      clearUser: () => set({ user: null })
+      logout: () => set({ user: null })
     }),
     { name: "user-storage" }
   )
