@@ -2,7 +2,7 @@ import Header from '@/common/components/Header';
 import ReviewCard from '@/FacilityView/components/ReviewCard';
 import type { Review } from '@/FacilityView/types/review';
 import { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const mockReviews: Review[] = [
   {
@@ -55,11 +55,28 @@ const mockReviews: Review[] = [
 
 const mockAiSummary = ['🚧좁음', '🧼청결함', '😃긍정적', '♿이동편의'];
 
+type LocationState = {
+  reviews?: Review[];
+  total?: number;
+  facilityName?: string;
+  aiSummary?: string[];
+};
+
 export default function FacilityReviewList() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = (location.state || {}) as LocationState;
 
-  const facilityName = useMemo(() => id ?? '1-A', [id]);
+  const reviews =
+    state.reviews && state.reviews.length > 0 ? state.reviews : mockReviews;
+  const aiSummary =
+    state.aiSummary && state.aiSummary.length > 0 ? state.aiSummary : mockAiSummary;
+  const total = state.total ?? reviews.length;
+  const facilityName = useMemo(
+    () => state.facilityName ?? id ?? '1-A',
+    [state.facilityName, id]
+  );
 
   const handleBack = () => navigate(-1);
   const handleWriteClick = () => navigate('/school/view/review/write');
@@ -76,7 +93,7 @@ export default function FacilityReviewList() {
         <section className="rounded-2xl border border-gray-20 bg-white p-4">
           <h2 className="text-heading-sm text-black">AI 분석 요약</h2>
           <div className="mt-3 flex flex-wrap gap-2">
-            {mockAiSummary.map((item) => (
+            {aiSummary.map((item) => (
               <span
                 key={item}
                 className="border-gray-30 bg-gray-05 rounded-full border px-3 py-1 text-body-sm text-gray-80"
@@ -89,10 +106,10 @@ export default function FacilityReviewList() {
 
         <section className="flex flex-col gap-3">
           <h2 className="text-heading-sm text-black">
-            리뷰 <span className="text-neon-100">{mockReviews.length}</span>
+            리뷰 <span className="text-neon-100">{total}</span>
           </h2>
           <div className="flex flex-col gap-3">
-            {mockReviews.map((review) => (
+            {reviews.map((review) => (
               <ReviewCard
                 key={review.reviewId}
                 review={review}

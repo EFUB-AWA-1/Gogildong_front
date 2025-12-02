@@ -7,12 +7,16 @@ interface ReviewListProps {
   reviews: Review[];
   total?: number;
   facilityId?: number | string;
+  facilityName?: string;
+  aiSummary?: string[];
 }
 
 export default function ReviewList({
   reviews,
   total,
-  facilityId
+  facilityId,
+  facilityName,
+  aiSummary
 }: ReviewListProps) {
   const MIN_REVIEWS_FOR_MORE = 3;
   const navigate = useNavigate();
@@ -36,11 +40,17 @@ export default function ReviewList({
       : reviews;
 
   const handleNavigateMore = () => {
-    if (facilityId !== undefined) {
-      navigate(`/school/facility/${facilityId}/reviews`);
-      return;
-    }
-    navigate('/school/view/review');
+    navigate(
+      facilityId ? `/school/facility/${facilityId}/reviews` : '/school/view/review',
+      {
+        state: {
+          reviews,
+          total: displayTotal,
+          facilityName,
+          aiSummary
+        }
+      }
+    );
   };
 
   return (

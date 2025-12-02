@@ -24,7 +24,7 @@ export default function FacilityViewDetail() {
         floorName: '1',
         facilityId: 1,
         facilityName: '1-A',
-        facilityNiceName: '미술실 옆 여자화장실',
+        facilityNickName: '미술실 옆 여자화장실',
         facilityType: 'restroom',
         reviewSummary: null,
         createdAt: '2025-11-03T21:55:41.000996'
@@ -100,6 +100,8 @@ export default function FacilityViewDetail() {
           </div>
           <ReviewList
             facilityId={facilityInfo?.facilityDetail.facilityId}
+            facilityName={facilityInfo?.facilityDetail.facilityName}
+            aiSummary={mockAiSummary}
             reviews={mockResponse.reviews}
             total={mockResponse.total}
           />

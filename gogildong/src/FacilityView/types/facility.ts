@@ -3,7 +3,7 @@ export interface FacilityDetail {
   floorName: string;
   facilityId: number;
   facilityName: string;
-  facilityNiceName: string;
+  facilityNickName: string;
   facilityType: string;
   reviewSummary: string | null;
   createdAt: string;
