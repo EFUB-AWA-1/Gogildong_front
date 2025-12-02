@@ -1,45 +1,47 @@
 import Header from "@/common/components/Header";
 import NavBar, { type NavKey } from "@/common/components/NavBar";
-import React from "react";
+import React, { useEffect } from "react";
 import ProfileSection from "../components/ProfileSection";
 import MenuList from "../components/MenuList";
 import { calculateJoinedDays } from "../utils/calculateJoinedDays";
-
-type UserInfo = {
-  userId: number;
-  loginId: string;
-  password: string;
-  username: string;
-  role: "INTERNAL" | "EXTERNAL";
-  email: string;
-  phone: string;
-  createAt: string; // "2025-01-01"
-  profileImageUrl: string | null;
-};
+import { useUserStore } from "../stores/useUserStore";
+import { getUserInfo } from "../api/getUserInfo";
+import { useAuthStore } from "./../../Login/stores/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Mypage() {
+  const navigate = useNavigate();
   const [active, setActive] = React.useState<NavKey>("mypage");
 
-  // TODO: 실제 API 연동으로 대체
-  const user: UserInfo = {
-    userId: 1,
-    loginId: "testId",
-    password: "testpw",
-    username: "홍길동",
-    role: "INTERNAL",
-    email: "test@gamil.com",
-    phone: "010-1234-5678",
-    createAt: "2025-12-01",
-    profileImageUrl: ""
-  };
+  const user = useUserStore((state) => state.user);
+  const logoutUser = useUserStore((state) => state.logout);
+  const clearTokens = useAuthStore((state) => state.clearTokens);
 
-  const joinedDays = React.useMemo(
-    () => calculateJoinedDays(user.createAt),
-    [user.createAt]
-  );
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const joinedDays = React.useMemo(() => {
+    if (!user) return 0;
+    return calculateJoinedDays(user.createdAt);
+  }, [user?.createdAt]);
+
+  if (!user) {
+    return (
+      <>
+        <div>로딩 중...</div>
+      </>
+    );
+  }
 
   const handleLogout = () => {
-    // 로그아웃 로직
+    logoutUser();
+    clearTokens();
+
+    localStorage.removeItem("user-storage");
+    localStorage.removeItem("auth-storage");
+
+    navigate("/login");
   };
 
   return (

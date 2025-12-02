@@ -1,0 +1,15 @@
+export interface Review {
+  userId: number;
+  userName: string;
+  reviewId: number;
+  reviewText: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+}
+
+export interface ReviewResponse {
+  total: number;
+  isLast: boolean;
+  reviews: Review[];
+}
