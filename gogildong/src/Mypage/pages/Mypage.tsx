@@ -1,17 +1,17 @@
-import Header from "@/common/components/Header";
-import NavBar, { type NavKey } from "@/common/components/NavBar";
-import React, { useEffect } from "react";
-import ProfileSection from "../components/ProfileSection";
-import MenuList from "../components/MenuList";
-import { calculateJoinedDays } from "../utils/calculateJoinedDays";
-import { useUserStore } from "../stores/useUserStore";
-import { getUserInfo } from "../api/getUserInfo";
-import { useAuthStore } from "./../../Login/stores/useAuthStore";
-import { useNavigate } from "react-router-dom";
+import Header from '@/common/components/Header';
+import NavBar, { type NavKey } from '@/common/components/NavBar';
+import React, { useEffect } from 'react';
+import ProfileSection from '../components/ProfileSection';
+import MenuList from '../components/MenuList';
+import { calculateJoinedDays } from '../utils/calculateJoinedDays';
+import { useUserStore } from '../stores/useUserStore';
+import { getUserInfo } from '../api/getUserInfo';
+import { useAuthStore } from './../../Login/stores/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function Mypage() {
   const navigate = useNavigate();
-  const [active, setActive] = React.useState<NavKey>("mypage");
+  const [active, setActive] = React.useState<NavKey>('mypage');
 
   const user = useUserStore((state) => state.user);
   const logoutUser = useUserStore((state) => state.logout);
@@ -24,7 +24,7 @@ export default function Mypage() {
   const joinedDays = React.useMemo(() => {
     if (!user) return 0;
     return calculateJoinedDays(user.createdAt);
-  }, [user?.createdAt]);
+  }, [user]);
 
   if (!user) {
     return (
@@ -38,10 +38,10 @@ export default function Mypage() {
     logoutUser();
     clearTokens();
 
-    localStorage.removeItem("user-storage");
-    localStorage.removeItem("auth-storage");
+    localStorage.removeItem('user-storage');
+    localStorage.removeItem('auth-storage');
 
-    navigate("/login");
+    navigate('/login');
   };
 
   return (
