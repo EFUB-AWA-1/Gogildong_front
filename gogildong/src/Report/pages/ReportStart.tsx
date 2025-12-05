@@ -31,9 +31,13 @@ export default function ReportStart() {
         : 3;
 
     if (step === 3) {
-      navigate(`/school/${id}/report/camera`);
+      navigate(`/school/${id}/report/camera`, {
+        state: { facilityType }
+      });
     } else if (step >= lastStep) {
-      navigate(`/school/${id}/report/camera`);
+      navigate(`/school/${id}/report/camera`, {
+        state: { facilityType }
+      });
     } else {
       setStep((prev) => Math.min(prev + 1, 3));
     }

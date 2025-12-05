@@ -1,56 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '@/common/components/Header';
 import ActionButton from '@/common/components/ActionButton';
+import Webcam from 'react-webcam';
+import ShotBtn from '@/Report/assets/svgs/btn_shot.svg?react';
+import type { FacilityType } from '@/Report/types';
 
 export default function PhotoReport() {
+  const location = useLocation();
+  const facilityType =
+    (location.state as { facilityType?: FacilityType } | null)?.facilityType ??
+    null;
   const [status, setStatus] = useState<
     'capture' | 'processing' | 'captured' | 'failed'
   >('capture');
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const webcamRef = useRef<Webcam>(null);
 
-  useEffect(() => {
-    const localVideoRef = videoRef.current;
-
-    const constraints = {
-      audio: false,
-      video: {
-        facingMode: { ideal: 'environment' },
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-      },
-    };
-
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream) => {
-        if (localVideoRef) localVideoRef.srcObject = stream;
-      })
-      .catch((err) => {
-        console.error('카메라 접근 오류:', err);
-        alert('카메라를 사용할 수 없습니다. 브라우저 권한을 확인해주세요.');
-      });
-
-    return () => {
-      if (localVideoRef?.srcObject) {
-        const tracks = (localVideoRef.srcObject as MediaStream).getTracks();
-        tracks.forEach((track) => track.stop());
-      }
-    };
-  }, []);
+  const videoConstraints = {
+    // Prefer rear camera on mobile; "ideal" prevents OverconstrainedError on
+    // devices without an environment camera.
+    facingMode: { ideal: 'environment' },
+    width: { ideal: 1280 },
+    height: { ideal: 720 }
+  };
 
   const takePhoto = () => {
-    if (!videoRef.current) return;
     setStatus('processing');
 
-    const canvas = document.createElement('canvas');
-    const video = videoRef.current;
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = webcamRef.current?.getScreenshot();
+    if (!imageData) {
+      setStatus('failed');
+      return;
+    }
 
-    const imageData = canvas.toDataURL('image/png');
     setCapturedImage(imageData);
 
     setTimeout(() => {
@@ -58,43 +41,60 @@ export default function PhotoReport() {
     }, 1000);
   };
 
-  return (
-    <div className='w-full h-full flex flex-col items-center justify-between bg-black text-white relative'>
-      <Header title='화장실 촬영' darkMode />
+  useEffect(() => {
+    return () => {
+      const stream = webcamRef.current?.video?.srcObject as MediaStream | null;
+      stream?.getTracks().forEach((track) => track.stop());
+    };
+  }, []);
 
-      <div className='flex-1 w-full flex flex-col justify-center items-center mt-16'>
+  return (
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-between bg-black text-white">
+      <Header
+        title={facilityType ? `${facilityType} 촬영` : '촬영'}
+        darkMode
+      />
+
+      <div className="mt-16 flex w-full flex-1 flex-col items-center justify-center">
         {status === 'capture' && (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border-[3px] border-neon-100 object-cover bg-black'
+          <Webcam
+            ref={webcamRef}
+            audio={false}
+            videoConstraints={videoConstraints}
+            screenshotFormat="image/png"
+            onUserMediaError={(err) => {
+              console.error('카메라 접근 오류:', err);
+              alert(
+                '후면 카메라를 사용할 수 없습니다. 브라우저 권한 또는 장치 상태를 확인해주세요.'
+              );
+              setStatus('failed');
+            }}
+            className="h-[60vh] w-[90%] max-w-sm rounded-2xl border-[3px] border-neon-100 bg-black object-cover"
           />
         )}
 
         {status === 'processing' && (
-          <div className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border border-neon-60 flex flex-col justify-center items-center whitespace-nowrap'>
-            <p className='text-neon-100 text-body-bold-md mb-2'>인식 중...</p>
-            <div className='w-1/2 h-0.5 bg-neon-100 animate-pulse' />
+          <div className="flex aspect-9/16 w-[90%] max-w-sm flex-col items-center justify-center rounded-2xl border border-neon-60 whitespace-nowrap">
+            <p className="text-body-bold-md mb-2 text-neon-100">인식 중...</p>
+            <div className="h-0.5 w-1/2 animate-pulse bg-neon-100" />
           </div>
         )}
 
         {status === 'captured' && capturedImage && (
-          <div className='relative flex flex-col items-center'>
+          <div className="relative flex flex-col items-center">
             <img
               src={capturedImage}
-              alt='촬영된 이미지'
-              className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border-[3px] border-neon-100 object-cover'
+              alt="촬영된 이미지"
+              className="aspect-9/16 w-[90%] max-w-sm rounded-2xl border-[3px] border-neon-100 object-cover"
             />
           </div>
         )}
 
         {status === 'failed' && (
-          <div className='flex flex-col items-center justify-center'>
-            <div className='w-[90%] max-w-sm aspect-9/16 rounded-2xl border border-neon-60 flex flex-col justify-center items-center'>
-              <p className='text-neon-100 text-body-bold-md mb-2'>인식 실패</p>
-              <p className='text-white text-body-sm text-center leading-tight'>
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex aspect-9/16 w-[90%] max-w-sm flex-col items-center justify-center rounded-2xl border border-neon-60 px-20">
+              <p className="text-body-bold-md mb-2 text-neon-100">인식 실패</p>
+              <p className="text-center text-body-sm leading-tight text-white">
                 가이드에 맞춰 <br /> 다시 촬영해 주세요
               </p>
             </div>
@@ -102,25 +102,23 @@ export default function PhotoReport() {
         )}
       </div>
 
-
-      <div className='w-full fixed bottom-8 flex justify-center items-center'>
+      <div className="sticky bottom-0 flex w-full items-center justify-center p-4">
         {status === 'capture' && (
-          <button
-            onClick={takePhoto}
-            className='w-16 h-16 rounded-full border-[3px] border-neon-100 bg-neon-100 active:bg-neon-60 transition'
-          />
+          <button onClick={takePhoto}>
+            <ShotBtn />
+          </button>
         )}
 
         {status === 'failed' && (
           <ActionButton
-            label='다시 촬영하기'
+            label="다시 촬영하기"
             onClick={() => setStatus('capture')}
           />
         )}
 
         {status === 'captured' && (
           <ActionButton
-            label='다음'
+            label="다음"
             onClick={() => console.log('다음 단계로 이동')}
           />
         )}
