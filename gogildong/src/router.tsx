@@ -65,7 +65,7 @@ const router = createBrowserRouter([
           { path: '/school/view/review/write', element: <ReviewWrite /> },
           { path: '/school/view/review', element: <ReviewDetail /> },
           { path: '/school/:id/report', element: <ReportStart /> },
-          { path: '/school/report/camera', element: <PhotoReport /> },
+          { path: '/school/:id/report/camera', element: <PhotoReport /> },
           { path: '/school/report/info', element: <ReportFlow /> },
           { path: '/mypage', element: <Mypage /> }
         ]
