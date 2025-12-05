@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @theme {
   /* Colors */
   --color-black: #282828;
@@ -68,6 +68,10 @@
     font-size: var(--text-display-sm);
     font-weight: var(--font-weight-bold);
     line-height: var(--leading-150);
+  }
+
+  .shadow-neon {
+    box-shadow: '0 0 12px 0 rgba(170, 235, 47, 0.30)';
   }
 
   /* Heading */
@@ -160,7 +164,7 @@
 }
 
 :root {
-  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   /* safe area */
