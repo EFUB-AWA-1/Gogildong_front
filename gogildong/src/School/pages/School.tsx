@@ -27,7 +27,7 @@ export default function School() {
   const isInternal = viewingId === dummyUser.schoolId;
 
   const handleReportClick = () => {
-    navigate("/school/report");
+    navigate(`/school/${id}/report`);
   };
   const handleRequestClick = () => {
     navigate(`/school/{id}/request`, {
