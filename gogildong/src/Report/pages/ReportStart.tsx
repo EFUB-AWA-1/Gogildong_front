@@ -7,7 +7,7 @@ import Step0 from '../components/steps/Step0';
 import Step1 from '../components/steps/Step1';
 import Step2 from '../components/steps/Step2';
 import Step3 from '../components/steps/Step3';
-import type { FacilityType } from '@/Report/types';
+import { toFacilityParam, type FacilityType } from '@/Report/types';
 
 export default function ReportStart() {
   const LAST_STEP_BY_TYPE: Record<FacilityType, number> = {
@@ -30,14 +30,13 @@ export default function ReportStart() {
         ? LAST_STEP_BY_TYPE[facilityType]
         : 3;
 
+    const param = toFacilityParam(facilityType);
+    if (!param) return;
+
     if (step === 3) {
-      navigate(`/school/${id}/report/camera`, {
-        state: { facilityType }
-      });
+      navigate(`/school/${id}/report/${param}/camera`);
     } else if (step >= lastStep) {
-      navigate(`/school/${id}/report/camera`, {
-        state: { facilityType }
-      });
+      navigate(`/school/${id}/report/${param}/camera`);
     } else {
       setStep((prev) => Math.min(prev + 1, 3));
     }

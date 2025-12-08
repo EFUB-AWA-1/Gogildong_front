@@ -1,5 +1,5 @@
-import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Header from '@/common/components/Header';
 import SampleImg from '@/Report/assets/imgs/img_sample.png';
 import LocationIcon from '@/Report/assets/svgs/location.svg?react';
@@ -8,17 +8,19 @@ import AlertDialog from '../components/AlertDialog';
 import ReportSuccess from '../components/ReportSuccess';
 import ReportForm2 from '../components/ReportForm2';
 import ReportForm1 from '../components/ReportForm1';
-import type { FacilityType } from '@/Report/types';
+import { toFacilityLabel, type FacilityTypeParam } from '@/Report/types';
 
 export default function ReportFlow() {
   const location = useLocation();
-  const { photo, facilityType } =
-    (location.state as {
-      photo?: string;
-      facilityType?: FacilityType;
-    } | null) ?? {};
+  const { facilityType: facilityTypeParam } = useParams<{
+    id: string;
+    facilityType: FacilityTypeParam;
+  }>();
 
-  const [step, setStep] = useState(1);
+  const facilityType = toFacilityLabel(facilityTypeParam);
+  const { photo } = (location.state as { photo?: string } | null) ?? {};
+
+  const [step, setStep] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [locationData, setLocationData] = useState({
     building: '',
@@ -26,7 +28,41 @@ export default function ReportFlow() {
     facility: ''
   });
 
+  useEffect(() => {
+    setStep(0);
+    setShowAlert(false);
+    setLocationData({ building: '', floor: '', facility: '' });
+  }, [facilityType]);
+
+  const formSequence: Array<'location' | 'toiletDetail'> =
+    facilityType === '화장실' ? ['location', 'toiletDetail'] : ['location'];
+
+  const isLastFormStep = step >= formSequence.length;
+
   const handleNext = () => setStep((prev) => prev + 1);
+  const handleSubmit = () => setShowAlert(true);
+
+  const renderStep = () => {
+    if (isLastFormStep) return <ReportSuccess />;
+
+    const current = formSequence[step];
+
+    if (current === 'location') {
+      return (
+        <ReportForm1
+          locationData={locationData}
+          onChange={setLocationData}
+          onNext={handleNext}
+        />
+      );
+    }
+
+    if (current === 'toiletDetail') {
+      return <ReportForm2 onSubmit={handleSubmit} />;
+    }
+
+    return null;
+  };
 
   return (
     <>
@@ -46,23 +82,13 @@ export default function ReportFlow() {
           </div>
         </div>
 
-        <div className="mt-10">
-          {step === 1 && (
-            <ReportForm1
-              locationData={locationData}
-              onChange={setLocationData}
-              onNext={handleNext}
-            />
-          )}
-          {step === 2 && <ReportForm2 onSubmit={() => setShowAlert(true)} />}
-          {step === 3 && <ReportSuccess />}
-        </div>
+        <div className="mt-10">{renderStep()}</div>
 
         {showAlert && (
           <AlertDialog
             onConfirm={() => {
               setShowAlert(false);
-              setStep(3);
+              setStep(formSequence.length);
             }}
           />
         )}

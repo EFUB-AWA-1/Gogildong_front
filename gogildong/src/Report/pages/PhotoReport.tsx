@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from '@/common/components/Header';
 import ActionButton from '@/common/components/ActionButton';
 import Webcam from 'react-webcam';
 import ShotBtn from '@/Report/assets/svgs/btn_shot.svg?react';
-import type { FacilityType } from '@/Report/types';
+import { toFacilityLabel, type FacilityTypeParam } from '@/Report/types';
 
 export default function PhotoReport() {
-  const location = useLocation();
   const navigate = useNavigate();
-  const facilityType =
-    (location.state as { facilityType?: FacilityType } | null)?.facilityType ??
-    null;
+  const { id, facilityType: facilityTypeParam } = useParams<{
+    id: string;
+    facilityType: FacilityTypeParam;
+  }>();
+  const facilityType = toFacilityLabel(facilityTypeParam) ?? null;
   const [status, setStatus] = useState<
     'capture' | 'processing' | 'captured' | 'failed'
   >('capture');
@@ -53,12 +54,11 @@ export default function PhotoReport() {
   };
 
   const handleGoToReportInfo = () => {
-    if (!capturedImage) return;
+    if (!capturedImage || !facilityTypeParam || !id) return;
 
-    navigate('/school/report/info', {
+    navigate(`/school/${id}/report/${facilityTypeParam}/info`, {
       state: {
-        photo: capturedImage,
-        facilityType
+        photo: capturedImage
       }
     });
   };
@@ -111,7 +111,7 @@ export default function PhotoReport() {
               className="aspect-112/183 w-full max-w-sm rounded-2xl border-[3px] border-neon-100 object-cover"
             />
           </div>
-        )} 
+        )}
 
         {status === 'failed' && (
           <div className="flex flex-col items-center justify-center">
