@@ -50,10 +50,7 @@ export default function PhotoReport() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-between bg-black text-white">
-      <Header
-        title={facilityType ? `${facilityType} 촬영` : '촬영'}
-        darkMode
-      />
+      <Header title={facilityType ? `${facilityType} 촬영` : '촬영'} darkMode />
 
       <div className="mt-16 flex w-full flex-1 flex-col items-center justify-center">
         {status === 'capture' && (
@@ -73,19 +70,19 @@ export default function PhotoReport() {
           />
         )}
 
-        {status === 'processing' && (
+        {/* {status === 'processing' && (
           <div className="flex aspect-9/16 w-[90%] max-w-sm flex-col items-center justify-center rounded-2xl border border-neon-60 whitespace-nowrap">
             <p className="text-body-bold-md mb-2 text-neon-100">인식 중...</p>
             <div className="h-0.5 w-1/2 animate-pulse bg-neon-100" />
           </div>
-        )}
+        )} */}
 
         {status === 'captured' && capturedImage && (
-          <div className="relative flex flex-col items-center">
+          <div className="relative flex w-full flex-col items-center">
             <img
               src={capturedImage}
               alt="촬영된 이미지"
-              className="aspect-9/16 w-[90%] max-w-sm rounded-2xl border-[3px] border-neon-100 object-cover"
+              className="h-[60vh] w-[90%] max-w-sm rounded-2xl border-[3px] border-neon-100 object-cover"
             />
           </div>
         )}
