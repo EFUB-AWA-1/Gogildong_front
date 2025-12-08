@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import MainLayout from './common/layout/MainLayout';
 import Home from './Home/pages/Home';
 import InfoRequest from './Home/pages/InfoRequest';
@@ -35,6 +35,7 @@ const router = createBrowserRouter([
           </PublicRoute>
         ),
         children: [
+          { index: true, element: <Navigate to="/login" replace /> },
           { path: '/login', element: <Login /> },
           { path: '/signup', element: <SignupSelectRole /> },
           { path: '/signup/admin', element: <SignupAdmin /> },
