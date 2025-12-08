@@ -56,9 +56,7 @@ export default function ReportStart() {
   const buttonLabel =
     step === 0 ? '선택' : step >= lastStep ? '촬영하기' : '다음';
   const title =
-    step === 0
-      ? '제보하기'
-      : `${Math.min(step, lastStep)}/${lastStep}`;
+    step === 0 ? '제보하기' : `${Math.min(step, lastStep)}/${lastStep}`;
   const renderStep = () => {
     switch (step) {
       case 0:
@@ -92,13 +90,9 @@ export default function ReportStart() {
         step === 0 ? 'bg-white' : 'bg-black'
       }`}
     >
-      <Header
-        title={title}
-        onBackClick={handlePrev}
-        darkMode={step !== 0}
-      />
+      <Header title={title} onBackClick={handlePrev} darkMode={step !== 0} />
 
-      <div className="flex w-full flex-1 items-center justify-center">
+      <div className="mt-10 flex w-full flex-1 items-start justify-center">
         {renderStep()}
       </div>
 

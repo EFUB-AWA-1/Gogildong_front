@@ -32,8 +32,8 @@ export default function Step1({ facilityType }: Step1Props) {
   };
   const imageSrc = IMAGE_BY_TYPE[facilityType];
   return (
-    <div className="flex flex-col items-center gap-[108px] text-center text-neon-100">
-      <p className="text-body-lg whitespace-pre-line">{message}</p>
+    <div className="flex flex-col items-center justify-start gap-25 text-center text-neon-100">
+      <p className="mt-10 text-heading-md whitespace-pre-line">{message}</p>
       <img src={imageSrc} alt="촬영 가이드 1" />
     </div>
   );

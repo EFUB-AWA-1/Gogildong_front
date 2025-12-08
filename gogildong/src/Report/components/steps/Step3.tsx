@@ -25,8 +25,8 @@ export default function Step3({ facilityType }: Step3Props) {
   };
   const guideImg = IMAGE_BY_TYPE[facilityType];
   return (
-    <div className="flex flex-col items-center gap-11 text-center text-neon-100">
-      <p className="text-body-lg whitespace-pre-line">{message}</p>
+    <div className="flex flex-col items-center gap-9 text-center text-neon-100">
+      <p className="mt-10 text-heading-md whitespace-pre-line">{message}</p>
       <img src={guideImg} alt="촬영 가이드 3" />
     </div>
   );
