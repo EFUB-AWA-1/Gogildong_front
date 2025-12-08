@@ -16,7 +16,7 @@ export default function ReportForm1({
 }: ReportForm1Props) {
   const isComplete =
     locationData.building && locationData.floor && locationData.facility;
-
+ 
   return (
     <div className="flex flex-col items-center gap-6">
       <div className="flex w-full flex-col items-start gap-4">

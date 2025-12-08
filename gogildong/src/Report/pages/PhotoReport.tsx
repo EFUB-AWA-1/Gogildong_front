@@ -42,6 +42,16 @@ export default function PhotoReport() {
     }, 1000);
   };
 
+  const handleBack = () => {
+    if (status === 'captured') {
+      setCapturedImage(null);
+      setStatus('capture');
+      return;
+    }
+
+    navigate(-1);
+  };
+
   const handleGoToReportInfo = () => {
     if (!capturedImage) return;
 
@@ -62,9 +72,13 @@ export default function PhotoReport() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-between bg-black text-white">
-      <Header title={facilityType ? `${facilityType} 촬영` : '촬영'} darkMode />
+      <Header
+        title={facilityType ? `${facilityType} 촬영` : '촬영'}
+        darkMode
+        onBackClick={handleBack}
+      />
 
-      <div className="mt-16 flex w-full flex-1 flex-col items-center justify-center">
+      <div className="mt-16 flex w-full flex-1 flex-col items-center justify-center px-[51px]">
         {status === 'capture' && (
           <Webcam
             ref={webcamRef}
@@ -78,7 +92,7 @@ export default function PhotoReport() {
               );
               setStatus('failed');
             }}
-            className="h-[60vh] w-[90%] max-w-sm rounded-2xl border-[3px] border-neon-100 bg-black object-cover"
+            className="aspect-112/183 w-full max-w-sm rounded-2xl border-[3px] border-neon-100 bg-black object-cover"
           />
         )}
 
@@ -94,10 +108,10 @@ export default function PhotoReport() {
             <img
               src={capturedImage}
               alt="촬영된 이미지"
-              className="h-[60vh] w-[90%] max-w-sm rounded-2xl border-[3px] border-neon-100 object-cover"
+              className="aspect-112/183 w-full max-w-sm rounded-2xl border-[3px] border-neon-100 object-cover"
             />
           </div>
-        )}
+        )} 
 
         {status === 'failed' && (
           <div className="flex flex-col items-center justify-center">
