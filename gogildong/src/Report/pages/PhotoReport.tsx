@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '@/common/components/Header';
 import ActionButton from '@/common/components/ActionButton';
 import Webcam from 'react-webcam';
@@ -8,6 +8,7 @@ import type { FacilityType } from '@/Report/types';
 
 export default function PhotoReport() {
   const location = useLocation();
+  const navigate = useNavigate();
   const facilityType =
     (location.state as { facilityType?: FacilityType } | null)?.facilityType ??
     null;
@@ -39,6 +40,17 @@ export default function PhotoReport() {
     setTimeout(() => {
       setStatus('captured');
     }, 1000);
+  };
+
+  const handleGoToReportInfo = () => {
+    if (!capturedImage) return;
+
+    navigate('/school/report/info', {
+      state: {
+        photo: capturedImage,
+        facilityType
+      }
+    });
   };
 
   useEffect(() => {
@@ -114,10 +126,7 @@ export default function PhotoReport() {
         )}
 
         {status === 'captured' && (
-          <ActionButton
-            label="다음"
-            onClick={() => console.log('다음 단계로 이동')}
-          />
+          <ActionButton label="다음" onClick={handleGoToReportInfo} />
         )}
       </div>
     </div>
