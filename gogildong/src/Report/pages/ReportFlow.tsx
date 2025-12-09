@@ -11,6 +11,7 @@ import {
   toFacilityLabel,
   type FacilityTypeParam
 } from '@/Report/types/facilityTypes';
+import type { Measurements } from '@/Report/types/measurement';
 
 export default function ReportFlow() {
   const location = useLocation();
