@@ -7,6 +7,7 @@ import {
   toFacilityLabel,
   type FacilityTypeParam
 } from '@/Report/types/facilityTypes';
+import type { Measurements } from '@/Report/types/measurement';
 
 interface SuccessState {
   photo?: string;
@@ -24,11 +25,7 @@ interface SuccessState {
     threshold?: string;
     extraDescription?: string;
   };
-  dimensions?: {
-    maxDoorWidth?: number | string;
-    doorHandleHeight?: number | string;
-    passableWidth?: number | string;
-  };
+  dimensions?: Measurements;
 }
 
 export default function ReportSuccess() {
@@ -62,7 +59,10 @@ export default function ReportSuccess() {
               지급되었습니다.
             </p>
             <p className="text-body-sm text-black">
-              <span className="underline" onClick={() => navigate('/mypage')}>
+              <span
+                className="cursor-pointer underline"
+                onClick={() => navigate('/mypage')}
+              >
                 마이페이지
               </span>
               에서 확인해 보세요!
@@ -84,6 +84,7 @@ export default function ReportSuccess() {
         </div>
 
         <ReportSummaryCard
+          facilityType={facilityType ?? '기타'}
           locationData={locationData}
           toiletDetail={toiletDetail}
           dimensions={dimensions}
