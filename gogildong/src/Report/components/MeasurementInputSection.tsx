@@ -1,19 +1,6 @@
 import { useEffect, useState } from 'react';
-import type { FacilityType } from '@/Report/types';
-
-interface Measurements {
-  entranceDoorWidth?: string;
-  entranceDoorHeight?: string;
-  innerDoorWidth?: string;
-  innerDoorHeight?: string;
-  toiletHeight?: string;
-  elevatorDoorWidth?: string;
-  elevatorDepth?: string;
-  buttonHeight?: string;
-  maxDoorWidth?: string;
-  doorHandleHeight?: string;
-  passableWidth?: string;
-}
+import type { FacilityType } from '@/Report/types/facilityTypes';
+import type { Measurements } from '@/Report/types/measurement';
 
 interface MeasurementInputSectionProps {
   facilityType: FacilityType;

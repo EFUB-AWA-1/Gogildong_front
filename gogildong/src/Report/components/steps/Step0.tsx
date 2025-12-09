@@ -1,4 +1,4 @@
-import type { FacilityType } from '@/Report/types';
+import type { FacilityType } from '@/Report/types/facilityTypes';
 
 interface Step0Props {
   selectedType: FacilityType | null;

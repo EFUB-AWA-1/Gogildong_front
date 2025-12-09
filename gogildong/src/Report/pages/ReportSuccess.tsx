@@ -3,7 +3,10 @@ import Header from '@/common/components/Header';
 import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 import ReportSummaryCard from '@/Report/components/ReportSummaryCard';
 import SampleImg from '@/Report/assets/imgs/img_sample.png';
-import { toFacilityLabel, type FacilityTypeParam } from '@/Report/types';
+import {
+  toFacilityLabel,
+  type FacilityTypeParam
+} from '@/Report/types/facilityTypes';
 
 interface SuccessState {
   photo?: string;

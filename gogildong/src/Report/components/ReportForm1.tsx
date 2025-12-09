@@ -3,19 +3,24 @@ import ActionButton from '@/common/components/ActionButton';
 import SameplePlan from '@/Report/assets/imgs/samplePlan.png';
 import type { LocationData } from '../types/report';
 import MeasurementInputSection from '@/Report/components/MeasurementInputSection';
-import type { FacilityType } from '@/Report/types';
+import type { FacilityType } from '@/Report/types/facilityTypes';
+import type { Measurements } from '@/Report/types/measurement';
 
 interface ReportForm1Props {
   facilityType: FacilityType;
   locationData: LocationData;
+  measurements?: Measurements;
   onChange: (data: LocationData) => void;
+  onMeasurementsChange?: (value: Measurements) => void;
   onNext: () => void;
 }
 
 export default function ReportForm1({
   facilityType,
   locationData,
+  measurements,
   onChange,
+  onMeasurementsChange,
   onNext
 }: ReportForm1Props) {
   const isComplete =
@@ -23,7 +28,11 @@ export default function ReportForm1({
 
   return (
     <div className="flex flex-col items-center gap-6">
-      <MeasurementInputSection facilityType={facilityType} />
+      <MeasurementInputSection
+        facilityType={facilityType}
+        value={measurements}
+        onChange={onMeasurementsChange}
+      />
       <div className="flex w-full flex-col items-start gap-4">
         <p className="text-body-bold-lg">위치 선택</p>
         <div className="flex w-full justify-center">

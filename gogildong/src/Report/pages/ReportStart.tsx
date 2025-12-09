@@ -7,7 +7,10 @@ import Step0 from '../components/steps/Step0';
 import Step1 from '../components/steps/Step1';
 import Step2 from '../components/steps/Step2';
 import Step3 from '../components/steps/Step3';
-import { toFacilityParam, type FacilityType } from '@/Report/types';
+import {
+  toFacilityParam,
+  type FacilityType
+} from '@/Report/types/facilityTypes';
 
 export default function ReportStart() {
   const LAST_STEP_BY_TYPE: Record<FacilityType, number> = {

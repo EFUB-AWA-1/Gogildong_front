@@ -1,6 +1,6 @@
 import toiletStep3 from '@/Report/assets/imgs/toilet3.png';
 
-import type { FacilityType } from '@/Report/types';
+import type { FacilityType } from '@/Report/types/facilityTypes';
 
 const GUIDE_MESSAGE: Partial<Record<FacilityType, string>> = {
   화장실: `화장실 칸 안에

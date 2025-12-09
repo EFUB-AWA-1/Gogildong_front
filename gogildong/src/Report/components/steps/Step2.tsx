@@ -1,6 +1,6 @@
 import toilet2 from '@/Report/assets/imgs/toilet2.png';
 import elevator2 from '@/Report/assets/imgs/elevator2.png';
-import type { FacilityType } from '@/Report/types';
+import type { FacilityType } from '@/Report/types/facilityTypes';
 
 const GUIDE_MESSAGE: Partial<Record<FacilityType, string>> = {
   화장실: `가이드에 맞춰

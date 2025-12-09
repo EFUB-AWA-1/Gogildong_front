@@ -7,7 +7,10 @@ import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 import AlertDialog from '../components/AlertDialog';
 import ReportForm2 from '../components/ReportForm2';
 import ReportForm1 from '../components/ReportForm1';
-import { toFacilityLabel, type FacilityTypeParam } from '@/Report/types';
+import {
+  toFacilityLabel,
+  type FacilityTypeParam
+} from '@/Report/types/facilityTypes';
 
 export default function ReportFlow() {
   const location = useLocation();
@@ -26,6 +29,7 @@ export default function ReportFlow() {
     floor: '',
     facility: ''
   });
+  const [measurements, setMeasurements] = useState<Measurements>({});
   const [toiletDetail, setToiletDetail] = useState({
     gender: '',
     type: '',
@@ -44,6 +48,7 @@ export default function ReportFlow() {
   useEffect(() => {
     setStep(0);
     setLocationData({ building: '', floor: '', facility: '' });
+    setMeasurements({});
     setToiletDetail({ gender: '', type: '', door: '' });
     setPendingToiletDetail(null);
     setShowAlert(false);
@@ -58,7 +63,13 @@ export default function ReportFlow() {
   const goToSuccess = (detail = toiletDetail) => {
     if (!id || !facilityTypeParam) return;
     navigate(`/school/${id}/report/${facilityTypeParam}/success`, {
-      state: { photo, facilityType, locationData, toiletDetail: detail }
+      state: {
+        photo,
+        facilityType,
+        locationData,
+        toiletDetail: detail,
+        dimensions: measurements
+      }
     });
   };
 
@@ -86,7 +97,7 @@ export default function ReportFlow() {
     setFlowStatus('processing');
 
     try {
-     //TODO : 실제 api 연결 
+      //TODO : 실제 api 연결
       await fakeSubmit();
       goToSuccess(pendingToiletDetail ?? toiletDetail);
     } catch (e) {
@@ -103,7 +114,9 @@ export default function ReportFlow() {
         <ReportForm1
           facilityType={facilityType}
           locationData={locationData}
+          measurements={measurements}
           onChange={setLocationData}
+          onMeasurementsChange={setMeasurements}
           onNext={handleNext}
         />
       );

@@ -4,7 +4,10 @@ import Header from '@/common/components/Header';
 import ActionButton from '@/common/components/ActionButton';
 import Webcam from 'react-webcam';
 import ShotBtn from '@/Report/assets/svgs/btn_shot.svg?react';
-import { toFacilityLabel, type FacilityTypeParam } from '@/Report/types';
+import {
+  toFacilityLabel,
+  type FacilityTypeParam
+} from '@/Report/types/facilityTypes';
 
 export default function PhotoReport() {
   const navigate = useNavigate();
