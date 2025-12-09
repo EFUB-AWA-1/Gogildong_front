@@ -9,19 +9,26 @@ import SingleBtnModal from '../components/modals/SingleBtnModal';
 import DoubleBtnModal from '@/ReportView/components/modals/DoubleBtnModal';
 
 type LocationState = {
-  photo?: FacilityImageType;
+  photos?: FacilityImageType[];
+  initialReportId?: number;
 };
 
 export default function PhotoDetail() {
   const { state } = useLocation();
-  const { photo } = (state || {}) as LocationState;
-
-  const src = photo?.facilityImage;
+  const { photos = [], initialReportId } = (state || {}) as LocationState;
 
   const [showReportButton, setShowReportButton] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [reportResultOpen, setReportResultOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    if (!initialReportId) return 0;
+    const idx = photos.findIndex((p) => p.reportId === initialReportId);
+    return idx === -1 ? 0 : idx;
+  });
+
+  const currentPhoto = photos[currentIndex];
+  const src = currentPhoto?.facilityImage;
 
   const handleImageClick = () => {
     setShowArrows((prev) => !prev);
@@ -29,12 +36,12 @@ export default function PhotoDetail() {
 
   const handlePrevClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이미지 클릭 토글 안 일어나게
-    console.log('이전 이미지로 이동 (TODO)');
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
   const handleNextClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('다음 이미지로 이동 (TODO)');
+    setCurrentIndex((prev) => (prev < photos.length - 1 ? prev + 1 : prev));
   };
 
   const handleOptionClick = () => {
@@ -91,22 +98,26 @@ export default function PhotoDetail() {
             {showArrows && (
               <>
                 {/* 이전 버튼 */}
-                <button
-                  type="button"
-                  onClick={handlePrevClick}
-                  className="absolute top-1/2 left-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
-                >
-                  <PrevImgBtn className="h-full w-full" />
-                </button>
+                {currentIndex > 0 && (
+                  <button
+                    type="button"
+                    onClick={handlePrevClick}
+                    className="absolute top-1/2 left-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
+                  >
+                    <PrevImgBtn className="h-full w-full" />
+                  </button>
+                )}
 
                 {/* 다음 버튼 */}
-                <button
-                  type="button"
-                  onClick={handleNextClick}
-                  className="absolute top-1/2 right-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
-                >
-                  <NextImgBtn className="h-full w-full" />
-                </button>
+                {currentIndex < photos.length - 1 && (
+                  <button
+                    type="button"
+                    onClick={handleNextClick}
+                    className="absolute top-1/2 right-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
+                  >
+                    <NextImgBtn className="h-full w-full" />
+                  </button>
+                )}
               </>
             )}
           </div>
