@@ -1,18 +1,18 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Header from '@/common/components/Header';
 import SampleImg from '@/Report/assets/imgs/img_sample.png';
 import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 
 import AlertDialog from '../components/AlertDialog';
-import ReportSuccess from '../components/ReportSuccess';
 import ReportForm2 from '../components/ReportForm2';
 import ReportForm1 from '../components/ReportForm1';
 import { toFacilityLabel, type FacilityTypeParam } from '@/Report/types';
 
 export default function ReportFlow() {
   const location = useLocation();
-  const { facilityType: facilityTypeParam } = useParams<{
+  const navigate = useNavigate();
+  const { id, facilityType: facilityTypeParam } = useParams<{
     id: string;
     facilityType: FacilityTypeParam;
   }>();
@@ -21,35 +21,87 @@ export default function ReportFlow() {
   const { photo } = (location.state as { photo?: string } | null) ?? {};
 
   const [step, setStep] = useState(0);
-  const [showAlert, setShowAlert] = useState(false);
   const [locationData, setLocationData] = useState({
     building: '',
     floor: '',
     facility: ''
   });
+  const [toiletDetail, setToiletDetail] = useState({
+    gender: '',
+    type: '',
+    door: ''
+  });
+  const [pendingToiletDetail, setPendingToiletDetail] = useState<{
+    gender: string;
+    type: string;
+    door: string;
+  } | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [flowStatus, setFlowStatus] = useState<
+    'idle' | 'processing' | 'failed'
+  >('idle');
 
   useEffect(() => {
     setStep(0);
-    setShowAlert(false);
     setLocationData({ building: '', floor: '', facility: '' });
+    setToiletDetail({ gender: '', type: '', door: '' });
+    setPendingToiletDetail(null);
+    setShowAlert(false);
+    setFlowStatus('idle');
   }, [facilityType]);
+
+  if (!facilityType) return null;
 
   const formSequence: Array<'location' | 'toiletDetail'> =
     facilityType === '화장실' ? ['location', 'toiletDetail'] : ['location'];
 
-  const isLastFormStep = step >= formSequence.length;
+  const goToSuccess = (detail = toiletDetail) => {
+    if (!id || !facilityTypeParam) return;
+    navigate(`/school/${id}/report/${facilityTypeParam}/success`, {
+      state: { photo, facilityType, locationData, toiletDetail: detail }
+    });
+  };
 
-  const handleNext = () => setStep((prev) => prev + 1);
-  const handleSubmit = () => setShowAlert(true);
+  const handleNext = () => {
+    if (formSequence.length === 1) {
+      setShowAlert(true);
+      return;
+    }
+    setStep((prev) => prev + 1);
+  };
+
+  const handleSubmit = (data: typeof toiletDetail) => {
+    setToiletDetail(data);
+    setPendingToiletDetail(data);
+    setShowAlert(true);
+  };
+
+  const fakeSubmit = () =>
+    new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 800);
+    });
+
+  const handleConfirmSubmit = async () => {
+    setShowAlert(false);
+    setFlowStatus('processing');
+
+    try {
+     //TODO : 실제 api 연결 
+      await fakeSubmit();
+      goToSuccess(pendingToiletDetail ?? toiletDetail);
+    } catch (e) {
+      console.error('제보 제출 실패', e);
+      setFlowStatus('failed');
+    }
+  };
 
   const renderStep = () => {
-    if (isLastFormStep) return <ReportSuccess />;
-
     const current = formSequence[step];
 
     if (current === 'location') {
       return (
         <ReportForm1
+          facilityType={facilityType}
           locationData={locationData}
           onChange={setLocationData}
           onNext={handleNext}
@@ -80,18 +132,23 @@ export default function ReportFlow() {
             <LocationIcon />
             {facilityType ?? '이화여자대학교부속초등학교'}
           </div>
+          {flowStatus === 'processing' && (
+            <p className="text-body-bold-md text-neon-100">
+              제보 내용 인식 중...
+            </p>
+          )}
+          {flowStatus === 'failed' && (
+            <p className="text-body-bold-md text-neon-100">
+              인식 실패
+              <br />
+              가이드에 맞춰 다시 작성해 주세요
+            </p>
+          )}
         </div>
 
         <div className="mt-10">{renderStep()}</div>
 
-        {showAlert && (
-          <AlertDialog
-            onConfirm={() => {
-              setShowAlert(false);
-              setStep(formSequence.length);
-            }}
-          />
-        )}
+        {showAlert && <AlertDialog onConfirm={handleConfirmSubmit} />}
       </div>
     </>
   );

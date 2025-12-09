@@ -17,6 +17,7 @@ import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
 import ReportStart from '@/Report/pages/ReportStart';
 import ReportFlow from '@/Report/pages/ReportFlow';
+import ReportSuccess from '@/Report/pages/ReportSuccess';
 import ProtectedRoute from '@/ProtectedRoute';
 import Mypage from './Mypage/pages/Mypage';
 import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
@@ -73,6 +74,14 @@ const router = createBrowserRouter([
           {
             path: '/school/:id/report/:facilityType/info',
             element: <ReportFlow />
+          },
+          {
+            path: '/school/:id/report/:facilityType/success',
+            element: <ReportSuccess />
+          },
+          {
+            path: '/school/:id/report/:facilityType/uploaded',
+            element: <ReportSuccess />
           },
           { path: '/mypage', element: <Mypage /> }
         ]
