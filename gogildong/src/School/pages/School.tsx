@@ -1,30 +1,33 @@
-import { useState } from "react";
-import FloorSelector from "../components/FloorSelector";
+import { useMemo, useState } from 'react';
+import FloorSelector from '../components/FloorSelector';
 
-import LocationTab from "../components/LocationTab";
-import SchoolInfo from "../components/SchoolInfo";
-import ActionButton from "@/common/components/ActionButton";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import AccessRestricted from "@/Home/components/AccessRestricted";
-import type { SchoolInfoProps } from "../types/schoolInfo";
-import FacilityGridList from "@/School/components/FacilityGridList";
-
-const dummyUser = {
-  userId: 1,
-  name: "이화 학생",
-  schoolId: 8026
-};
+import LocationTab from '../components/LocationTab';
+import SchoolInfo from '../components/SchoolInfo';
+import ActionButton from '@/common/components/ActionButton';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import AccessRestricted from '@/Home/components/AccessRestricted';
+import type { SchoolInfoProps } from '../types/schoolInfo';
+import FacilityGridList from '@/School/components/FacilityGridList';
+import { useUserStore } from '@/Mypage/stores/useUserStore';
 
 export default function School() {
   const navigate = useNavigate();
   const { id } = useParams();
   const viewingId = Number(id);
-  const [selectedTab, setSelectedTab] = useState("화장실");
-  const [selectedFloor, setSelectedFloor] = useState("본관 1층");
+  const userSchoolId = useUserStore((state) => state.user?.schoolId ?? null);
+
+  console.log(userSchoolId);
+  const [selectedTab, setSelectedTab] = useState('화장실');
+  const [selectedFloor, setSelectedFloor] = useState('본관 1층');
   const { state } = useLocation();
   const schoolState = (state || {}) as SchoolInfoProps;
 
-  const isInternal = viewingId === dummyUser.schoolId;
+  //* viewingId와 userSchoolId가 변할때만 계산하도록 useMemo 활용
+  const isInternal = useMemo(() => {
+    if (viewingId == null) return false;
+    if (userSchoolId == null) return false;
+    return viewingId === userSchoolId;
+  }, [viewingId, userSchoolId]);
 
   const handleReportClick = () => {
     navigate(`/school/${id}/report`);
@@ -32,9 +35,9 @@ export default function School() {
   const handleRequestClick = () => {
     navigate(`/school/{id}/request`, {
       state: {
-        name: schoolState.name ?? "개발용기본중학교고등학교",
+        name: schoolState.name ?? '개발용기본중학교고등학교',
         address:
-          schoolState.address ?? "아무주소나넣어보자서대문구3로드뷰는이대부초",
+          schoolState.address ?? '아무주소나넣어보자서대문구3로드뷰는이대부초',
         latitude: schoolState.latitude ?? 37.56115022,
         longitude: schoolState.longitude ?? 126.9427504
       }
@@ -42,12 +45,12 @@ export default function School() {
   };
 
   return (
-    <div className={`${isInternal ? "bg-gray-10" : "bg-gray-20"}`}>
+    <div className={`${isInternal ? 'bg-gray-10' : 'bg-gray-20'}`}>
       <div className={`flex min-h-screen w-full flex-col items-center pb-28`}>
         <SchoolInfo
-          name={schoolState.name ?? "개발용기본중학교고등학교"}
+          name={schoolState.name ?? '개발용기본중학교고등학교'}
           address={
-            schoolState.address ?? "아무주소나넣어보자서대문구3로드뷰는이대부초"
+            schoolState.address ?? '아무주소나넣어보자서대문구3로드뷰는이대부초'
           }
           latitude={schoolState.latitude ?? 37.56115022}
           longitude={schoolState.longitude ?? 126.9427504}
@@ -71,8 +74,8 @@ export default function School() {
       <div
         className={`sticky bottom-0 w-full p-4 ${
           isInternal
-            ? "bg-gray-10"
-            : "bg-[linear-gradient(184deg,rgba(255,255,255,0)_24.88%,#fff_93.89%)]"
+            ? 'bg-gray-10'
+            : 'bg-[linear-gradient(184deg,rgba(255,255,255,0)_24.88%,#fff_93.89%)]'
         }`}
       >
         {isInternal ? (

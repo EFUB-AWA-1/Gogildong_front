@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface UserInfo {
   userId: number;
@@ -8,7 +8,7 @@ export interface UserInfo {
   role: string;
   email: string;
   phone: string;
-  schoolCode: string;
+  schoolId: number;
   schoolName: string;
   createdAt: string;
   profileImageUrl: string;
@@ -27,6 +27,6 @@ export const useUserStore = create<UserState>()(
       setUser: (user) => set({ user }),
       logout: () => set({ user: null })
     }),
-    { name: "user-storage" }
+    { name: 'user-storage' }
   )
 );
