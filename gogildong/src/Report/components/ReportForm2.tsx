@@ -3,7 +3,11 @@ import RadioOptionGroup from "./RadioOptionGroup";
 import { useState } from "react";
 
 interface ReportForm2Props {
-  onSubmit: () => void;
+  onSubmit: (data: {
+    gender: string;
+    type: string;
+    door: string;
+  }) => void;
 }
 export default function ReportForm2({ onSubmit }: ReportForm2Props) {
   const [formData, setFormData] = useState({
@@ -41,7 +45,11 @@ export default function ReportForm2({ onSubmit }: ReportForm2Props) {
         onChange={(v) => handleChange("door", v)}
       />
 
-      <ActionButton label="등록" disabled={!isComplete} onClick={onSubmit} />
+      <ActionButton
+        label="등록"
+        disabled={!isComplete}
+        onClick={() => onSubmit(formData)}
+      />
     </div>
   );
 }
