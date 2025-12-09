@@ -1,23 +1,16 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import Header from "@/common/components/Header";
-import OptionIcon from "../assets/icon_option.svg?react";
-import type { FacilityImageType } from "../types/facilityImage";
-import PrevImgBtn from "../assets/btn_previmg.svg?react";
-import NextImgBtn from "../assets/btn_nextimg.svg?react";
-import SelectSubmitModal from "../components/modals/SelectSubmitModal";
-import SingleBtnModal from "../components/modals/SingleBtnModal";
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import Header from '@/common/components/Header';
+import OptionIcon from '../assets/icon_option.svg?react';
+import type { FacilityImageType } from '../types/facilityImage';
+import PrevImgBtn from '../assets/btn_previmg.svg?react';
+import NextImgBtn from '../assets/btn_nextimg.svg?react';
+import SingleBtnModal from '../components/modals/SingleBtnModal';
+import DoubleBtnModal from '@/ReportView/components/modals/DoubleBtnModal';
 
 type LocationState = {
   photo?: FacilityImageType;
 };
-
-const REPORT_OPTIONS = [
-  { id: "personal_info", label: "개인 정보 노출" },
-  { id: "obscene", label: "음란물" },
-  { id: "offensive", label: "불쾌한 사진" },
-  { id: "irrelevant", label: "장소와 관련 없는 정보" }
-];
 
 export default function PhotoDetail() {
   const { state } = useLocation();
@@ -36,12 +29,12 @@ export default function PhotoDetail() {
 
   const handlePrevClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이미지 클릭 토글 안 일어나게
-    console.log("이전 이미지로 이동 (TODO)");
+    console.log('이전 이미지로 이동 (TODO)');
   };
 
   const handleNextClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log("다음 이미지로 이동 (TODO)");
+    console.log('다음 이미지로 이동 (TODO)');
   };
 
   const handleOptionClick = () => {
@@ -138,10 +131,9 @@ export default function PhotoDetail() {
         </div>
       </div>
 
-      <SelectSubmitModal
+      <DoubleBtnModal
         open={reportModalOpen}
-        title="사진 신고 사유"
-        options={REPORT_OPTIONS}
+        title="사진을 신고할까요?"
         label="신고하기"
         onClose={() => setReportModalOpen(false)}
         onConfirm={handleReportConfirm}
@@ -150,7 +142,7 @@ export default function PhotoDetail() {
       <SingleBtnModal
         open={reportResultOpen}
         title="신고가 제출되었습니다"
-        message={"신고 3회 이상 누적 시 \n검토 후 게시글이 차단됩니다."}
+        message={'신고 3회 이상 누적 시 \n검토 후 사진이 차단됩니다.'}
         label="확인"
         onClose={() => setReportResultOpen(false)}
       />
