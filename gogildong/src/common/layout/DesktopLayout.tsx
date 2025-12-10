@@ -10,7 +10,7 @@ export default function DesktopLayout() {
       </aside>
 
       {/* 오른쪽 컨텐츠 영역 (배경 + 기본 패딩) */}
-      <main className="flex-1 bg-[#F5F5F5] px-10 py-8">
+      <main className="flex-1 bg-[#F5F5F5] px-25 py-15">
         <Outlet />
       </main>
     </div>
