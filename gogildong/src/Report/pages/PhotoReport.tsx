@@ -59,7 +59,7 @@ export default function PhotoReport() {
   const handleGoToReportInfo = () => {
     if (!capturedImage || !facilityTypeParam || !id) return;
 
-    navigate(`/school/${id}/report/${facilityTypeParam}/info`, {
+    navigate(`/school/${id}/report/${facilityTypeParam}/form`, {
       state: {
         photo: capturedImage
       }

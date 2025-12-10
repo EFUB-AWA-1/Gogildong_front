@@ -48,7 +48,7 @@ export default function ReportForm1({
           className="w-full rounded-[1.25rem] border border-gray-40 px-[23px] py-[19px] text-caption-lg text-black outline-none"
         />
       </div>
-      <div className="w-full bg-white py-4">
+      <div className="sticky bottom-0 w-full py-4">
         <ActionButton label="다음" disabled={!isComplete} onClick={onNext} />
       </div>
     </div>

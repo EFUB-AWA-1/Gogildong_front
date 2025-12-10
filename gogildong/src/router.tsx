@@ -72,7 +72,7 @@ const router = createBrowserRouter([
             element: <PhotoReport />
           },
           {
-            path: '/school/:id/report/:facilityType/info',
+            path: '/school/:id/report/:facilityType/form',
             element: <ReportFlow />
           },
           {
