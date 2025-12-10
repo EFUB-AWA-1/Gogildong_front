@@ -6,12 +6,12 @@ export const getBuildings = async () => {
 };
 
 export const getFloorsByBuilding = async (buildingId: number) => {
-  const { data } = await axiosInstance.get(`/building/${buildingId}/floor`);
+  const { data } = await axiosInstance.get(`/buildings/${buildingId}/floors`);
   return data;
 };
 
 export const getFacilitiesByFloor = async (floorId: number) => {
-  const { data } = await axiosInstance.get(`/floor/${floorId}/facilities`);
+  const { data } = await axiosInstance.get(`/floors/${floorId}/facilities`);
   return data;
 };
 
