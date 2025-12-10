@@ -7,6 +7,7 @@ import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 import AlertDialog from '../components/AlertDialog';
 import ReportForm2 from '../components/ReportForm2';
 import ReportForm1 from '../components/ReportForm1';
+import MeasurementInputSection from '@/Report/components/MeasurementInputSection';
 import {
   toFacilityLabel,
   type FacilityTypeParam
@@ -31,16 +32,11 @@ export default function ReportFlow() {
     facility: ''
   });
   const [measurements, setMeasurements] = useState<Measurements>({});
-  const [toiletDetail, setToiletDetail] = useState({
-    gender: '',
-    type: '',
-    door: ''
-  });
-  const [pendingToiletDetail, setPendingToiletDetail] = useState<{
-    gender: string;
-    type: string;
-    door: string;
-  } | null>(null);
+  const [detailData, setDetailData] = useState<Record<string, string>>({});
+  const [pendingDetailData, setPendingDetailData] = useState<
+    Record<string, string> | null
+  >(null);
+  const [floorId, setFloorId] = useState<number | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [flowStatus, setFlowStatus] = useState<
     'idle' | 'processing' | 'failed'
@@ -50,8 +46,9 @@ export default function ReportFlow() {
     setStep(0);
     setLocationData({ building: '', floor: '', facility: '' });
     setMeasurements({});
-    setToiletDetail({ gender: '', type: '', door: '' });
-    setPendingToiletDetail(null);
+    setDetailData({});
+    setPendingDetailData(null);
+    setFloorId(null);
     setShowAlert(false);
     setFlowStatus('idle');
   }, [facilityType]);
@@ -61,14 +58,14 @@ export default function ReportFlow() {
   const formSequence: Array<'location' | 'toiletDetail'> =
     facilityType === '화장실' ? ['location', 'toiletDetail'] : ['location'];
 
-  const goToSuccess = (detail = toiletDetail) => {
+  const goToSuccess = (detail = detailData) => {
     if (!id || !facilityTypeParam) return;
     navigate(`/school/${id}/report/${facilityTypeParam}/success`, {
       state: {
         photo,
         facilityType,
         locationData,
-        toiletDetail: detail,
+        detail,
         dimensions: measurements
       }
     });
@@ -82,9 +79,9 @@ export default function ReportFlow() {
     setStep((prev) => prev + 1);
   };
 
-  const handleSubmit = (data: typeof toiletDetail) => {
-    setToiletDetail(data);
-    setPendingToiletDetail(data);
+  const handleSubmit = (data: Record<string, string>) => {
+    setDetailData(data);
+    setPendingDetailData(data);
     setShowAlert(true);
   };
 
@@ -100,7 +97,7 @@ export default function ReportFlow() {
     try {
       //TODO : 실제 api 연결
       await fakeSubmit();
-      goToSuccess(pendingToiletDetail ?? toiletDetail);
+      goToSuccess(pendingDetailData ?? detailData);
     } catch (e) {
       console.error('제보 제출 실패', e);
       setFlowStatus('failed');
@@ -113,18 +110,23 @@ export default function ReportFlow() {
     if (current === 'location') {
       return (
         <ReportForm1
-          facilityType={facilityType}
           locationData={locationData}
-          measurements={measurements}
+          schoolId={id ? Number(id) : undefined}
+          floorId={floorId ?? undefined}
+          onFloorSelect={setFloorId}
           onChange={setLocationData}
-          onMeasurementsChange={setMeasurements}
           onNext={handleNext}
         />
       );
     }
 
     if (current === 'toiletDetail') {
-      return <ReportForm2 onSubmit={handleSubmit} />;
+      return (
+        <ReportForm2
+          facilityType={facilityType}
+          onSubmit={handleSubmit}
+        />
+      );
     }
 
     return null;
@@ -158,6 +160,14 @@ export default function ReportFlow() {
               가이드에 맞춰 다시 작성해 주세요
             </p>
           )}
+        </div>
+
+        <div className="mt-8">
+          <MeasurementInputSection
+            facilityType={facilityType}
+            value={measurements}
+            onChange={setMeasurements}
+          />
         </div>
 
         <div className="mt-10">{renderStep()}</div>

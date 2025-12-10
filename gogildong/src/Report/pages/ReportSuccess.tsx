@@ -1,13 +1,12 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Header from '@/common/components/Header';
 import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 import ReportSummaryCard from '@/Report/components/ReportSummaryCard';
-import SampleImg from '@/Report/assets/imgs/img_sample.png';
 import {
   toFacilityLabel,
   type FacilityTypeParam
 } from '@/Report/types/facilityTypes';
 import type { Measurements } from '@/Report/types/measurement';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 interface SuccessState {
   photo?: string;
@@ -18,13 +17,7 @@ interface SuccessState {
     facility?: string;
     extraDescription?: string;
   };
-  toiletDetail?: {
-    gender?: string;
-    type?: string;
-    door?: string;
-    threshold?: string;
-    extraDescription?: string;
-  };
+  detail?: Record<string, string>;
   dimensions?: Measurements;
 }
 
@@ -35,7 +28,7 @@ export default function ReportSuccess() {
   }>();
   const facilityType = toFacilityLabel(facilityTypeParam);
   const { state } = useLocation();
-  const { photo, locationData, toiletDetail, dimensions } =
+  const { photo, locationData, detail, dimensions } =
     (state as SuccessState) || {};
 
   const handleBack = () => {
@@ -71,7 +64,7 @@ export default function ReportSuccess() {
           <div className="flex flex-col items-center gap-4">
             <div className="h-50 w-[133px] rounded-3xl border-[6px] border-neon-100">
               <img
-                src={photo ?? SampleImg}
+                src={photo}
                 alt="촬영된 사진"
                 className="h-full w-full rounded-2xl object-cover"
               />
@@ -86,14 +79,8 @@ export default function ReportSuccess() {
         <ReportSummaryCard
           facilityType={facilityType ?? '기타'}
           locationData={locationData}
-          toiletDetail={toiletDetail}
           dimensions={dimensions}
-          detail={{
-            doorType: toiletDetail?.door,
-            extraDescription: toiletDetail?.extraDescription,
-            threshold: toiletDetail?.threshold,
-            gender: toiletDetail?.gender
-          }}
+          detail={detail}
         />
       </div>
     </div>

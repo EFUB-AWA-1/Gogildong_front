@@ -10,26 +10,14 @@ interface ReportSummaryCardProps {
     facility?: string;
     extraDescription?: string;
   };
-  detail?: {
-    threshold?: string;
-    doorType?: string;
-    extraDescription?: string;
-    gender?: string;
-  };
-  toiletDetail?: {
-    gender?: string;
-    type?: string;
-    door?: string;
-    threshold?: string;
-  };
+  detail?: Record<string, string>;
 }
 
 export default function ReportSummaryCard({
   facilityType,
   dimensions,
   locationData,
-  detail,
-  toiletDetail
+  detail
 }: ReportSummaryCardProps) {
   const numberRows: Array<
     | { label: string; type: 'pair'; width?: string; height?: string }
@@ -117,32 +105,23 @@ export default function ReportSummaryCard({
         return [
           ...baseLocation,
           { label: '위치 추가 설명', value: locationData?.extraDescription },
-          { label: '칸 종류', value: toiletDetail?.type },
-          { label: '문 종류', value: detail?.doorType ?? toiletDetail?.door },
-          {
-            label: '손잡이 유무',
-            value: detail?.threshold ?? toiletDetail?.threshold
-          }
+          { label: '칸 종류', value: detail?.stallType },
+          { label: '문 종류', value: detail?.doorType },
+          { label: '손잡이 유무', value: detail?.grabBar }
         ];
       case '엘리베이터':
         return [
           ...baseLocation,
-          { label: '승인 없이 이용 여부', value: detail?.threshold },
-          { label: '수업 중 이용 가능 여부', value: detail?.doorType },
+          { label: '승인 없이 이용 여부', value: detail?.accessApproval },
+          { label: '수업 중 이용 가능 여부', value: detail?.classUse },
           { label: '시설 추가 설명', value: detail?.extraDescription }
         ];
       case '교실':
         return [
           ...baseLocation,
           { label: '위치 추가 설명', value: locationData?.extraDescription },
-          {
-            label: '교실 문턱 유무',
-            value: detail?.threshold ?? toiletDetail?.threshold
-          },
-          {
-            label: '교실 문 종류',
-            value: detail?.doorType ?? toiletDetail?.door
-          },
+          { label: '교실 문턱 유무', value: detail?.threshold },
+          { label: '교실 문 종류', value: detail?.doorType },
           { label: '시설 추가 설명', value: detail?.extraDescription }
         ];
       case '기타':

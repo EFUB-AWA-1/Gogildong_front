@@ -1,47 +1,76 @@
-import LocationSelectorGroup from './LocationSelectorGroup';
+import { useEffect, useState } from 'react';
 import ActionButton from '@/common/components/ActionButton';
-import SameplePlan from '@/Report/assets/imgs/samplePlan.png';
 import type { LocationData } from '../types/report';
-import MeasurementInputSection from '@/Report/components/MeasurementInputSection';
-import type { FacilityType } from '@/Report/types/facilityTypes';
-import type { Measurements } from '@/Report/types/measurement';
+import LocationSelectorGroup from './LocationSelectorGroup';
+import { getFloorPlan } from '@/Report/api/getFacilities';
 
 interface ReportForm1Props {
-  facilityType: FacilityType;
   locationData: LocationData;
-  measurements?: Measurements;
+  schoolId?: number;
+  floorId?: number;
   onChange: (data: LocationData) => void;
-  onMeasurementsChange?: (value: Measurements) => void;
+  onFloorSelect?: (floorId: number | null) => void;
   onNext: () => void;
 }
 
 export default function ReportForm1({
-  facilityType,
   locationData,
-  measurements,
+  schoolId,
+  floorId,
   onChange,
-  onMeasurementsChange,
+  onFloorSelect,
   onNext
 }: ReportForm1Props) {
+  const [planUrl, setPlanUrl] = useState<string | null>(null);
+
   const isComplete =
     locationData.building && locationData.floor && locationData.facility;
 
+  useEffect(() => {
+    let ignore = false;
+
+    const fetchFloorPlan = async () => {
+      if (!schoolId || !floorId) {
+        setPlanUrl(null);
+        return;
+      }
+      try {
+        const data = await getFloorPlan(schoolId, floorId);
+        if (!ignore) setPlanUrl(data?.floorPlanImage ?? null);
+      } catch (error) {
+        if (!ignore) setPlanUrl(null);
+        console.log(error);
+      }
+    };
+
+    fetchFloorPlan();
+    return () => {
+      ignore = true;
+    };
+  }, [schoolId, floorId]);
+
   return (
     <div className="flex flex-col items-center gap-6">
-      <MeasurementInputSection
-        facilityType={facilityType}
-        value={measurements}
-        onChange={onMeasurementsChange}
-      />
       <div className="flex w-full flex-col items-start gap-4">
         <p className="text-body-bold-lg">위치 선택</p>
-        <div className="flex w-full justify-center">
-          <img src={SameplePlan} alt="학교 도면" />
-        </div>
+        <LocationSelectorGroup
+          schoolId={schoolId}
+          onChange={onChange}
+          onFloorSelect={onFloorSelect}
+        />
+        {planUrl ? (
+          <div className="flex w-full justify-center">
+            <img
+              src={planUrl}
+              alt="학교 도면"
+              className="border-gray-30 w-full max-w-md rounded-2xl border object-contain"
+            />
+          </div>
+        ) : null}
       </div>
-      <LocationSelectorGroup onChange={onChange} />
+
       <div className="flex w-full flex-col gap-4">
-        <p className="text-body-bold-lg">추가 정보</p>
+        <p className="text-body-bold-lg">위치 추가 설명</p>
         <input
           type="text"
           placeholder="예) 교무실 앞 화장실"
