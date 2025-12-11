@@ -33,9 +33,10 @@ export default function ReportFlow() {
   });
   const [measurements, setMeasurements] = useState<Measurements>({});
   const [detailData, setDetailData] = useState<Record<string, string>>({});
-  const [pendingDetailData, setPendingDetailData] = useState<
-    Record<string, string> | null
-  >(null);
+  const [pendingDetailData, setPendingDetailData] = useState<Record<
+    string,
+    string
+  > | null>(null);
   const [floorId, setFloorId] = useState<number | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [flowStatus, setFlowStatus] = useState<
@@ -55,8 +56,8 @@ export default function ReportFlow() {
 
   if (!facilityType) return null;
 
-  const formSequence: Array<'location' | 'toiletDetail'> =
-    facilityType === '화장실' ? ['location', 'toiletDetail'] : ['location'];
+  const formSequence: Array<'location' | 'detail'> =
+    facilityType === '기타' ? ['location'] : ['location', 'detail'];
 
   const goToSuccess = (detail = detailData) => {
     if (!id || !facilityTypeParam) return;
@@ -120,12 +121,9 @@ export default function ReportFlow() {
       );
     }
 
-    if (current === 'toiletDetail') {
+    if (current === 'detail') {
       return (
-        <ReportForm2
-          facilityType={facilityType}
-          onSubmit={handleSubmit}
-        />
+        <ReportForm2 facilityType={facilityType} onSubmit={handleSubmit} />
       );
     }
 
@@ -134,7 +132,7 @@ export default function ReportFlow() {
 
   return (
     <>
-      <Header title={facilityType ? `${facilityType} 촬영` : '화장실 촬영'} />
+      <Header title={facilityType ? `${facilityType} 촬영` : '촬영'} />
       <div className="relative flex flex-col bg-white px-[30px]">
         <div className="mt-10 flex flex-col items-center gap-5">
           <div className="h-[183px] w-28 overflow-hidden rounded-3xl border-[6px] border-neon-100">
