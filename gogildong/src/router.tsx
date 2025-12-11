@@ -89,13 +89,13 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
-          { path: '/quiz', element: <QuizPage />},
+          { path: '/quiz', element: <QuizPage /> }
         ]
       }
     ]
   },
   {
-    path: '/desktop',
+    path: '/admin',
     element: <DesktopLayout />,
     children: [
       { index: true, element: <DashBoard /> },
