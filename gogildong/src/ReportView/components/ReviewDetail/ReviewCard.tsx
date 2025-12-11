@@ -1,8 +1,9 @@
-import OptionIcon from "../../assets/icon_option_black.svg?react";
-import ThumbIcon from "../../assets/icon_thumb.svg?react";
-import ThumbIconOn from "../../assets/icon_thumb_on.svg?react";
-import { useEffect, useRef, useState } from "react";
-import DoubleBtnModal from "../modals/DoubleBtnModal";
+import OptionIcon from '../../assets/icon_option_black.svg?react';
+import ThumbIcon from '../../assets/icon_thumb.svg?react';
+import ThumbIconOn from '../../assets/icon_thumb_on.svg?react';
+import { useEffect, useRef, useState } from 'react';
+import DoubleBtnModal from '../modals/DoubleBtnModal';
+import SingleBtnModal from '@/ReportView/components/modals/SingleBtnModal';
 
 type ReviewCardProps = {
   isMine?: boolean;
@@ -13,9 +14,11 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openReportConfirm, setOpenReportConfirm] = useState(false);
+  const [reportResultOpen, setReportResultOpen] = useState(false);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const optionLabel = isMine ? "삭제하기" : "신고하기";
+  const optionLabel = isMine ? '삭제하기' : '신고하기';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -28,11 +31,11 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
     };
 
     if (openMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [openMenu]);
 
@@ -52,12 +55,12 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
 
   const handleConfirmDelete = () => {
     // TODO: 리뷰 삭제 API 호출
-    console.log("리뷰 삭제");
+    console.log('리뷰 삭제');
   };
 
   const handleConfirmReport = () => {
     // TODO: 리뷰 신고 API 호출
-    console.log("리뷰 신고");
+    setReportResultOpen(true);
   };
 
   return (
@@ -106,7 +109,7 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
           <button
             type="button"
             onClick={handleToggleLike}
-            className={`flex h-6.5 items-center gap-2.5 rounded-[1.25rem] border ${isLiked ? "border-neon-100" : "border-gray-20"} bg-white px-2.5`}
+            className={`flex h-6.5 items-center gap-2.5 rounded-[1.25rem] border ${isLiked ? 'border-neon-100' : 'border-gray-20'} bg-white px-2.5`}
           >
             {isLiked ? (
               <ThumbIconOn className="h-3 w-3" />
@@ -114,7 +117,7 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
               <ThumbIcon className="h-3 w-3" />
             )}
             <span
-              className={`text-body-sm ${isLiked ? "text-neon-100" : "text-gray-80"}`}
+              className={`text-body-sm ${isLiked ? 'text-neon-100' : 'text-gray-80'}`}
             >
               추천 3
             </span>
@@ -131,14 +134,21 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
         onConfirm={handleConfirmDelete}
       />
 
-      {/* 리뷰 신고 모달 (확인 한 번 더) */}
+      {/* 리뷰 신고 모달 */}
       <DoubleBtnModal
         open={openReportConfirm}
         title="리뷰를 신고할까요?"
-        message={"신고한 리뷰는 관리자의 신고 처리 후\n삭제될 수 있습니다."}
         label="신고하기"
         onClose={() => setOpenReportConfirm(false)}
         onConfirm={handleConfirmReport}
+      />
+
+      <SingleBtnModal
+        open={reportResultOpen}
+        title="신고가 제출되었습니다"
+        message={'신고 3회 이상 누적 시 \n검토 후 리뷰가 차단됩니다.'}
+        label="확인"
+        onClose={() => setReportResultOpen(false)}
       />
     </section>
   );
