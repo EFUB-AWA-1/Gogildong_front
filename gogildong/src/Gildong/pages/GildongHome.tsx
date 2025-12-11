@@ -9,15 +9,54 @@ import { useUserStore } from '@/Mypage/stores/useUserStore';
 import QuizIcon from '../assets/QuizIcon.svg';
 import MissonIcon from '../assets/MissonIcon.svg';
 import { useCoinStore } from '@/Gildong/stores/useCoinStore';
+import { useNavigate } from 'react-router-dom';
+import { getQuizList } from '@/Gildong/api/quiz';
+import { findUnsolvedQuiz } from '@/Gildong/hooks/findUnsolvedQuiz';
+import MissionCompleteTag from '@/Gildong/components/MissionCompleteTag';
+import MissionProgress from '@/Gildong/components/MissionProgress';
+
+type Quiz = {
+  quiz_id: number;
+  title: string;
+  attemptStatus: 'SUBITTED' | 'NONE';
+  isCorrect: boolean | null;
+};
 
 export default function GildongHome() {
+  const navigate = useNavigate();
   const [active, setActive] = React.useState<NavKey>('gildong');
   const username = useUserStore((state) => state.user?.username);
   const { coin, fetchCoin } = useCoinStore();
+  const [quizProgress, setQuizProgress] = React.useState({
+    solved: 0,
+    total: 0
+  });
 
   useEffect(() => {
+    const loadQuizProgress = async () => {
+      const quizzes = await getQuizList();
+      const solvedCount = quizzes.filter((q: Quiz) => q.isCorrect).length;
+
+      setQuizProgress({
+        solved: solvedCount,
+        total: quizzes.length
+      });
+    };
+    loadQuizProgress();
     fetchCoin();
   }, []);
+  const isQuizCompleted = quizProgress.total > 0 && quizProgress.solved === quizProgress.total;
+  const goToQuiz = async () => {
+    const quizzes = await getQuizList();
+    const unsolved = findUnsolvedQuiz(quizzes);
+
+    if (!unsolved) {
+      alert('모든 퀴즈를 이미 완료했어요!');
+      return;
+    }
+
+    navigate(`/quiz/${unsolved.quiz_id}`);
+  };
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-linear-to-b from-lime-50 to-lime-200">
@@ -33,7 +72,8 @@ export default function GildongHome() {
           }
           .compact-text {
             font-size: 0.8rem !important;
-            line-height: 1rem;
+            line-height: 1rem;import { Navigate, useNavigate } from 'react-router-dom';
+
           }
         }
         `}
@@ -77,15 +117,14 @@ export default function GildongHome() {
             </div>
 
             <p className="compact-text font-semibold text-green-600">3/3</p>
-            <div className="inline-flex items-center justify-center gap-2 rounded-lg bg-neutral-600 px-2 py-0.5">
-              <div className="justify-center text-center text-caption-sm leading-4 font-normal text-white">
-                미션 완료
-              </div>
-            </div>
+            <MissionCompleteTag />
           </div>
 
           {/* 퀴즈 */}
-          <div className="compact-card flex flex-col items-center justify-between rounded-2xl bg-[#EDEDED] p-5">
+          <div
+            onClick={goToQuiz}
+            className="compact-card flex flex-col items-center justify-between rounded-2xl bg-[#EDEDED] p-5"
+          >
             <p className="compact-text text-center text-lg leading-6 font-medium">
               퀴즈 풀고
               <br />
@@ -96,13 +135,11 @@ export default function GildongHome() {
               <img src={QuizIcon} />
             </div>
 
-            <p className="compact-text font-semibold text-green-600">1/5</p>
+            <p className="compact-text font-semibold text-green-600">
+              {quizProgress.solved}/{quizProgress.total}
+            </p>
 
-            <div className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-200 px-2 py-0.5">
-              <div className="justify-center text-center text-caption-sm leading-4 font-normal text-neon-d">
-                진행 중
-              </div>
-            </div>
+            {isQuizCompleted ? <MissionCompleteTag /> : <MissionProgress />}
           </div>
         </div>
       </div>

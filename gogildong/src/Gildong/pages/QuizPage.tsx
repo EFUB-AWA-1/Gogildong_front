@@ -1,29 +1,32 @@
 import Header from '@/common/components/Header';
 import QuizImage from '../assets/quizImage.png';
 import QuizOption from '@/Gildong/components/QuizOption';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ActionButton from '@/common/components/ActionButton';
+import { getQuizById } from '@/Gildong/api/quiz';
+import { useParams } from 'react-router-dom';
+
+
+type QuizChoice = {
+  choice_id : number;
+  label: string;
+  text: string;
+};
 
 export default function QuizPage() {
+    const {quizId} = useParams();
+    const [quiz, setQuiz] = useState<any>(null);
+
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const mockdata = [
-    {
-      label: 'A',
-      text: '건물 입구에 계단만 설치'
-    },
-    {
-      label: 'B',
-      text: '엘리베이터와 경사로 설치'
-    },
-    {
-      label: 'C',
-      text: '글자가 작은 안내판 설치'
-    },
-    {
-      label: 'D',
-      text: '휠체어 사용자를 위한 화장실 미설치'
-    }
-  ];
+  useEffect(() => {
+    const loadQuiz = async () => {
+        const data = await getQuizById(Number(quizId));
+        setQuiz(data);
+    };
+    loadQuiz();
+  }, [quizId]);
+
+  if(!quiz) return <div>찾을 수 없는 퀴즈입니다!</div>;
 
   const handleSelect = (label: string) => {
     if (selectedOption === label) {
@@ -39,19 +42,19 @@ export default function QuizPage() {
   };
   return (
     <div className="relative flex h-screen flex-col items-center bg-lime-50">
-      <Header title="퀴즈 1" transparentMode={true} />
+      <Header title={quiz.title} transparentMode={true} />
       <div className="w-full items-center">
         <div className="m-5 flex flex-col items-center justify-center rounded-2xl bg-white px-5 py-8">
           <img className="h-36 w-72 rounded-2xl object-cover" src={QuizImage} />
           <div className="flex max-w-72 flex-col items-center gap-2.5 overflow-hidden bg-white p-2.5">
             <div className="justify-centertext-base w-64 leading-6 font-bold text-zinc-800">
-              Q1. 다음 중 베리어프리 설계에 해당하는 것은 무엇일까요?
+              Q{quiz.quiz_id}. {quiz.question}
             </div>
             <div>
               <div className="mt-4 flex w-72 flex-col items-center gap-2.5">
-                {mockdata.map((item) => (
+                {quiz.choices.map((item: QuizChoice) => (
                   <QuizOption
-                    key={item.label}
+                    key={item.choice_id}
                     label={item.label}
                     option={item.text}
                     isSelected={selectedOption === item.label}
