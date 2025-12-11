@@ -1,6 +1,6 @@
-import EyeIcon from "@/Signup/assets/icon_eye.svg?react";
-import EyeOffIcon from "@/Signup/assets/icon_eye_disabled.svg?react";
-import { useState } from "react";
+import EyeIcon from '@/Signup/assets/icon_eye.svg?react';
+import EyeOffIcon from '@/Signup/assets/icon_eye_disabled.svg?react';
+import { useState } from 'react';
 interface LoginInputFieldProps {
   label: string;
   value: string;
@@ -11,18 +11,18 @@ interface LoginInputFieldProps {
 export default function LoginInputField({
   label,
   value,
-  type = "text",
+  type = 'text',
   placeholder,
   onChange
 }: LoginInputFieldProps) {
   const inputId = label;
-  const isPasswordField = label === "비밀번호";
+  const isPasswordField = label === '비밀번호';
   const [showPassword, setShowPassword] = useState(false);
 
   const inputType = isPasswordField
     ? showPassword
-      ? "text"
-      : "password"
+      ? 'text'
+      : 'password'
     : type;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,7 @@ export default function LoginInputField({
             onClick={() => setShowPassword((prev) => !prev)}
             className="absolute top-1/2 right-4 -translate-y-1/2"
           >
-            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            {showPassword ? <EyeIcon /> : <EyeOffIcon />}
           </button>
         )}
       </div>

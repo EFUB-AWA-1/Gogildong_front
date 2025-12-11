@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import MainLayout from './common/layout/MainLayout';
 import Home from './Home/pages/Home';
 import InfoRequest from './Home/pages/InfoRequest';
@@ -17,11 +17,16 @@ import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
 import ReportStart from '@/Report/pages/ReportStart';
 import ReportFlow from '@/Report/pages/ReportFlow';
+import ReportSuccess from '@/Report/pages/ReportSuccess';
 import ProtectedRoute from '@/ProtectedRoute';
 import Mypage from './Mypage/pages/Mypage';
 import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
 import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
 import PublicRoute from '@/PublicRoute';
+import DesktopLayout from '@/common/layout/DesktopLayout';
+import DashBoard from '@/Desktop/pages/DashBoard';
+import GildongHome from '@/Gildong/pages/GildongHome';
+import QuizPage from '@/Gildong/pages/QuizPage';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +40,7 @@ const router = createBrowserRouter([
           </PublicRoute>
         ),
         children: [
+          { index: true, element: <Navigate to="/login" replace /> },
           { path: '/login', element: <Login /> },
           { path: '/signup', element: <SignupSelectRole /> },
           { path: '/signup/admin', element: <SignupAdmin /> },
@@ -64,12 +70,40 @@ const router = createBrowserRouter([
           { path: '/school/view/photos/detail', element: <PhotoDetail /> },
           { path: '/school/view/review/write', element: <ReviewWrite /> },
           { path: '/school/view/review', element: <ReviewDetail /> },
-          { path: '/school/report', element: <ReportStart /> },
-          { path: '/school/report/camera', element: <PhotoReport /> },
-          { path: '/school/report/info', element: <ReportFlow /> },
-          { path: '/mypage', element: <Mypage /> }
+          { path: '/school/:id/report', element: <ReportStart /> },
+          {
+            path: '/school/:id/report/:facilityType/camera',
+            element: <PhotoReport />
+          },
+          {
+            path: '/school/:id/report/:facilityType/info',
+            element: <ReportFlow />
+          },
+          {
+            path: '/school/:id/report/:facilityType/success',
+            element: <ReportSuccess />
+          },
+          {
+            path: '/school/:id/report/:facilityType/uploaded',
+            element: <ReportSuccess />
+          },
+          { path: '/mypage', element: <Mypage /> },
+          { path: '/gildong', element: <GildongHome /> },
+          { path: '/quiz', element: <QuizPage />},
         ]
       }
+    ]
+  },
+  {
+    path: '/desktop',
+    element: <DesktopLayout />,
+    children: [
+      { index: true, element: <DashBoard /> },
+      { path: 'stats', element: <DashBoard /> },
+      { path: 'schools', element: <div>학교 목록</div> },
+      { path: 'reports', element: <div>제보 관리</div> },
+      { path: 'requests', element: <div>열람 요청 관리</div> },
+      { path: 'buildings', element: <div>건물 도면 관리</div> }
     ]
   }
 ]);
