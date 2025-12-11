@@ -26,7 +26,8 @@ export default function GildongHome() {
             display: none !important;
           }
           .compact-text {
-            font-size: 0.9rem !important;
+            font-size: 0.8rem !important;
+            line-height: 1rem;
           }
         }
         `}
@@ -35,7 +36,6 @@ export default function GildongHome() {
       {/* 상단 영역 */}
       <div className="flex flex-none flex-col space-y-5 px-6 pt-14 pb-6">
         <UserInfo username={username} coin={12000000} />
-
         <div className="flex w-full flex-row justify-between">
           <DialogueBox />
           <MenuButtonContainer />

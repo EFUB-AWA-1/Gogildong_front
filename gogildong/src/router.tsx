@@ -26,6 +26,7 @@ import PublicRoute from '@/PublicRoute';
 import DesktopLayout from '@/common/layout/DesktopLayout';
 import DashBoard from '@/Desktop/pages/DashBoard';
 import GildongHome from '@/Gildong/pages/GildongHome';
+import QuizPage from '@/Gildong/pages/QuizPage';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,7 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
+          { path: '/quiz', element: <QuizPage />},
         ]
       }
     ]
