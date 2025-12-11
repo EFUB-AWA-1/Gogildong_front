@@ -25,6 +25,7 @@ import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
 import PublicRoute from '@/PublicRoute';
 import DesktopLayout from '@/common/layout/DesktopLayout';
 import DashBoard from '@/Desktop/pages/DashBoard';
+import GildongHome from '@/Gildong/pages/GildongHome';
 
 const router = createBrowserRouter([
   {
@@ -85,7 +86,8 @@ const router = createBrowserRouter([
             path: '/school/:id/report/:facilityType/uploaded',
             element: <ReportSuccess />
           },
-          { path: '/mypage', element: <Mypage /> }
+          { path: '/mypage', element: <Mypage /> },
+          { path: '/gildong', element: <GildongHome /> },
         ]
       }
     ]
