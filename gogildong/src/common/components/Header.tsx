@@ -7,6 +7,7 @@ interface HeaderProps {
   onBackClick?: () => void;
   darkMode?: boolean;
   rightElement?: React.ReactNode;
+  transparentMode?: boolean;
 }
 
 export default function Header({
@@ -14,7 +15,8 @@ export default function Header({
   showBack = true,
   onBackClick,
   darkMode = false,
-  rightElement
+  rightElement,
+  transparentMode = false
 }: HeaderProps) {
   const navigate = useNavigate();
 
@@ -26,8 +28,8 @@ export default function Header({
   return (
     <header
       className={`sticky top-0 z-10 grid w-full grid-cols-3 items-center px-4 py-2 ${
-        darkMode ? "text-white" : "bg-white text-black"
-      }`}
+        darkMode ? "text-white" : "text-black"
+      } ${transparentMode ? "bg-transparent" : "bg-white"}`}
     >
       {showBack && (
         <button
