@@ -1,5 +1,5 @@
 import UserInfo from '@/Gildong/components/UserInfo';
-import React from 'react';
+import React, { useEffect } from 'react';
 import NavBar from '../../common/components/NavBar';
 import type { NavKey } from '../../common/components/NavBar';
 import DialogueBox from '@/Gildong/components/DialogueBox';
@@ -8,10 +8,16 @@ import GildongSample from '../assets/gildongex.svg';
 import { useUserStore } from '@/Mypage/stores/useUserStore';
 import QuizIcon from '../assets/QuizIcon.svg';
 import MissonIcon from '../assets/MissonIcon.svg';
+import { useCoinStore } from '@/Gildong/stores/useCoinStore';
 
 export default function GildongHome() {
   const [active, setActive] = React.useState<NavKey>('gildong');
   const username = useUserStore((state) => state.user?.username);
+  const { coin, fetchCoin } = useCoinStore();
+
+  useEffect(() => {
+    fetchCoin();
+  }, []);
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-linear-to-b from-lime-50 to-lime-200">
@@ -35,7 +41,7 @@ export default function GildongHome() {
 
       {/* 상단 영역 */}
       <div className="flex flex-none flex-col space-y-5 px-6 pt-14 pb-6">
-        <UserInfo username={username} coin={12000000} />
+        <UserInfo username={username} coin={coin ?? 0} />
         <div className="flex w-full flex-row justify-between">
           <DialogueBox />
           <MenuButtonContainer />
