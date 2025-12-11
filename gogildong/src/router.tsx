@@ -23,6 +23,10 @@ import Mypage from './Mypage/pages/Mypage';
 import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
 import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
 import PublicRoute from '@/PublicRoute';
+import DesktopLayout from '@/common/layout/DesktopLayout';
+import DashBoard from '@/Desktop/pages/DashBoard';
+import GildongHome from '@/Gildong/pages/GildongHome';
+import QuizPage from '@/Gildong/pages/QuizPage';
 
 const router = createBrowserRouter([
   {
@@ -83,9 +87,23 @@ const router = createBrowserRouter([
             path: '/school/:id/report/:facilityType/uploaded',
             element: <ReportSuccess />
           },
-          { path: '/mypage', element: <Mypage /> }
+          { path: '/mypage', element: <Mypage /> },
+          { path: '/gildong', element: <GildongHome /> },
+          { path: '/quiz', element: <QuizPage />},
         ]
       }
+    ]
+  },
+  {
+    path: '/desktop',
+    element: <DesktopLayout />,
+    children: [
+      { index: true, element: <DashBoard /> },
+      { path: 'stats', element: <DashBoard /> },
+      { path: 'schools', element: <div>학교 목록</div> },
+      { path: 'reports', element: <div>제보 관리</div> },
+      { path: 'requests', element: <div>열람 요청 관리</div> },
+      { path: 'buildings', element: <div>건물 도면 관리</div> }
     ]
   }
 ]);
