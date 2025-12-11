@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
-import DesktopSidebar from '@/common/components/DesktopSidebar';
+import DesktopSidebar from '@/Admin/components/DesktopSidebar';
 
 export default function DesktopLayout() {
   return (
-    <div className="w-ful mx-auto flex min-h-screen">
+    <div className="mx-auto flex min-h-screen w-full">
       {/* 왼쪽 내비게이션 */}
-      <aside className="flex w-96 shrink-0 flex-col items-center bg-white">
+      <aside className="flex w-[19%] shrink-0 flex-col items-center bg-white">
         <DesktopSidebar />
       </aside>
 

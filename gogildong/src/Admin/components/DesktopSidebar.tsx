@@ -25,7 +25,7 @@ export default function Sidebar() {
   return (
     <aside className="flex h-full w-full flex-col bg-white">
       {/* 로고 */}
-      <div className="flex h-[115px] items-center gap-[18px] px-10 py-2">
+      <div className="flex items-center py-9 pl-10">
         <img src="/logo_horizontal_strong.svg" alt="고!길동" className="h-8" />
       </div>
 
