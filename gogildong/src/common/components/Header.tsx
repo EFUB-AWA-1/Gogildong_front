@@ -29,7 +29,9 @@ export default function Header({
     <header
       className={`sticky top-0 z-10 grid w-full grid-cols-3 items-center px-4 py-2 ${
         darkMode ? 'text-white' : 'text-black'
-      } ${transparentMode ? 'bg-transparent' : 'bg-white'}`}
+      } ${
+        transparentMode ? 'bg-transparent' : darkMode ? 'bg-black' : 'bg-white'
+      }`}
     >
       {showBack && (
         <button
