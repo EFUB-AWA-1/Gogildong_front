@@ -27,6 +27,8 @@ import DesktopLayout from '@/Admin/layout/DesktopLayout';
 import DashBoard from '@/Admin/pages/DashBoard';
 import GildongHome from '@/Gildong/pages/GildongHome';
 import QuizPage from '@/Gildong/pages/QuizPage';
+import QuizCorrect from '@/Gildong/pages/QuizCorrect';
+import QuizWrong from '@/Gildong/pages/QuizWrong';
 
 const router = createBrowserRouter([
   {
@@ -90,6 +92,8 @@ const router = createBrowserRouter([
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
           { path: '/quiz/:quizId', element: <QuizPage />},
+          { path: '/quiz/correct', element: <QuizCorrect />},
+          { path: '/quiz/wrong', element: <QuizWrong />},
         ]
       }
     ]
