@@ -1,12 +1,12 @@
-import React from "react";
-import iconSearch from "../assets/icon_search.svg";
-import Logo from "../assets/logo.svg";
-import iconSdelete from "../assets/icon_sdelete.svg";
-import iconBack from "../../assets/backIcon.svg";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import iconSearch from '../assets/icon_search.svg';
+import Logo from '../assets/logo.svg';
+import iconSdelete from '../assets/icon_sdelete.svg';
+import iconBack from '../../common/assets/backIcon.svg';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
-  variant: "home" | "detail";
+  variant: 'home' | 'detail';
   placeholder?: string;
   value?: string;
   onChangeQuery?: (value: string) => void;
@@ -16,21 +16,21 @@ type Props = {
 
 const SearchBar: React.FC<Props> = ({
   variant,
-  placeholder = "학교, 주소, 시설 검색",
+  placeholder = '학교, 주소, 시설 검색',
   value,
   onChangeQuery,
   onSubmit,
   onClear
 }) => {
   const navigate = useNavigate();
-  const [internalQuery, setInternalQuery] = React.useState("");
+  const [internalQuery, setInternalQuery] = React.useState('');
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const query = value !== undefined ? value : internalQuery;
 
   const handleFocus = () => {
-    if (variant === "home") {
-      navigate("/search");
+    if (variant === 'home') {
+      navigate('/search');
     }
   };
 
@@ -42,8 +42,8 @@ const SearchBar: React.FC<Props> = ({
   };
 
   const handleClear = () => {
-    updateQuery("");
-    if (variant === "detail") {
+    updateQuery('');
+    if (variant === 'detail') {
       inputRef.current?.focus();
     } else {
       onClear?.();
@@ -51,7 +51,7 @@ const SearchBar: React.FC<Props> = ({
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       const trimmed = query.trim();
       if (!trimmed) return;
       onSubmit?.(trimmed);
@@ -65,7 +65,7 @@ const SearchBar: React.FC<Props> = ({
   return (
     <div className="flex h-12 w-83 shrink-0 items-center justify-between rounded-[1.25rem] bg-white px-2 shadow-[0_0_12px_rgba(0,0,0,0.10)]">
       {/*로고 및 뒤로가기*/}
-      {variant === "detail" ? (
+      {variant === 'detail' ? (
         <img
           src={iconBack}
           alt="back"
@@ -85,7 +85,7 @@ const SearchBar: React.FC<Props> = ({
         onFocus={handleFocus}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        autoFocus={variant === "detail"}
+        autoFocus={variant === 'detail'}
         className="font-[Pretendard Variable] mx-2 w-50 shrink-0 bg-transparent text-left text-body-md leading-6 font-medium text-black placeholder-gray-60 outline-none"
       />
 

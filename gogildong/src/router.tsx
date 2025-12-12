@@ -23,10 +23,12 @@ import Mypage from './Mypage/pages/Mypage';
 import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
 import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
 import PublicRoute from '@/PublicRoute';
-import DesktopLayout from '@/common/layout/DesktopLayout';
-import DashBoard from '@/Desktop/pages/DashBoard';
+import DesktopLayout from '@/Admin/layout/DesktopLayout';
+import DashBoard from '@/Admin/pages/DashBoard';
 import GildongHome from '@/Gildong/pages/GildongHome';
 import QuizPage from '@/Gildong/pages/QuizPage';
+import QuizCorrect from '@/Gildong/pages/QuizCorrect';
+import QuizWrong from '@/Gildong/pages/QuizWrong';
 
 const router = createBrowserRouter([
   {
@@ -89,13 +91,15 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
-          { path: '/quiz', element: <QuizPage />},
+          { path: '/quiz/:quizId', element: <QuizPage />},
+          { path: '/quiz/correct', element: <QuizCorrect />},
+          { path: '/quiz/wrong', element: <QuizWrong />},
         ]
       }
     ]
   },
   {
-    path: '/desktop',
+    path: '/admin',
     element: <DesktopLayout />,
     children: [
       { index: true, element: <DashBoard /> },

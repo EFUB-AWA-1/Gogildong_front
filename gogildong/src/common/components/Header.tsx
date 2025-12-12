@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import BackIcon from '@/assets/backIcon.svg?react';
+import BackIcon from '@/common/assets/backIcon.svg?react';
 
 interface HeaderProps {
   title: string;
