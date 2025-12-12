@@ -1,13 +1,22 @@
 import Header from '@/common/components/Header';
 import CorrectQuizGildong from '../assets/QuizCorrectGildong.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ActionButton from '@/common/components/ActionButton';
+import { goToNextUnsolvedQuiz } from '@/Gildong/utils/quizNavigation';
 
 export default function QuizCorrect() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const title = state?.title ?? "";
+  const point = state?.point ?? 0;
+
+  const handleNextClick = async () => {
+    await goToNextUnsolvedQuiz(navigate);
+  };
+  
   return (
     <div className="relative flex h-screen flex-col items-center bg-lime-50">
-      <Header title="퀴즈1" transparentMode={true} />
+      <Header title={title} transparentMode={true} onBackClick={() => navigate("/gildong")}/>
       <div className="w-full items-center flex-1 overflow-y-auto">
         <div className="m-5 flex flex-col items-center justify-center rounded-2xl bg-white px-5 py-8">
           <img className="h-40 w-28" src={CorrectQuizGildong} />
@@ -22,7 +31,7 @@ export default function QuizCorrect() {
             </div>
             <div className="justify-start text-center">
               <span className="text-sm leading-5 font-bold text-neon-d">
-                100
+                {point}
               </span>
               <span className="text-sm leading-5 font-bold text-zinc-800">
                 포인트
@@ -46,7 +55,7 @@ export default function QuizCorrect() {
         </div>
       </div>
       <div className="z-index-100 fixed bottom-0 w-full max-w-120 p-4">
-        <ActionButton label="다음" type="submit" />
+        <ActionButton label="다음" type="button" onClick={handleNextClick} />
       </div>
     </div>
   );

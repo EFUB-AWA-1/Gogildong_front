@@ -14,11 +14,12 @@ import { getQuizList } from '@/Gildong/api/quiz';
 import { findUnsolvedQuiz } from '@/Gildong/hooks/findUnsolvedQuiz';
 import MissionCompleteTag from '@/Gildong/components/MissionCompleteTag';
 import MissionProgress from '@/Gildong/components/MissionProgress';
+import { goToNextUnsolvedQuiz } from '@/Gildong/utils/quizNavigation';
 
 type Quiz = {
   quiz_id: number;
   title: string;
-  attemptStatus: 'SUBITTED' | 'NONE';
+  attemptStatus: 'SUBMITTED' | 'NONE';
   isCorrect: boolean | null;
 };
 
@@ -35,7 +36,7 @@ export default function GildongHome() {
   useEffect(() => {
     const loadQuizProgress = async () => {
       const quizzes = await getQuizList();
-      const solvedCount = quizzes.filter((q: Quiz) => q.isCorrect).length;
+      const solvedCount = quizzes.filter((q: Quiz) => q.attemptStatus === 'SUBMITTED').length;
 
       setQuizProgress({
         solved: solvedCount,
@@ -45,17 +46,10 @@ export default function GildongHome() {
     loadQuizProgress();
     fetchCoin();
   }, []);
-  const isQuizCompleted = quizProgress.total > 0 && quizProgress.solved === quizProgress.total;
+  const isQuizCompleted =
+    quizProgress.total > 0 && quizProgress.solved === quizProgress.total;
   const goToQuiz = async () => {
-    const quizzes = await getQuizList();
-    const unsolved = findUnsolvedQuiz(quizzes);
-
-    if (!unsolved) {
-      alert('모든 퀴즈를 이미 완료했어요!');
-      return;
-    }
-
-    navigate(`/quiz/${unsolved.quiz_id}`);
+    await goToNextUnsolvedQuiz(navigate);
   };
 
   return (
