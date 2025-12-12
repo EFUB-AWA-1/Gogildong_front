@@ -92,10 +92,10 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
-          { path: '/quiz/:quizId', element: <QuizPage />},
-          { path: '/quiz/correct', element: <QuizCorrect />},
-          { path: '/quiz/wrong', element: <QuizWrong />},
-          { path: '/ranking', element: <RankingPage />},
+          { path: '/quiz/:quizId', element: <QuizPage /> },
+          { path: '/quiz/correct', element: <QuizCorrect /> },
+          { path: '/quiz/wrong', element: <QuizWrong /> },
+          { path: '/ranking', element: <RankingPage /> }
         ]
       }
     ]
@@ -104,7 +104,7 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <DesktopLayout />,
     children: [
-      { index: true, element: <DashBoard /> },
+      { index: true, element: <Navigate to="stats" replace /> },
       { path: 'stats', element: <DashBoard /> },
       { path: 'schools', element: <div>학교 목록</div> },
       { path: 'reports', element: <div>제보 관리</div> },
