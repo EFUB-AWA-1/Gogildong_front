@@ -11,7 +11,6 @@ import MissonIcon from '../assets/MissonIcon.svg';
 import { useCoinStore } from '@/Gildong/stores/useCoinStore';
 import { useNavigate } from 'react-router-dom';
 import { getQuizList } from '@/Gildong/api/quiz';
-import { findUnsolvedQuiz } from '@/Gildong/hooks/findUnsolvedQuiz';
 import MissionCompleteTag from '@/Gildong/components/MissionCompleteTag';
 import MissionProgress from '@/Gildong/components/MissionProgress';
 import { goToNextUnsolvedQuiz } from '@/Gildong/utils/quizNavigation';
