@@ -39,7 +39,7 @@ export default function Sidebar() {
                 <NavLink
                   to={to}
                   className={({ isActive }) =>
-                    `flex h-[72px] w-[200px] items-center gap-6 rounded-[20px] pl-2 ${
+                    `flex h-[72px] w-[210px] items-center gap-6 rounded-[20px] px-2 ${
                       isActive ? 'bg-neon-60' : 'bg-white'
                     }`
                   }
@@ -61,7 +61,7 @@ export default function Sidebar() {
       <div className="flex w-full justify-center pt-5">
         <button
           type="button"
-          className="flex h-[72px] w-[200px] items-center gap-6 rounded-[20px] bg-white pl-2"
+          className="flex h-[72px] w-[210px] items-center gap-6 rounded-[20px] bg-white px-2"
         >
           <LogoutIcon className="h-10 w-10" />
           <span className="text-heading-md text-black">로그아웃</span>
