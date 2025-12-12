@@ -15,11 +15,11 @@ type NavItem = {
 };
 
 const MAIN_ITEMS: NavItem[] = [
-  { to: '/desktop/schools', label: '학교 목록', Icon: HomeIcon },
-  { to: '/desktop/reports', label: '제보 관리', Icon: ReportIcon },
-  { to: '/desktop/requests', label: '열람 요청 관리', Icon: RequestIcon },
-  { to: '/desktop/buildings', label: '건물 도면 관리', Icon: MapIcon },
-  { to: '/desktop/stats', label: '통계', Icon: StatsIcon }
+  { to: '/admin/schools', label: '학교 목록', Icon: HomeIcon },
+  { to: '/admin/reports', label: '제보 관리', Icon: ReportIcon },
+  { to: '/admin/requests', label: '열람 요청 관리', Icon: RequestIcon },
+  { to: '/admin/buildings', label: '건물 도면 관리', Icon: MapIcon },
+  { to: '/admin/stats', label: '통계', Icon: StatsIcon }
 ];
 
 export default function Sidebar() {
@@ -31,15 +31,15 @@ export default function Sidebar() {
       </div>
 
       {/* 메뉴*/}
-      <div className="flex w-full justify-center border-b-2 border-gray-20">
+      <div className="flex w-full flex-col items-center justify-center gap-2.5 border-b-2 border-gray-20 pb-5">
         <nav>
-          <ul className="flex w-full flex-col items-start gap-2">
+          <ul className="flex w-full flex-col gap-2">
             {MAIN_ITEMS.map(({ to, label, Icon }) => (
               <li key={to}>
                 <NavLink
                   to={to}
                   className={({ isActive }) =>
-                    `flex h-[72px] w-[190px] items-center gap-6 rounded-[20px] ${
+                    `px flex h-[72px] w-[200px] items-center gap-6 rounded-[20px] ${
                       isActive ? 'bg-neon-60' : 'bg-white'
                     }`
                   }
@@ -58,10 +58,10 @@ export default function Sidebar() {
       </div>
 
       {/* 로그아웃 */}
-      <div className="flex w-full justify-center">
+      <div className="flex w-full justify-center pt-5">
         <button
           type="button"
-          className="flex h-[72px] w-[190px] items-center gap-6 rounded-[20px] bg-white"
+          className="flex h-[72px] w-[200px] items-center gap-6 rounded-[20px] bg-white"
         >
           <LogoutIcon className="h-10 w-10" />
           <span className="text-heading-md text-black">로그아웃</span>
