@@ -89,7 +89,7 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
-          { path: '/quiz', element: <QuizPage /> }
+          { path: '/quiz/:quizId', element: <QuizPage />},
         ]
       }
     ]
