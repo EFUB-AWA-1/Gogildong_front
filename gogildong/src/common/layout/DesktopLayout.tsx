@@ -3,7 +3,7 @@ import DesktopSidebar from '@/Admin/components/DesktopSidebar';
 
 export default function DesktopLayout() {
   return (
-    <div className="mx-auto flex min-h-screen w-full">
+    <div className="mx-auto flex min-h-screen max-w-[1920px] min-w-7xl">
       {/* 왼쪽 내비게이션 */}
       <aside className="flex w-[19%] shrink-0 flex-col items-center bg-white">
         <DesktopSidebar />

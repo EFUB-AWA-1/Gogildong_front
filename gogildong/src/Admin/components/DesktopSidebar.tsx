@@ -6,6 +6,7 @@ import RequestIcon from '@/assets/Common/icon_pc_request.svg?react';
 import MapIcon from '@/assets/Common/icon_pc_map.svg?react';
 import StatsIcon from '@/assets/Common/icon_pc_statistics.svg?react';
 import LogoutIcon from '@/assets/Common/icon_pc_logout.svg?react';
+import LogoIcon from '@/Admin/assets/svgs/destop-logo.svg?react';
 
 type NavItem = {
   to: string;
@@ -26,44 +27,45 @@ export default function Sidebar() {
     <aside className="flex h-full w-full flex-col bg-white">
       {/* 로고 */}
       <div className="flex items-center py-9 pl-10">
-        <img src="/logo_horizontal_strong.svg" alt="고!길동" className="h-8" />
+        <LogoIcon role="img" aria-label="서비스 로고" />
       </div>
 
-      <div className="flex flex-1 flex-col">
-        {/* 메뉴*/}
-        <nav className="border-b-2 border-[#E4E4E4] px-10 py-7">
-          <ul className="flex w-full flex-col gap-2">
+      {/* 메뉴*/}
+      <div className="flex w-full justify-center border-b-2 border-gray-20">
+        <nav>
+          <ul className="flex w-full flex-col items-start gap-2">
             {MAIN_ITEMS.map(({ to, label, Icon }) => (
               <li key={to}>
                 <NavLink
                   to={to}
                   className={({ isActive }) =>
-                    `flex h-[72px] items-center gap-6 rounded-[20px] px-10 py-3 ${
+                    `flex h-[72px] w-[190px] items-center gap-6 rounded-[20px] ${
                       isActive ? 'bg-neon-60' : 'bg-white'
                     }`
                   }
                 >
                   <div className="flex items-center gap-6">
                     <Icon className="h-10 w-10" />
-
-                    <span className="text-heading-md text-black">{label}</span>
+                    <span className="text-heading-md whitespace-nowrap text-black">
+                      {label}
+                    </span>
                   </div>
                 </NavLink>
               </li>
             ))}
           </ul>
         </nav>
+      </div>
 
-        {/* 로그아웃 */}
-        <div className="px-10 py-7">
-          <button
-            type="button"
-            className="flex h-[72px] w-full items-center gap-6 rounded-[20px] bg-white px-10 py-3"
-          >
-            <LogoutIcon className="h-10 w-10" />
-            <span className="text-heading-md text-black">로그아웃</span>
-          </button>
-        </div>
+      {/* 로그아웃 */}
+      <div className="flex w-full justify-center">
+        <button
+          type="button"
+          className="flex h-[72px] w-[190px] items-center gap-6 rounded-[20px] bg-white"
+        >
+          <LogoutIcon className="h-10 w-10" />
+          <span className="text-heading-md text-black">로그아웃</span>
+        </button>
       </div>
     </aside>
   );
