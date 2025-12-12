@@ -23,7 +23,7 @@ import Mypage from './Mypage/pages/Mypage';
 import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
 import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
 import PublicRoute from '@/PublicRoute';
-import DesktopLayout from '@/common/layout/DesktopLayout';
+import DesktopLayout from '@/Admin/layout/DesktopLayout';
 import DashBoard from '@/Admin/pages/DashBoard';
 import GildongHome from '@/Gildong/pages/GildongHome';
 import QuizPage from '@/Gildong/pages/QuizPage';

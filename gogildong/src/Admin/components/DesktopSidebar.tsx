@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom';
 
-import HomeIcon from '@/assets/Common/icon_pc_school.svg?react';
-import ReportIcon from '@/assets/Common/icon_pc_camera.svg?react';
-import RequestIcon from '@/assets/Common/icon_pc_request.svg?react';
-import MapIcon from '@/assets/Common/icon_pc_map.svg?react';
-import StatsIcon from '@/assets/Common/icon_pc_statistics.svg?react';
-import LogoutIcon from '@/assets/Common/icon_pc_logout.svg?react';
+import HomeIcon from '@/Admin/assets/svgs/icon_pc_school.svg?react';
+import ReportIcon from '@/Admin/assets/svgs/icon_pc_camera.svg?react';
+import RequestIcon from '@/Admin/assets/svgs/icon_pc_request.svg?react';
+import MapIcon from '@/Admin/assets/svgs/icon_pc_map.svg?react';
+import StatsIcon from '@/Admin/assets/svgs/icon_pc_statistics.svg?react';
+import LogoutIcon from '@/Admin/assets/svgs/icon_pc_logout.svg?react';
 import LogoIcon from '@/Admin/assets/svgs/destop-logo.svg?react';
 
 type NavItem = {
