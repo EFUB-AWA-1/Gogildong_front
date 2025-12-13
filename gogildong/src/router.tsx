@@ -30,6 +30,7 @@ import QuizPage from '@/Gildong/pages/QuizPage';
 import QuizCorrect from '@/Gildong/pages/QuizCorrect';
 import QuizWrong from '@/Gildong/pages/QuizWrong';
 import RankingPage from '@/Gildong/pages/RankingPage';
+import AllRankingPage from '@/Gildong/pages/AllRankingPage';
 
 const router = createBrowserRouter([
   {
@@ -96,6 +97,7 @@ const router = createBrowserRouter([
           { path: '/quiz/correct', element: <QuizCorrect />},
           { path: '/quiz/wrong', element: <QuizWrong />},
           { path: '/ranking', element: <RankingPage />},
+          { path: '/ranking/all', element: <AllRankingPage />},
         ]
       }
     ]
