@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
-
+import { mockStatistics } from '@/Admin/mocks/mockStatistics';
 import StatsCardLarge from '@/Admin/components/StatsCardLarge';
+import LineChart from '@/Admin/components/chart/LineChart';
 
 type TabKey = 'report' | 'request' | 'newUser' | 'school';
 
@@ -11,22 +12,30 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'school', label: '참여 학교' }
 ];
 
-// ✅ 일단 더미 데이터(탭별로 다르게)
-const DATA_MAP: Record<TabKey, number[]> = {
-  report: [10, 12, 6, 8, 7, 13, 12, 14],
-  request: [4, 6, 3, 5, 6, 7, 8, 9],
-  newUser: [30, 20, 25, 22, 28, 35, 33, 40],
-  school: [1, 2, 2, 3, 3, 4, 4, 5]
+const TAB_TO_DAILY_KEY: Record<TabKey, keyof typeof mockStatistics.daily> = {
+  report: 'reports',
+  request: 'viewRequests',
+  newUser: 'newUsers',
+  school: 'participatingSchools'
 };
 
 export default function TrendChartCard() {
   const [activeTab, setActiveTab] = useState<TabKey>('report');
 
-  const chartData = useMemo(() => DATA_MAP[activeTab], [activeTab]);
+  const dailyList = useMemo(() => {
+    const key = TAB_TO_DAILY_KEY[activeTab];
+    return mockStatistics.daily[key];
+  }, [activeTab]);
+
+  const labels = useMemo(() => dailyList.map((d) => d.date), [dailyList]);
+  const values = useMemo(() => dailyList.map((d) => d.count), [dailyList]);
+  const activeLabel = useMemo(() => {
+    return TABS.find((t) => t.key === activeTab)?.label ?? '';
+  }, [activeTab]);
 
   return (
     <StatsCardLarge>
-      <div className="flex w-full flex-col items-start gap-[1.31rem]">
+      <div className="flex w-full flex-col items-start gap-[1rem]">
         <div className="flex w-full items-center gap-2 px-3">
           {TABS.map(({ key, label }) => {
             const isActive = activeTab === key;
@@ -49,7 +58,24 @@ export default function TrendChartCard() {
             );
           })}
         </div>
-        <div>chart</div>
+
+        {/* Chart */}
+        <div className="relative w-full">
+          <div className="mb-2 ml-5 text-[1rem] font-bold text-gray-80">
+            일별 변화 추이 (단위: 일)
+          </div>
+          <div className="w-full overflow-x-auto">
+            <div className="mr-30 h-52 min-w-590 px-3">
+              <LineChart
+                labels={labels}
+                values={values}
+                datasetLabel={activeLabel}
+              />
+            </div>
+          </div>
+
+          <div className="pointer-events-none absolute top-0 right-0 h-full w-40 bg-linear-to-l from-white to-transparent" />
+        </div>
       </div>
     </StatsCardLarge>
   );
