@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import DoubleBtnModal from '../modals/DoubleBtnModal';
 import SingleBtnModal from '@/ReportView/components/modals/SingleBtnModal';
 import { deleteReview } from '@/ReportView/api/deleteReview'; 
+import { reportReview } from '@/ReportView/api/reportReview'; 
 import type { Review } from '@/FacilityView/types/review'; 
 
 interface ReviewCardProps {
@@ -83,11 +84,16 @@ export default function ReviewCard({ review, isMine = false, onDelete, onClick }
     }
   };
 
-  // 신고 처리
-  const handleConfirmReport = () => {
-    console.log(`리뷰 신고: ${reviewId}`);
-    setOpenReportConfirm(false);
-    setReportResultOpen(true);
+  const handleConfirmReport = async () => {
+    try {
+      await reportReview(reviewId);
+      console.log(`리뷰 신고 성공: ${reviewId}`);
+      setOpenReportConfirm(false); 
+      setReportResultOpen(true);   
+    } catch (error) {
+      console.error('리뷰 신고 실패:', error);
+      setOpenReportConfirm(false);
+    }
   };
 
   return (
