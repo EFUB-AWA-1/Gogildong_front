@@ -50,6 +50,8 @@
 
   /* Line height */
   --leading-150: 150%;
+
+  --radius-20: 1.25rem;
 }
 
 @layer utilities {
@@ -160,6 +162,10 @@
       display: none;
     }
     scrollbar-width: none;
+  }
+
+  .rounded-20 {
+    border-radius: var(--radius-20);
   }
 }
 
