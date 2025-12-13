@@ -121,6 +121,8 @@ export default function LocationSelectorGroup({
     });
   };
 
+  const facilityOptions = [...facilities.map((f) => f.name), '새 시설'];
+
   return (
     <div className="mt-2 flex w-full flex-1 justify-around gap-4">
       <LocationDropDown
@@ -147,7 +149,7 @@ export default function LocationSelectorGroup({
 
       <LocationDropDown
         label="시설"
-        options={facilities.map((f) => f.name)}
+        options={facilityOptions}
         value={formData.facility}
         onChange={handleFacilityChange}
         disabled={!formData.floor}
