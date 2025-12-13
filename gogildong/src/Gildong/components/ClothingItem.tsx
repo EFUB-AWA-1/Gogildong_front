@@ -27,16 +27,10 @@ export default function ClothingItem({ clothing, onClick }: Props) {
         ) : (
           <div className="h-10 w-10 rounded-md border border-neon-100" />
         )}
-
-        {isActive && (
-          <span className="absolute bottom-2 text-xs text-neon-100">
-            현재 적용 중
-          </span>
-        )}
       </div>
 
       {/* 이름 */}
-      <span className="font-medium text-zinc-800">{clothing.name}</span>
+      <span className="font-medium text-zinc-800">{isActive ? "현재 착용 중" : clothing.name}</span>
     </button>
   );
 }
