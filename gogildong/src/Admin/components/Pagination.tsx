@@ -25,23 +25,24 @@ export default function Pagination({
   };
 
   const getPageNumbers = () => {
+    const visibleCount = Math.min(totalPages, MAX_PAGE_BUTTONS);
     if (totalPages <= MAX_PAGE_BUTTONS) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
-    const half = Math.floor(MAX_PAGE_BUTTONS / 2);
+    const half = Math.floor((visibleCount - 1) / 2);
     let start = clampedPage - half;
-    let end = clampedPage + half;
+    let end = start + visibleCount - 1;
 
     if (start < 1) {
       start = 1;
-      end = MAX_PAGE_BUTTONS;
+      end = visibleCount;
     } else if (end > totalPages) {
       end = totalPages;
-      start = totalPages - MAX_PAGE_BUTTONS + 1;
+      start = totalPages - visibleCount + 1;
     }
 
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    return Array.from({ length: visibleCount }, (_, i) => start + i);
   };
 
   const pageNumbers = getPageNumbers();
