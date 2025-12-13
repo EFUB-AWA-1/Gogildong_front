@@ -38,14 +38,14 @@ const FIELD_BY_TYPE: Record<FacilityType, FieldConfig[]> = {
     { kind: 'single', label: '변기 높이', key: 'toiletHeight' }
   ],
   엘리베이터: [
-    { kind: 'single', label: '엘리베이터 문 폭', key: 'elevatorDoorWidth' },
-    { kind: 'single', label: '엘리베이터 내부 깊이', key: 'elevatorDepth' },
-    { kind: 'single', label: '버튼 높이', key: 'buttonHeight' }
+    { kind: 'single', label: '엘리베이터 문 폭', key: 'doorWidth' },
+    { kind: 'single', label: '엘리베이터 내부 깊이', key: 'interiorDepth' },
+    { kind: 'single', label: '버튼 높이', key: 'maxControlPanelHeight' }
   ],
   교실: [
     { kind: 'single', label: '문 최대 가로 길이', key: 'maxDoorWidth' },
     { kind: 'single', label: '문 손잡이 높이', key: 'doorHandleHeight' },
-    { kind: 'single', label: '지나다닐 수 있는 문 폭', key: 'passableWidth' }
+    { kind: 'single', label: '지나다닐 수 있는 문 폭', key: 'minAisleWidth' }
   ],
   기타: []
 };

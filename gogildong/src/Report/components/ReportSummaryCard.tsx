@@ -49,17 +49,17 @@ export default function ReportSummaryCard({
           {
             label: '엘리베이터 문 폭',
             type: 'single',
-            value: dimensions?.elevatorDoorWidth
+            value: dimensions?.doorWidth
           },
           {
             label: '엘리베이터 내부 깊이',
             type: 'single',
-            value: dimensions?.elevatorDepth
+            value: dimensions?.interiorDepth
           },
           {
             label: '버튼 높이',
             type: 'single',
-            value: dimensions?.buttonHeight
+            value: dimensions?.maxControlPanelHeight
           }
         ];
       case '교실':
@@ -77,7 +77,7 @@ export default function ReportSummaryCard({
           {
             label: '지나다닐 수 있는 문 폭',
             type: 'single',
-            value: dimensions?.passableWidth
+            value: dimensions?.minAisleWidth
           }
         ];
       case '기타':
