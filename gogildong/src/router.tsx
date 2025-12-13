@@ -32,6 +32,7 @@ import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
 import RankingPage from '@/Gildong/pages/RankingPage';
 import AllRankingPage from '@/Gildong/pages/AllRankingPage';
+import ClosetPage from '@/Gildong/pages/ClosetPage';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,7 @@ const router = createBrowserRouter([
           { path: '/quiz/wrong', element: <QuizWrong />},
           { path: '/ranking', element: <RankingPage />},
           { path: '/ranking/all', element: <AllRankingPage />},
+          { path: '/closet', element: <ClosetPage />},
         ]
       }
     ]
@@ -107,7 +109,7 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <DesktopLayout />,
     children: [
-      { index: true, element: <DashBoard /> },
+      { index: true, element: <Navigate to="stats" replace /> },
       { path: 'stats', element: <DashBoard /> },
       { path: 'schools', element: <RegisteredSchoolList /> },
       { path: 'reports', element: <div>제보 관리</div> },
