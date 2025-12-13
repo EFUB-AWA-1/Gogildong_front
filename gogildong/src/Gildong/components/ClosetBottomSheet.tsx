@@ -65,9 +65,9 @@ export default function ClosetBottomSheet({ clothes }: ClosetBottomSheetProps) {
           onSelect={(clothing) => {
             useCharacterStore.getState().setPreviewItem({
               itemId: clothing.id,
-              type: clothing.category, 
+              type: clothing.type,
               name: clothing.name,
-              imageUrl: clothing.itemImg,
+              imageUrl: clothing.itemImg
             });
           }}
         />

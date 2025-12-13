@@ -7,10 +7,11 @@ type Props = {
 };
 
 export default function ClothingItem({ clothing, onClick }: Props) {
-  const previewItem = useCharacterStore(
-    (state: any) => state.previewItems[clothing.category]
+  const currentItem = useCharacterStore((state) =>
+    state.getItemByType(clothing.type)
   );
-  const isActive = previewItem?.itemId === clothing.id;
+
+  const isActive = currentItem?.itemId === clothing.id;
   return (
     <button onClick={onClick} className="flex flex-col items-center gap-2">
       {/* 카드 */}
