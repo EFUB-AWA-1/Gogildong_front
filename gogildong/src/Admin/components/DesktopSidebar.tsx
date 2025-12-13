@@ -40,7 +40,7 @@ export default function Sidebar() {
                   to={to}
                   className={({ isActive }) =>
                     `flex h-[72px] w-[210px] items-center gap-6 rounded-[20px] px-2 ${
-                      isActive ? 'bg-neon-60' : 'bg-white'
+                      isActive ? 'bg-neon-60' : 'bg-white hover:bg-neon-15'
                     }`
                   }
                 >
