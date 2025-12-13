@@ -14,6 +14,9 @@ import { getQuizList } from '@/Gildong/api/quiz';
 import MissionCompleteTag from '@/Gildong/components/MissionCompleteTag';
 import MissionProgress from '@/Gildong/components/MissionProgress';
 import { goToNextUnsolvedQuiz } from '@/Gildong/utils/quizNavigation';
+import MyCharacter from '@/Gildong/components/MyCharacter';
+import { getMyCharacterInfo } from '@/Gildong/api/closet';
+import { useCharacterStore } from '@/Gildong/stores/useCharacterStore';
 
 type Quiz = {
   quiz_id: number;
@@ -42,6 +45,7 @@ export default function GildongHome() {
         total: quizzes.length
       });
     };
+    getMyCharacterInfo();
     loadQuizProgress();
     fetchCoin();
   }, []);
@@ -50,6 +54,9 @@ export default function GildongHome() {
   const goToQuiz = async () => {
     await goToNextUnsolvedQuiz(navigate);
   };
+
+  const head = useCharacterStore((state) => state.getItemByType('head'));
+  const dress = useCharacterStore((state) => state.getItemByType('dress'));
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-linear-to-b from-lime-50 to-lime-200">
@@ -71,9 +78,8 @@ export default function GildongHome() {
         }
         `}
       </style>
-
       {/* 상단 영역 */}
-      <div className="flex flex-none flex-col space-y-5 px-6 pt-14 pb-6">
+      <div className="pt-15 flex flex-none flex-col space-y-5 px-6 pb-6">
         <UserInfo username={username} coin={coin ?? 0} />
         <div className="flex w-full flex-row justify-between">
           <DialogueBox />
@@ -83,10 +89,7 @@ export default function GildongHome() {
 
       {/* 캐릭터 영역 */}
       <div className="flex flex-none items-center justify-center py-4">
-        <img
-          src={GildongSample}
-          className="h-auto max-h-[20vh] w-auto object-contain"
-        />
+        <MyCharacter headImg={head?.imageUrl} dressImg={dress?.imageUrl} />
       </div>
 
       {/* 미션 카드 영역 */}

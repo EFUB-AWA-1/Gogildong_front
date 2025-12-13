@@ -32,6 +32,7 @@ import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
 import RankingPage from '@/Gildong/pages/RankingPage';
 import AllRankingPage from '@/Gildong/pages/AllRankingPage';
+import ClosetPage from '@/Gildong/pages/ClosetPage';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,7 @@ const router = createBrowserRouter([
           { path: '/quiz/wrong', element: <QuizWrong />},
           { path: '/ranking', element: <RankingPage />},
           { path: '/ranking/all', element: <AllRankingPage />},
+          { path: '/closet', element: <ClosetPage />},
         ]
       }
     ]
