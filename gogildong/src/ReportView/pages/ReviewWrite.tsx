@@ -5,14 +5,29 @@ import ActionButton from "@/common/components/ActionButton";
 import { useMemo, useState } from "react";
 import ReviewGuidelines from "../components/ReviewGuidelines";
 import DoubleBtnModal from "../components/modals/DoubleBtnModal";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { postReview } from "@/ReportView/api/postReview";
 
 type ModalType = "leave" | "submit" | null;
+
+type LocationState = {
+  facilityId?: string | number;
+  facilityName?: string;
+  buildingName?: string;
+};
 
 export default function ReviewWrite() {
   const [review, setReview] = useState("");
   const [modalType, setModalType] = useState<ModalType>(null);
+  
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = (location.state || {}) as LocationState;
+
+  const facilityId = state.facilityId; 
+  const facilityName = state.facilityName || "시설 정보 없음";
+  const buildingName = state.buildingName || "건물 정보 없음";
 
   const isValid = useMemo(() => {
     const len = review.trim().length;
@@ -29,7 +44,6 @@ export default function ReviewWrite() {
     navigate(-1);
   };
 
-  //하단 제출 액션 버튼 클릭 시
   const handleSubmitClick = () => {
     if (!isValid) return;
     if (hasContent) {
@@ -38,17 +52,32 @@ export default function ReviewWrite() {
     }
   };
 
-  //실제 모달에서 제출 버튼 누를 시 (진짜 제출)
-  const submitReview = () => {
-    // TODO: API 호출
-    // 성공 후 이동 등 처리
-    navigate("/school/view/review", {
-      //경로 수정 필요
-      state: {
-        fromWrite: true // 작성 페이지에서 넘어왔다는 표시
-        // reviewId: newReviewId, // 나중에 상세 페이지에서 사용할 id
-      }
-    });
+  const submitReview = async () => {
+    if (!facilityId) {
+      alert("시설 정보를 찾을 수 없습니다.");
+      setModalType(null);
+      return;
+    }
+
+    try {
+      const responseData = await postReview(Number(facilityId), review);
+
+      // 성공 후 상세 페이지로 이동
+      navigate("/school/view/review", {
+        state: {
+          fromWrite: true,
+          reviewId: responseData.reviewId,
+          reviewData: responseData, // API 응답 데이터 전달
+        }
+      });
+
+    } catch (error) {
+      console.error('API Error:', error);
+      // axios 에러 처리 (필요시)
+      alert('리뷰 등록 중 오류가 발생했습니다.');
+    } finally {
+      setModalType(null);
+    }
   };
 
   const closeModal = () => setModalType(null);
@@ -68,11 +97,15 @@ export default function ReviewWrite() {
     <div className="flex h-full w-full flex-col items-center">
       <Header title="리뷰 작성" onBackClick={handleBack} />
 
-      <div className="overflow-y-auto">
-        <ReviewLocation />
+      <div className="overflow-y-auto w-full">
+        <ReviewLocation 
+          facilityName={facilityName} 
+          buildingName={buildingName} 
+        />
         <ReviewForm review={review} setReview={setReview} />
         <ReviewGuidelines />
       </div>
+      
       <div className="sticky bottom-0 w-full max-w-[480px] bg-white p-4">
         <ActionButton
           label="작성 완료"

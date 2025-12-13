@@ -10,6 +10,7 @@ import ReviewList from '@/FacilityView/components/ReviewList';
 
 import { getFacilityDetail } from '@/FacilityView/api/getFacilityDetail';
 import { getFacilityImages } from '@/FacilityView/api/getFacilityImages';
+import { getFacilityReviews } from '@/FacilityView/api/getFacilityReviews';
 
 import type { FacilityInfo } from '@/FacilityView/types/facility';
 import type { ReviewResponse } from '@/FacilityView/types/review';
@@ -19,8 +20,15 @@ export default function FacilityViewDetail() {
   const { id } = useParams<{ id: string }>();
 
   const [facilityInfo, setFacilityInfo] = useState<FacilityInfo | null>(null);
-  
   const [facilityImages, setFacilityImages] = useState<ReportImage[]>([]);
+  
+  // 뷰 데이터 State (초기값: 빈 목록)
+  const [reviewData, setReviewData] = useState<ReviewResponse>({
+    total: 0,
+    isLast: true,
+    reviews: []
+  });
+  
   const [loading, setLoading] = useState(true);
 
   const facilityTypeLabel: Record<string, string> = {
@@ -43,15 +51,20 @@ export default function FacilityViewDetail() {
       try {
         setLoading(true);
         
-        const [detailData, imageData] = await Promise.all([
+        const [detailData, imageData, reviewsData] = await Promise.all([
           getFacilityDetail(Number(id)),
-          getFacilityImages(Number(id)).catch(() => ({ total: 0, reportImages: [] } as FacilityImageResponse))
+          getFacilityImages(Number(id)).catch(() => ({ total: 0, reportImages: [] } as FacilityImageResponse)),
+          getFacilityReviews(Number(id)).catch(() => ({ total: 0, isLast: true, reviews: [] } as ReviewResponse)) // 실패 시 빈 목록 처리
         ]);
 
         setFacilityInfo(detailData);
 
         if (imageData && imageData.reportImages && imageData.reportImages.length > 0) {
           setFacilityImages(imageData.reportImages);
+        }
+
+        if (reviewsData) {
+          setReviewData(reviewsData);
         }
 
       } catch (error) {
@@ -64,24 +77,8 @@ export default function FacilityViewDetail() {
     fetchData();
   }, [id]);
 
-  const mockResponse: ReviewResponse = {
-    total: 4,
-    isLast: true,
-    reviews: [
-      {
-        userId: 1,
-        userName: '홍길동',
-        reviewId: 23,
-        reviewText: '화장실이 깔끔해요!',
-        likeCount: 3,
-        commentCount: 1,
-        createdAt: '2025-10-30'
-      }
-    ]
-  };
-
+  // AI 요약은 아직 API가 없으므로 Mock 유지
   const mockAiSummary = ['🚧좁음', '🧼청결함', '😃긍정적', '♿이동편의'];
-
 
   const displayImages: ReportImage[] = 
     facilityImages.length > 0 
@@ -134,7 +131,6 @@ export default function FacilityViewDetail() {
         )}
 
         <div className="flex flex-col gap-6 rounded-[20px] border border-gray-20 bg-linear-to-b from-white to-[#f2f2f2] px-4 py-6">
-          {/* AI 요약 & 리뷰 리스트 (기존 동일) */}
           <div className="flex flex-col gap-2">
             <p className="text-heading-sm text-black">AI 분석 요약</p>
             <div className="flex flex-1 justify-evenly gap-2">
@@ -143,12 +139,13 @@ export default function FacilityViewDetail() {
               ))}
             </div>
           </div>
+          
           <ReviewList
             facilityId={facilityInfo?.facilityDetail.facilityId}
             facilityName={facilityInfo?.facilityDetail.facilityName}
             aiSummary={mockAiSummary}
-            reviews={mockResponse.reviews}
-            total={mockResponse.total}
+            reviews={reviewData.reviews}
+            total={reviewData.total}     
           />
         </div>
       </div>

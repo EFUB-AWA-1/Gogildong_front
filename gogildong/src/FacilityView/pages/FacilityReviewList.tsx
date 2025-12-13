@@ -59,6 +59,7 @@ type LocationState = {
   reviews?: Review[];
   total?: number;
   facilityName?: string;
+  buildingName?: string;
   aiSummary?: string[];
 };
 
@@ -71,18 +72,38 @@ export default function FacilityReviewList() {
   const reviews =
     state.reviews && state.reviews.length > 0 ? state.reviews : mockReviews;
   const aiSummary =
-    state.aiSummary && state.aiSummary.length > 0 ? state.aiSummary : mockAiSummary;
+    state.aiSummary && state.aiSummary.length > 0
+      ? state.aiSummary
+      : mockAiSummary;
   const total = state.total ?? reviews.length;
+
   const facilityName = useMemo(
     () => state.facilityName ?? id ?? '1-A',
     [state.facilityName, id]
   );
 
+  // 건물 이름 추가
+  const buildingName = state.buildingName ?? '본관';
+
   const handleBack = () => navigate(-1);
-  const handleWriteClick = () => navigate('/school/view/review/write');
+
+  // 작성 페이지로 갈 때 buildingName도 함께 전달
+  const handleWriteClick = () => {
+    navigate('/school/view/review/write', {
+      state: {
+        facilityId: id,
+        facilityName: facilityName,
+        buildingName: buildingName
+      }
+    });
+  };
 
   const handleReviewClick = (review: Review) => {
-    navigate('/school/view/review', { state: { reviewId: review.reviewId } });
+    navigate('/school/view/review', {
+      state: {
+        review: review // reviewId만 넘기지 말고 review 객체 전체를 넘겨야 함
+      }
+    });
   };
 
   return (

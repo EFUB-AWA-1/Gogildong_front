@@ -5,12 +5,26 @@ import { useEffect, useRef, useState } from 'react';
 import DoubleBtnModal from '../modals/DoubleBtnModal';
 import SingleBtnModal from '@/ReportView/components/modals/SingleBtnModal';
 
-type ReviewCardProps = {
-  isMine?: boolean;
+// 실제 리뷰 데이터 타입을 정의
+export type ReviewData = {
+  id: number;
+  nickname: string;
+  date: string;
+  content: string;
+  likeCount: number;
+  isLiked: boolean;
 };
 
-export default function ReviewCard({ isMine = false }: ReviewCardProps) {
-  const [isLiked, setIsLiked] = useState(false);
+type ReviewCardProps = {
+  isMine?: boolean;
+  review: ReviewData; // 데이터를 props로 받도록 추가
+};
+
+export default function ReviewCard({ isMine = false, review }: ReviewCardProps) {
+
+  const [isLiked, setIsLiked] = useState(review.isLiked);
+  const [likeCount, setLikeCount] = useState(review.likeCount); // 추천 수 관리
+  
   const [openMenu, setOpenMenu] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openReportConfirm, setOpenReportConfirm] = useState(false);
@@ -41,6 +55,8 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
 
   const handleToggleLike = () => {
     setIsLiked((prev) => !prev);
+    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+    // TODO: 좋아요 토글 API 호출
   };
 
   const handleModalOption = () => {
@@ -54,13 +70,16 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
   };
 
   const handleConfirmDelete = () => {
-    // TODO: 리뷰 삭제 API 호출
-    console.log('리뷰 삭제');
+    // TODO: 리뷰 삭제 API 호출 (review.id 사용)
+    console.log(`리뷰 삭제: ${review.id}`);
+    setOpenDeleteModal(false); // 모달 닫기 추가
   };
 
   const handleConfirmReport = () => {
-    // TODO: 리뷰 신고 API 호출
-    setReportResultOpen(true);
+    // TODO: 리뷰 신고 API 호출 (review.id 사용)
+    console.log(`리뷰 신고: ${review.id}`);
+    setOpenReportConfirm(false); // 신고 확인 모달 닫고
+    setReportResultOpen(true);   // 결과 모달 열기
   };
 
   return (
@@ -71,9 +90,9 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
           <div className="flex w-51 items-center gap-2">
             <div className="h-5.25 w-5.25 shrink-0 rounded-full bg-gray-10" />
             <span className="text-[0.875rem] leading-150 font-bold text-black">
-              닉네임
+              {review.nickname}
             </span>
-            <span className="text-caption-md text-gray-60">2025-09-21</span>
+            <span className="text-caption-md text-gray-60">{review.date}</span>
           </div>
           <div className="relative" ref={menuRef}>
             <button
@@ -98,9 +117,8 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
 
         {/* 리뷰내용 */}
         <div className="flex w-full items-center justify-center gap-2 self-stretch px-[1.72rem]">
-          <p className="w-full text-body-sm text-black">
-            여기 화장실 수압이 약해서 물이 잘 안 내려가요. 참고하세요.
-            내용길어지는중입니다듀듀듀텍스트AWA으악더더더더더더ㅓ더더덛길어져
+          <p className="w-full text-body-sm text-black break-all whitespace-pre-wrap">
+            {review.content}
           </p>
         </div>
 
@@ -119,7 +137,7 @@ export default function ReviewCard({ isMine = false }: ReviewCardProps) {
             <span
               className={`text-body-sm ${isLiked ? 'text-neon-100' : 'text-gray-80'}`}
             >
-              추천 3
+              추천 {likeCount}
             </span>
           </button>
         </div>
