@@ -1,8 +1,13 @@
 import StackedBarChart from '@/Admin/components/chart/StackedBarChart';
 import StatsCardLarge from '@/Admin/components/StatsCardLarge';
 import { mockStatistics } from '@/Admin/mocks/mockStatistics';
+import type { YearMonth } from '@/Admin/utils/dateRange';
 
-export default function PlaceChartCard() {
+type PlaceChartCardProps = {
+  selectedYM: YearMonth;
+};
+
+export default function PlaceChartCard({ selectedYM }: PlaceChartCardProps) {
   return (
     <StatsCardLarge>
       <div className="flex w-full flex-col items-start gap-[1.31rem]">
@@ -19,7 +24,7 @@ export default function PlaceChartCard() {
                   placeSummary: mockStatistics.placeSummary
                 }
               ]}
-              selectedMonths={[{ year: 2025, month: 11 }]}
+              selectedMonth={selectedYM}
             />
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { mockStatistics } from '@/Admin/mocks/mockStatistics';
 import StatsCardLarge from '@/Admin/components/StatsCardLarge';
 import LineChart from '@/Admin/components/chart/LineChart';
+import type { YearMonth } from '@/Admin/utils/dateRange';
 
 type TabKey = 'report' | 'request' | 'newUser' | 'school';
 
@@ -19,16 +20,29 @@ const TAB_TO_DAILY_KEY: Record<TabKey, keyof typeof mockStatistics.daily> = {
   school: 'participatingSchools'
 };
 
-export default function TrendChartCard() {
+type TrendChartCardProps = {
+  selectedYM: YearMonth;
+};
+
+function pad2(n: number) {
+  return String(n).padStart(2, '0');
+}
+
+export default function TrendChartCard({ selectedYM }: TrendChartCardProps) {
   const [activeTab, setActiveTab] = useState<TabKey>('report');
 
   const dailyList = useMemo(() => {
     const key = TAB_TO_DAILY_KEY[activeTab];
-    return mockStatistics.daily[key];
-  }, [activeTab]);
+    const list = mockStatistics.daily[key];
+
+    //선택된 월(yyyy-mm)만 남기기
+    const ymPrefix = `${selectedYM.year}-${pad2(selectedYM.month)}`; // "2025-11"
+    return list.filter((d) => d.date.startsWith(ymPrefix));
+  }, [activeTab, selectedYM.year, selectedYM.month]);
 
   const labels = useMemo(() => dailyList.map((d) => d.date), [dailyList]);
   const values = useMemo(() => dailyList.map((d) => d.count), [dailyList]);
+
   const activeLabel = useMemo(() => {
     return TABS.find((t) => t.key === activeTab)?.label ?? '';
   }, [activeTab]);
@@ -36,7 +50,7 @@ export default function TrendChartCard() {
   return (
     <StatsCardLarge>
       <div className="flex w-full flex-col items-start gap-[1rem]">
-        <div className="flex w-full items-center gap-2 px-3">
+        <div className="flex w-full items-center gap-2 overflow-x-auto px-3">
           {TABS.map(({ key, label }) => {
             const isActive = activeTab === key;
 
