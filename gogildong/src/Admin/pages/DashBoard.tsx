@@ -1,9 +1,9 @@
 import DesktopHeader from '@/Admin/components/DesktopHeader';
-import DownloadBtn from '@/Admin/components/DownloadBtn';
-import PeriodSetBtn from '@/Admin/components/PeriodSetBtn';
-import PlaceChartCard from '@/Admin/components/PlaceChartCard';
-import StatsCardSmall from '@/Admin/components/StatsCardSmall';
-import TrendChartCard from '@/Admin/components/TrendChartCard';
+import DownloadBtn from '@/Admin/components/DashBoard/DownloadBtn';
+import PeriodSetBtn from '@/Admin/components/DashBoard/PeriodSetBtn';
+import PlaceChartCard from '@/Admin/components/DashBoard/PlaceChartCard';
+import StatsCardSmall from '@/Admin/components/DashBoard/StatsCardSmall';
+import TrendChartCard from '@/Admin/components/DashBoard/TrendChartCard';
 import type { YearMonth } from '@/Admin/utils/dateRange';
 import { useState } from 'react';
 

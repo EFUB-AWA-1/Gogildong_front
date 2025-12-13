@@ -1,7 +1,7 @@
 import type { YearMonth } from '@/Admin/utils/dateRange';
 import { compareYM } from '@/Admin/utils/dateRange';
-import ArrowLeftIcon from '../assets/svgs/icon_year_back.svg?react';
-import ArrowRightIcon from '../assets/svgs/icon_year_next.svg?react';
+import ArrowLeftIcon from '@/Admin/assets/svgs/icon_year_back.svg?react';
+import ArrowRightIcon from '@/Admin/assets/svgs/icon_year_next.svg?react';
 
 type MonthButtonProps = {
   label: string;
@@ -22,7 +22,7 @@ function MonthButton({
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       className={[
-        'flex h-12 w-25 shrink-0 items-center justify-center rounded-[1.25rem] px-[1.125rem] py-[0.625rem]',
+        'flex h-12 w-25 shrink-0 items-center justify-center rounded-20 px-4.5 py-2.5',
         'transition-colors',
         selected
           ? 'border border-neon-100 bg-neon-15'

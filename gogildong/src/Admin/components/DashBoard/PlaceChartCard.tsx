@@ -1,5 +1,5 @@
 import StackedBarChart from '@/Admin/components/chart/StackedBarChart';
-import StatsCardLarge from '@/Admin/components/StatsCardLarge';
+import StatsCardLarge from '@/Admin/components/DashBoard/StatsCardLarge';
 import { mockStatistics } from '@/Admin/mocks/mockStatistics';
 import type { YearMonth } from '@/Admin/utils/dateRange';
 

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { mockStatistics } from '@/Admin/mocks/mockStatistics';
-import StatsCardLarge from '@/Admin/components/StatsCardLarge';
+import StatsCardLarge from '@/Admin/components/DashBoard/StatsCardLarge';
 import LineChart from '@/Admin/components/chart/LineChart';
 import type { YearMonth } from '@/Admin/utils/dateRange';
 
@@ -49,7 +49,7 @@ export default function TrendChartCard({ selectedYM }: TrendChartCardProps) {
 
   return (
     <StatsCardLarge>
-      <div className="flex w-full flex-col items-start gap-[1rem]">
+      <div className="flex w-full flex-col items-start gap-4">
         <div className="flex w-full items-center gap-2 overflow-x-auto px-3">
           {TABS.map(({ key, label }) => {
             const isActive = activeTab === key;
@@ -75,7 +75,7 @@ export default function TrendChartCard({ selectedYM }: TrendChartCardProps) {
 
         {/* Chart */}
         <div className="relative w-full">
-          <div className="mb-2 ml-5 text-[1rem] font-bold text-gray-80">
+          <div className="text-body-bold-md mb-2 ml-5 text-gray-80">
             일별 변화 추이 (단위: 일)
           </div>
           <div className="w-full overflow-x-auto">
