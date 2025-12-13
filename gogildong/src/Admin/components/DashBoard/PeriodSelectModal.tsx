@@ -41,7 +41,7 @@ export default function PeriodSelectModal({
         className="fixed inset-0 z-40 bg-black/40"
       />
       <div className="absolute top-full left-0 z-50 mt-2">
-        <div className="inline-flex flex-col overflow-hidden rounded-[1.25rem] bg-white shadow-lg">
+        <div className="inline-flex flex-col overflow-hidden rounded-20 bg-white shadow-lg">
           {/* 헤더: 선택 연/월 */}
           <div className="flex h-23 w-full items-center justify-center gap-2 self-stretch border-b border-gray-40 bg-white px-[2.44rem] py-6.25">
             <div className="flex w-full flex-col items-start">
@@ -75,7 +75,7 @@ export default function PeriodSelectModal({
               <button
                 type="button"
                 onClick={onConfirm}
-                className="flex items-center justify-center rounded-2xl bg-neon-100 px-7 py-[0.625rem]"
+                className="flex items-center justify-center rounded-2xl bg-neon-100 px-7 py-2.5"
               >
                 <span className="text-body-bold-lg text-black">선택</span>
               </button>

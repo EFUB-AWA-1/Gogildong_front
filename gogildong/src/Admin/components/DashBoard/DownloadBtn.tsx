@@ -1,4 +1,4 @@
-import DownloadIcon from '../assets/svgs/icon_download.svg?react';
+import DownloadIcon from '@/Admin/assets/svgs/icon_download.svg?react';
 
 export default function DownloadBtn() {
   return (

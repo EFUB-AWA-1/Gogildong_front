@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import CalenderIcon from '../assets/svgs/icon_calender.svg?react';
+import CalenderIcon from '@/Admin/assets/svgs/icon_calender.svg?react';
 import PeriodSelectModal from './PeriodSelectModal';
 import type { YearMonth } from '@/Admin/utils/dateRange';
 import { formatYM } from '@/Admin/utils/dateRange';
