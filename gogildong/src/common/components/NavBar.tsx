@@ -5,6 +5,7 @@ import iconHome from "../../assets/Common/icon_home.svg";
 import iconSchool from "../../assets/Common/icon_school.svg";
 import iconGildong from "../../assets/Common/icon_gildong.svg";
 import iconMyPage from "../../assets/Common/icon_mypage.svg";
+import { useUserStore } from "@/Mypage/stores/useUserStore";
 
 export type NavKey = "home" | "school" | "gildong" | "mypage";
 
@@ -20,13 +21,31 @@ const ICONS: Record<NavKey, string> = {
   mypage: iconMyPage
 };
 
+
 const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
   const navigate = useNavigate();
+  
+  const user = useUserStore((state) => state.user);
+
   const handleClick = (key: NavKey) => () => {
     onChange?.(key);
     if (key === "home") navigate("/home");
+    
+    if (key === "school") {
+      // user가 존재하는지 확인 후 이동
+      if (user?.schoolId) {
+        navigate(`/school/${user.schoolId}`);
+      } else {
+        // user 정보가 없을 때의 처리
+        // console.error("사용자 정보가 없습니다.");
+        navigate("/login"); 
+      }
+    }
+    // 길동이 페이지 퍼블리싱 되면 수정
+    // if (key === "gildong") navigate("/");
     if (key === "mypage") navigate("/mypage");
   };
+  
   const isActive = (key: NavKey) => active === key;
 
   return (
