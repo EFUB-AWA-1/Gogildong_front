@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import RadioOff from "../../assets/btn_radio.svg?react";
-import RadioOn from "../../assets/btn_radio_select.svg?react";
+import { useEffect, useState } from 'react';
+import RadioOff from '../../assets/btn_radio.svg?react';
+import RadioOn from '../../assets/btn_radio_select.svg?react';
 
 type Option = { id: string; label: string };
 
@@ -28,14 +28,14 @@ export default function SelectSubmitModal({
   }, [open]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     if (open) {
-      document.addEventListener("keydown", onKey);
-      document.body.classList.add("overflow-hidden");
+      document.addEventListener('keydown', onKey);
+      document.body.classList.add('overflow-hidden');
     }
     return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.classList.remove("overflow-hidden");
+      document.removeEventListener('keydown', onKey);
+      document.body.classList.remove('overflow-hidden');
     };
   }, [open, onClose]);
 
@@ -98,7 +98,7 @@ export default function SelectSubmitModal({
             취소
           </button>
           <button
-            className={`flex h-9 w-27 cursor-pointer items-center justify-center gap-2 rounded-[1.25rem] px-4.25 py-2.5 text-[0.875rem] leading-5.25 font-bold text-black ${disabled ? "cursor-not-allowed bg-gray-20" : "cursor-pointer bg-neon-100"} `}
+            className={`flex h-9 w-27 cursor-pointer items-center justify-center gap-2 rounded-[1.25rem] px-4.25 py-2.5 text-[0.875rem] leading-5.25 font-bold text-black ${disabled ? 'cursor-not-allowed bg-gray-20' : 'cursor-pointer bg-neon-100'} `}
             disabled={disabled}
             onClick={() => {
               if (!selectedId) return;
@@ -112,42 +112,4 @@ export default function SelectSubmitModal({
       </div>
     </div>
   );
-}
-
-{
-  /* 사용시
-    const OPTIONS = [
-     { id: "abuse", label: "비아냥/욕설" },
-     { id: "gambling", label: "도배" },
-     { id: "irrelevant", label: "관련 없는 댓글" },
-     { id: "sexual", label: "성적 불쾌감 유발" }
-    ];
-
-
-    const [open, setOpen] = useState(true);
-    const [targetReportId, setTargetReportId] = useState<number | null>(null);
-    
-    const openReportModal = (reportId: number) => {
-        setTargetReportId(reportId);
-        setOpen(true);
-    };
-    
-    const handleConfirm = (optionId: string) => {
-        if (targetReportId == null) return;
-        // TODO: 신고 API 호출 등 처리
-        console.log("신고하기:", { reportId: targetReportId, reason: optionId });
-    };
-    
-//리턴 부분에
-
-    <SelectSubmitModal
-        open={open}
-        title="댓글 신고 사유"
-        options={OPTIONS}
-        label="신고하기"
-        onClose={() => setOpen(false)}
-        onConfirm={handleConfirm}
-      />
-    
-    */
 }

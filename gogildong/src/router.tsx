@@ -1,9 +1,24 @@
+import DesktopLayout from '@/Admin/layout/DesktopLayout';
+import DashBoard from '@/Admin/pages/DashBoard';
+import RegisteredSchoolList from '@/Admin/pages/RegisteredSchoolList';
+import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
+import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
+import GildongHome from '@/Gildong/pages/GildongHome';
+import QuizCorrect from '@/Gildong/pages/QuizCorrect';
+import QuizPage from '@/Gildong/pages/QuizPage';
+import QuizWrong from '@/Gildong/pages/QuizWrong';
+import ProtectedRoute from '@/ProtectedRoute';
+import PublicRoute from '@/PublicRoute';
+import ReportFlow from '@/Report/pages/ReportFlow';
+import ReportStart from '@/Report/pages/ReportStart';
+import ReportSuccess from '@/Report/pages/ReportSuccess';
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import MainLayout from './common/layout/MainLayout';
 import Home from './Home/pages/Home';
 import InfoRequest from './Home/pages/InfoRequest';
 import SearchDetail from './Home/pages/SearchDetail';
 import Login from './Login/pages/Login';
+import Mypage from './Mypage/pages/Mypage';
 import PhotoReport from './Report/pages/PhotoReport';
 import PhotoDetail from './ReportView/pages/PhotoDetail';
 import PhotoList from './ReportView/pages/PhotoList';
@@ -15,20 +30,9 @@ import SignupExternal from './Signup/pages/SignupExternal';
 import SignupInternal from './Signup/pages/SignupInternal';
 import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
-import ReportStart from '@/Report/pages/ReportStart';
-import ReportFlow from '@/Report/pages/ReportFlow';
-import ReportSuccess from '@/Report/pages/ReportSuccess';
-import ProtectedRoute from '@/ProtectedRoute';
-import Mypage from './Mypage/pages/Mypage';
-import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
-import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
-import PublicRoute from '@/PublicRoute';
-import DesktopLayout from '@/Admin/layout/DesktopLayout';
-import DashBoard from '@/Admin/pages/DashBoard';
-import GildongHome from '@/Gildong/pages/GildongHome';
-import QuizPage from '@/Gildong/pages/QuizPage';
-import QuizCorrect from '@/Gildong/pages/QuizCorrect';
-import QuizWrong from '@/Gildong/pages/QuizWrong';
+import RankingPage from '@/Gildong/pages/RankingPage';
+import AllRankingPage from '@/Gildong/pages/AllRankingPage';
+import ClosetPage from '@/Gildong/pages/ClosetPage';
 
 const router = createBrowserRouter([
   {
@@ -94,6 +98,9 @@ const router = createBrowserRouter([
           { path: '/quiz/:quizId', element: <QuizPage />},
           { path: '/quiz/correct', element: <QuizCorrect />},
           { path: '/quiz/wrong', element: <QuizWrong />},
+          { path: '/ranking', element: <RankingPage />},
+          { path: '/ranking/all', element: <AllRankingPage />},
+          { path: '/closet', element: <ClosetPage />},
         ]
       }
     ]
@@ -102,9 +109,9 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <DesktopLayout />,
     children: [
-      { index: true, element: <DashBoard /> },
+      { index: true, element: <Navigate to="stats" replace /> },
       { path: 'stats', element: <DashBoard /> },
-      { path: 'schools', element: <div>학교 목록</div> },
+      { path: 'schools', element: <RegisteredSchoolList /> },
       { path: 'reports', element: <div>제보 관리</div> },
       { path: 'requests', element: <div>열람 요청 관리</div> },
       { path: 'buildings', element: <div>건물 도면 관리</div> }

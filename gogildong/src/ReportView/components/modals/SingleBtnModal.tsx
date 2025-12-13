@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 type SingleBtnModalProps = {
   open: boolean;
@@ -18,14 +18,14 @@ export default function SingleBtnModal({
   onConfirm
 }: SingleBtnModalProps) {
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     if (open) {
-      document.addEventListener("keydown", onKey);
-      document.body.classList.add("overflow-hidden");
+      document.addEventListener('keydown', onKey);
+      document.body.classList.add('overflow-hidden');
     }
     return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.classList.remove("overflow-hidden");
+      document.removeEventListener('keydown', onKey);
+      document.body.classList.remove('overflow-hidden');
     };
   }, [open, onClose]);
 
@@ -67,20 +67,4 @@ export default function SingleBtnModal({
       </div>
     </div>
   );
-}
-
-{
-  /* 사용 
-
-
-    <SingleBtnModal
-        open={openPopup}
-        title="신고가 제출되었습니다"
-        message={"신고 3회 이상 누적 시 \n검토 후 게시글이 차단됩니다."}
-        label="확인"
-        onClose={() => setOpenPopup(false)}
-      />
-      
-      
-*/
 }
