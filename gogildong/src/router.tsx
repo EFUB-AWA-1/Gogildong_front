@@ -109,7 +109,7 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <DesktopLayout />,
     children: [
-      { index: true, element: <DashBoard /> },
+      { index: true, element: <Navigate to="stats" replace /> },
       { path: 'stats', element: <DashBoard /> },
       { path: 'schools', element: <RegisteredSchoolList /> },
       { path: 'reports', element: <div>제보 관리</div> },
