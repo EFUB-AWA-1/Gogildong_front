@@ -1,6 +1,7 @@
 import DecreaseIcon from '@/Admin/assets/svgs/icon_down.svg?react';
 import IncreaseIcon from '@/Admin/assets/svgs/icon_up.svg?react';
 import FlatIcon from '@/Admin/assets/svgs/icon_flat.svg?react';
+
 type StatsCardSmallProps = {
   title: string;
   current: number;
@@ -64,7 +65,7 @@ export default function StatsCardSmall({
               <diffMeta.Icon className="h-12 w-12" />
 
               <span className="text-display-sm">
-                {diff} ({rate}%)
+                {diff} ({rate})
               </span>
             </div>
           </div>
