@@ -37,7 +37,7 @@ export default function RankingBox({
       </div>
 
       {/* 닉네임 */}
-      <div className="flex w-36 items-center justify-start">
+      <div className="flex w-46 items-center justify-start">
         {nickname}
       </div>
 
