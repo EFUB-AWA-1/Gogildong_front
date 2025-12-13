@@ -11,6 +11,7 @@ import { mapItemsToClothes } from '@/Gildong/utils/mapItemsToClothes';
 import { getMyCharacterInfo, getMyClothes } from '@/Gildong/api/closet';
 import MyCharacter from '@/Gildong/components/MyCharacter';
 import { useCharacterStore } from '@/Gildong/stores/useCharacterStore';
+import UpdateClotheBtn from '@/Gildong/components/UpdateClotheBtn';
 
 export default function ClosetPage() {
   const username = useUserStore((state) => state.user?.username);
@@ -29,7 +30,9 @@ export default function ClosetPage() {
 
   const head = useCharacterStore((state) => state.getItemByType('head'));
   const dress = useCharacterStore((state) => state.getItemByType('dress'));
-
+  const hasPreview = useCharacterStore(
+    (state) => Object.keys(state.previewItems).length > 0
+  );
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-linear-to-b from-lime-50 to-lime-200">
       {/* 작은 화면 대응 CSS */}
@@ -48,6 +51,7 @@ export default function ClosetPage() {
         <MyCharacter headImg={head?.imageUrl} dressImg={dress?.imageUrl} />
       </div>
       <ClosetBottomSheet clothes={clothes} />
+      {hasPreview && <UpdateClotheBtn />}
     </div>
   );
 }
