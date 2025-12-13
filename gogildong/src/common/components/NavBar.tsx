@@ -1,13 +1,13 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import iconHome from "../../assets/Common/icon_home.svg";
-import iconSchool from "../../assets/Common/icon_school.svg";
-import iconGildong from "../../assets/Common/icon_gildong.svg";
-import iconMyPage from "../../assets/Common/icon_mypage.svg";
+import iconHome from '@/common/assets/icon_home.svg';
+import iconSchool from '@/common/assets/icon_school.svg';
+import iconGildong from '@/common/assets/icon_gildong.svg';
+import iconMyPage from '@/common/assets/icon_mypage.svg';
 import { useUserStore } from "@/Mypage/stores/useUserStore";
 
-export type NavKey = "home" | "school" | "gildong" | "mypage";
+export type NavKey = 'home' | 'school' | 'gildong' | 'mypage';
 
 interface NavBarProps {
   active: NavKey;
@@ -41,8 +41,7 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
         navigate("/login"); 
       }
     }
-    // 길동이 페이지 퍼블리싱 되면 수정
-    // if (key === "gildong") navigate("/");
+    if (key === "gildong") navigate("/");
     if (key === "mypage") navigate("/mypage");
   };
   
@@ -55,16 +54,16 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
         {/* 홈 */}
         <div
           className="relative grid cursor-pointer place-items-center"
-          onClick={handleClick("home")}
+          onClick={handleClick('home')}
         >
           <img
             src={ICONS.home}
             alt="home"
             className={`mx-[0.38rem] mt-[0.2rem] mb-[0.2rem] h-7 w-7 ${
-              isActive("home") ? "opacity-100" : "opacity-40"
+              isActive('home') ? 'opacity-100' : 'opacity-40'
             } `}
           />
-          {isActive("home") && (
+          {isActive('home') && (
             <span className="absolute -bottom-1 h-[3px] w-8 rounded-full bg-[#535353]" />
           )}
         </div>
@@ -72,14 +71,14 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
         {/* 내 학교 */}
         <div
           className="relative grid cursor-pointer place-items-center"
-          onClick={handleClick("school")}
+          onClick={handleClick('school')}
         >
           <img
             src={ICONS.school}
             alt="board"
-            className={`mx-[0.38rem] mt-[0.2rem] mb-[0.2rem] h-7 w-7 ${isActive("school") ? "opacity-100" : "opacity-40"}`}
+            className={`mx-[0.38rem] mt-[0.2rem] mb-[0.2rem] h-7 w-7 ${isActive('school') ? 'opacity-100' : 'opacity-40'}`}
           />
-          {isActive("school") && (
+          {isActive('school') && (
             <span className="absolute -bottom-1 h-[3px] w-8 rounded-full bg-[#535353]" />
           )}
         </div>
@@ -87,16 +86,16 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
         {/* 길동이 */}
         <div
           className="relative grid cursor-pointer place-items-center"
-          onClick={handleClick("gildong")}
+          onClick={handleClick('gildong')}
         >
           <img
             src={ICONS.gildong}
             alt="gildong"
             className={`mx-[0.38rem] mt-[0.2rem] mb-[0.2rem] h-7 w-7 ${
-              isActive("gildong") ? "opacity-100" : "opacity-40"
+              isActive('gildong') ? 'opacity-100' : 'opacity-40'
             }`}
           />
-          {isActive("gildong") && (
+          {isActive('gildong') && (
             <span className="absolute -bottom-1 h-[3px] w-8 rounded-full bg-[#535353]" />
           )}
         </div>
@@ -104,16 +103,16 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
         {/* 마이페이지 */}
         <div
           className="relative grid cursor-pointer place-items-center"
-          onClick={handleClick("mypage")}
+          onClick={handleClick('mypage')}
         >
           <img
             src={ICONS.mypage}
             alt="mypage"
             className={`mx-[0.38rem] mt-[0.2rem] mb-[0.2rem] h-7 w-7 ${
-              isActive("mypage") ? "opacity-100" : "opacity-40"
+              isActive('mypage') ? 'opacity-100' : 'opacity-40'
             }`}
           />
-          {isActive("mypage") && (
+          {isActive('mypage') && (
             <span className="absolute -bottom-1 h-[3px] w-8 rounded-full bg-[#535353]" />
           )}
         </div>

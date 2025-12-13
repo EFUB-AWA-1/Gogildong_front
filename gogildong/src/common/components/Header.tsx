@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import BackIcon from "@/assets/backIcon.svg?react";
+import { useNavigate } from 'react-router-dom';
+import BackIcon from '@/common/assets/backIcon.svg?react';
 
 interface HeaderProps {
   title: string;
@@ -7,6 +7,7 @@ interface HeaderProps {
   onBackClick?: () => void;
   darkMode?: boolean;
   rightElement?: React.ReactNode;
+  transparentMode?: boolean;
 }
 
 export default function Header({
@@ -14,7 +15,8 @@ export default function Header({
   showBack = true,
   onBackClick,
   darkMode = false,
-  rightElement
+  rightElement,
+  transparentMode = false
 }: HeaderProps) {
   const navigate = useNavigate();
 
@@ -26,7 +28,9 @@ export default function Header({
   return (
     <header
       className={`sticky top-0 z-10 grid w-full grid-cols-3 items-center px-4 py-2 ${
-        darkMode ? "text-white" : "bg-white text-black"
+        darkMode ? 'text-white' : 'text-black'
+      } ${
+        transparentMode ? 'bg-transparent' : darkMode ? 'bg-black' : 'bg-white'
       }`}
     >
       {showBack && (
@@ -36,7 +40,7 @@ export default function Header({
           aria-label="뒤로 가기"
         >
           <BackIcon
-            className={darkMode ? "[&_path]:fill-white" : "[&_path]:fill-black"}
+            className={darkMode ? '[&_path]:fill-white' : '[&_path]:fill-black'}
           />
         </button>
       )}

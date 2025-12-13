@@ -1,34 +1,42 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import Header from "@/common/components/Header";
-import OptionIcon from "../assets/icon_option.svg?react";
-import type { FacilityImageType } from "../types/facilityImage";
-import PrevImgBtn from "../assets/btn_previmg.svg?react";
-import NextImgBtn from "../assets/btn_nextimg.svg?react";
-import SelectSubmitModal from "../components/modals/SelectSubmitModal";
-import SingleBtnModal from "../components/modals/SingleBtnModal";
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import Header from '@/common/components/Header';
+import OptionIcon from '../assets/icon_option.svg?react';
+import type { FacilityImageType } from '../types/facilityImage';
+import PrevImgBtn from '../assets/btn_previmg.svg?react';
+import NextImgBtn from '../assets/btn_nextimg.svg?react';
+import SingleBtnModal from '../components/modals/SingleBtnModal';
+import DoubleBtnModal from '@/ReportView/components/modals/DoubleBtnModal';
+import ReportSummary from '@/ReportView/components/ReportSummary';
+import InfoIcon from '../assets/icon_infor.svg?react';
+import type { FacilityType } from '@/ReportView/types/reportSummary';
+import { getReportSummaryMock } from '@/ReportView/mocks/reportSummaryMock';
 
 type LocationState = {
-  photo?: FacilityImageType;
+  photos?: FacilityImageType[];
+  initialReportId?: number;
 };
 
-const REPORT_OPTIONS = [
-  { id: "personal_info", label: "개인 정보 노출" },
-  { id: "obscene", label: "음란물" },
-  { id: "offensive", label: "불쾌한 사진" },
-  { id: "irrelevant", label: "장소와 관련 없는 정보" }
-];
+const facilityType: FacilityType = 'restroom';
+const summaryMock = getReportSummaryMock(facilityType);
 
 export default function PhotoDetail() {
   const { state } = useLocation();
-  const { photo } = (state || {}) as LocationState;
-
-  const src = photo?.facilityImage;
+  const { photos = [], initialReportId } = (state || {}) as LocationState;
 
   const [showReportButton, setShowReportButton] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [reportResultOpen, setReportResultOpen] = useState(false);
+  const [reportSummaryOpen, setReportSummaryOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    if (!initialReportId) return 0;
+    const idx = photos.findIndex((p) => p.reportId === initialReportId);
+    return idx === -1 ? 0 : idx;
+  });
+
+  const currentPhoto = photos[currentIndex];
+  const src = currentPhoto?.facilityImage;
 
   const handleImageClick = () => {
     setShowArrows((prev) => !prev);
@@ -36,16 +44,20 @@ export default function PhotoDetail() {
 
   const handlePrevClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이미지 클릭 토글 안 일어나게
-    console.log("이전 이미지로 이동 (TODO)");
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
   const handleNextClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log("다음 이미지로 이동 (TODO)");
+    setCurrentIndex((prev) => (prev < photos.length - 1 ? prev + 1 : prev));
   };
 
   const handleOptionClick = () => {
     setShowReportButton((prev) => !prev);
+  };
+
+  const handleInfoIconClick = () => {
+    setReportSummaryOpen(true);
   };
 
   const handleReportClick = () => {
@@ -98,22 +110,26 @@ export default function PhotoDetail() {
             {showArrows && (
               <>
                 {/* 이전 버튼 */}
-                <button
-                  type="button"
-                  onClick={handlePrevClick}
-                  className="absolute top-1/2 left-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
-                >
-                  <PrevImgBtn className="h-full w-full" />
-                </button>
+                {currentIndex > 0 && (
+                  <button
+                    type="button"
+                    onClick={handlePrevClick}
+                    className="absolute top-1/2 left-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
+                  >
+                    <PrevImgBtn className="h-full w-full" />
+                  </button>
+                )}
 
                 {/* 다음 버튼 */}
-                <button
-                  type="button"
-                  onClick={handleNextClick}
-                  className="absolute top-1/2 right-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
-                >
-                  <NextImgBtn className="h-full w-full" />
-                </button>
+                {currentIndex < photos.length - 1 && (
+                  <button
+                    type="button"
+                    onClick={handleNextClick}
+                    className="absolute top-1/2 right-[0.94rem] z-10 flex h-12 w-12 shrink-0 -translate-y-1/2 items-center justify-center"
+                  >
+                    <NextImgBtn className="h-full w-full" />
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -131,17 +147,18 @@ export default function PhotoDetail() {
           </div>
         </div>
 
-        {/* 제보 값 부분*/}
-        <div className="flex flex-col items-end text-[0.875rem] font-medium">
-          <span>폭: 108 cm</span>
-          <span>활동 공간: 120 cm</span>
+        <div className="font- flex flex-row items-center gap-1 text-[0.875rem] font-medium">
+          <span>제보 요약 정보</span>
+          <InfoIcon
+            className="h-5 w-5 cursor-pointer"
+            onClick={handleInfoIconClick}
+          />
         </div>
       </div>
 
-      <SelectSubmitModal
+      <DoubleBtnModal
         open={reportModalOpen}
-        title="사진 신고 사유"
-        options={REPORT_OPTIONS}
+        title="사진을 신고할까요?"
         label="신고하기"
         onClose={() => setReportModalOpen(false)}
         onConfirm={handleReportConfirm}
@@ -150,9 +167,16 @@ export default function PhotoDetail() {
       <SingleBtnModal
         open={reportResultOpen}
         title="신고가 제출되었습니다"
-        message={"신고 3회 이상 누적 시 \n검토 후 게시글이 차단됩니다."}
+        message={'신고 3회 이상 누적 시 \n검토 후 사진이 차단됩니다.'}
         label="확인"
         onClose={() => setReportResultOpen(false)}
+      />
+
+      <ReportSummary
+        open={reportSummaryOpen}
+        title="제보 요약 정보"
+        data={summaryMock}
+        onClose={() => setReportSummaryOpen(false)}
       />
     </div>
   );

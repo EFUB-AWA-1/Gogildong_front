@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import OptionIcon from "../../assets/icon_option_black.svg?react";
-import DoubleBtnModal from "../modals/DoubleBtnModal";
-import SelectSubmitModal from "../modals/SelectSubmitModal";
+import { useEffect, useRef, useState } from 'react';
+import OptionIcon from '../../assets/icon_option_black.svg?react';
+import DoubleBtnModal from '../modals/DoubleBtnModal';
+import SingleBtnModal from '@/ReportView/components/modals/SingleBtnModal';
 
 type CommentItemProps = {
   nickname: string;
@@ -9,13 +9,6 @@ type CommentItemProps = {
   content: string;
   isMine?: boolean;
 };
-
-const REPORT_OPTIONS = [
-  { id: "abuse", label: "비아냥/욕설" },
-  { id: "spam", label: "도배" },
-  { id: "irrelevant", label: "관련 없는 댓글" },
-  { id: "sexual", label: "성적 불쾌감 유발" }
-];
 
 export default function CommentItem({
   nickname,
@@ -26,9 +19,11 @@ export default function CommentItem({
   const [openMenu, setOpenMenu] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
+  const [reportResultOpen, setReportResultOpen] = useState(false);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const optionLabel = isMine ? "삭제하기" : "신고하기";
+  const optionLabel = isMine ? '삭제하기' : '신고하기';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -41,11 +36,11 @@ export default function CommentItem({
     };
 
     if (openMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [openMenu]);
 
@@ -63,12 +58,12 @@ export default function CommentItem({
 
   const handleConfirmDelete = () => {
     // TODO: 댓글 삭제 API 호출
-    console.log("댓글 삭제");
+    console.log('댓글 삭제');
   };
 
-  const handleConfirmReport = (reasonId: string) => {
-    // TODO: 댓글 신고 API 호출
-    console.log("댓글 신고:", { reasonId });
+  const handleReportConfirm = () => {
+    // TODO: 신고 API 붙일 때 여기에서 처리
+    setReportResultOpen(true);
   };
 
   return (
@@ -118,13 +113,21 @@ export default function CommentItem({
       />
 
       {/* 댓글 신고 모달 (라디오 선택) */}
-      <SelectSubmitModal
+      <DoubleBtnModal
         open={openReportModal}
-        title="댓글 신고 사유"
-        options={REPORT_OPTIONS}
+        title="댓글 신고하기"
+        message="이 댓글을 신고할까요?"
         label="신고하기"
         onClose={() => setOpenReportModal(false)}
-        onConfirm={handleConfirmReport}
+        onConfirm={handleReportConfirm}
+      />
+
+      <SingleBtnModal
+        open={reportResultOpen}
+        title="신고가 제출되었습니다"
+        message={'신고 3회 이상 누적 시 \n검토 후 댓글이 차단됩니다.'}
+        label="확인"
+        onClose={() => setReportResultOpen(false)}
       />
     </div>
   );
