@@ -3,14 +3,14 @@ import FacilityTitle from './FacilityTitle';
 
 interface FacilityHeaderProps {
   detail: FacilityDetail;
-
+  isAccessible?: boolean; // Prop 추가
   images?: string[];
   onImageClick?: (index: number) => void;
 }
 
 export default function FacilityHeader({
   detail,
-
+  isAccessible, // 추가
   images = [],
   onImageClick
 }: FacilityHeaderProps) {
@@ -70,6 +70,7 @@ export default function FacilityHeader({
         facilityName={facilityName}
         facilityNickName={facilityNickName}
         createdAt={createdAt}
+        isAccessible={isAccessible} // 추가
       />
 
       <div className="scrollbar-hide flex gap-3 overflow-x-auto pb-1">

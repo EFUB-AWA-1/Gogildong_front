@@ -1,10 +1,12 @@
 import AccessbilityIcon from '@/FacilityView/assets/svgs/icon_disabled.svg?react';
+
 interface FacilityTitleProps {
   buildingName: string;
   floorName: string;
   facilityName: string;
   facilityNickName?: string;
   createdAt?: string;
+  isAccessible?: boolean; // Prop 추가
 }
 
 export default function FacilityTitle({
@@ -12,7 +14,8 @@ export default function FacilityTitle({
   floorName,
   facilityName,
   facilityNickName,
-  createdAt
+  createdAt,
+  isAccessible // 추가
 }: FacilityTitleProps) {
   const formattedDate = createdAt
     ? new Date(createdAt).toISOString().split('T')[0]
@@ -26,7 +29,9 @@ export default function FacilityTitle({
       </p>
       <div className="flex items-center justify-between">
         <p className="text-display-md text-black">{facilityName}</p>
-        <AccessbilityIcon />
+        
+        {/* isAccessible이 true일 때만 아이콘 렌더링 */}
+        {isAccessible && <AccessbilityIcon />}
       </div>
     </div>
   );
