@@ -1,5 +1,5 @@
 import UserInfo from '@/Gildong/components/UserInfo';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import type { Clothing } from '@/Gildong/types/Clothing';
 import DialogueBox from '@/Gildong/components/DialogueBox';
 import MenuButtonContainer from '@/Gildong/components/MenuButtonContainer';

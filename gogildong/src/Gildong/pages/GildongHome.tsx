@@ -4,7 +4,6 @@ import NavBar from '../../common/components/NavBar';
 import type { NavKey } from '../../common/components/NavBar';
 import DialogueBox from '@/Gildong/components/DialogueBox';
 import MenuButtonContainer from '@/Gildong/components/MenuButtonContainer';
-import GildongSample from '../assets/gildongex.svg';
 import { useUserStore } from '@/Mypage/stores/useUserStore';
 import QuizIcon from '../assets/QuizIcon.svg';
 import MissonIcon from '../assets/MissonIcon.svg';
@@ -38,7 +37,9 @@ export default function GildongHome() {
   useEffect(() => {
     const loadQuizProgress = async () => {
       const quizzes = await getQuizList();
-      const solvedCount = quizzes.filter((q: Quiz) => q.attemptStatus === 'SUBMITTED').length;
+      const solvedCount = quizzes.filter(
+        (q: Quiz) => q.attemptStatus === 'SUBMITTED'
+      ).length;
 
       setQuizProgress({
         solved: solvedCount,
@@ -79,7 +80,7 @@ export default function GildongHome() {
         `}
       </style>
       {/* 상단 영역 */}
-      <div className="pt-15 flex flex-none flex-col space-y-5 px-6 pb-6">
+      <div className="flex flex-none flex-col space-y-5 px-6 pt-15 pb-6">
         <UserInfo username={username} coin={coin ?? 0} />
         <div className="flex w-full flex-row justify-between">
           <DialogueBox />
