@@ -92,7 +92,8 @@ export default function ReportSummaryCard({
       value: [
         locationData?.building,
         locationData?.floor,
-        locationData?.facility
+        locationData?.facility,
+        locationData?.extraDescription
       ]
         .filter(Boolean)
         .join(' ')
@@ -104,7 +105,7 @@ export default function ReportSummaryCard({
       case '화장실':
         return [
           ...baseLocation,
-          { label: '위치 추가 설명', value: locationData?.extraDescription },
+
           { label: '칸 종류', value: detail?.stallType },
           { label: '문 종류', value: detail?.doorType },
           { label: '손잡이 유무', value: detail?.grabBar }
@@ -112,6 +113,7 @@ export default function ReportSummaryCard({
       case '엘리베이터':
         return [
           ...baseLocation,
+
           { label: '승인 없이 이용 여부', value: detail?.accessApproval },
           { label: '수업 중 이용 가능 여부', value: detail?.classUse },
           { label: '시설 추가 설명', value: detail?.extraDescription }
@@ -119,7 +121,7 @@ export default function ReportSummaryCard({
       case '교실':
         return [
           ...baseLocation,
-          { label: '위치 추가 설명', value: locationData?.extraDescription },
+
           { label: '교실 문턱 유무', value: detail?.threshold },
           { label: '교실 문 종류', value: detail?.doorType },
           { label: '시설 추가 설명', value: detail?.extraDescription }

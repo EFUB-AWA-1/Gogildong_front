@@ -5,6 +5,7 @@ interface RadioOptionGroupProps {
   name: string;
   options: string[];
   label?: string;
+  selectedValue?: string;
   onChange?: (value: string) => void;
 }
 
@@ -12,6 +13,7 @@ export default function RadioOptionGroup({
   name,
   options,
   label,
+  selectedValue,
   onChange
 }: RadioOptionGroupProps) {
   return (
@@ -31,6 +33,7 @@ export default function RadioOptionGroup({
               type="radio"
               name={name}
               value={option}
+              checked={selectedValue === option}
               className="peer absolute top-1/2 left-0 -translate-y-1/2 cursor-pointer opacity-0 focus-visible:ring-2"
               onChange={() => onChange?.(option)}
             />

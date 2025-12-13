@@ -1,10 +1,12 @@
 import ActionButton from '@/common/components/ActionButton';
 import RadioOptionGroup from './RadioOptionGroup';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FacilityType } from '@/Report/types/facilityTypes';
 
 interface ReportForm2Props {
   facilityType: FacilityType;
+  initialValues?: Record<string, string>;
+  onChange?: (data: Record<string, string>) => void;
   onSubmit: (data: Record<string, string>) => void;
 }
 
@@ -83,6 +85,8 @@ const EXTRA_TEXT_BY_TYPE: Partial<
 
 export default function ReportForm2({
   facilityType,
+  initialValues,
+  onChange,
   onSubmit
 }: ReportForm2Props) {
   const questions = useMemo(
@@ -94,10 +98,20 @@ export default function ReportForm2({
     [facilityType]
   );
 
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<Record<string, string>>(
+    initialValues ?? {}
+  );
+
+  useEffect(() => {
+    setFormData(initialValues ?? {});
+  }, [facilityType, initialValues]);
 
   const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const next = { ...prev, [field]: value };
+      onChange?.(next);
+      return next;
+    });
   };
 
   const isComplete =
@@ -116,6 +130,7 @@ export default function ReportForm2({
           name={q.name}
           label={q.label}
           options={q.options}
+          selectedValue={formData[q.name]}
           onChange={(v) => handleChange(q.name, v)}
         />
       ))}

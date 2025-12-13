@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Header from '@/common/components/Header';
 import ActionButton from '@/common/components/ActionButton';
 import Webcam from 'react-webcam';
@@ -8,9 +8,14 @@ import {
   toFacilityLabel,
   type FacilityTypeParam
 } from '@/Report/types/facilityTypes';
+import type { ReportFlowFormState } from '@/Report/types/report';
 
 export default function PhotoReport() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const previousFormState = (
+    (location.state as { formState?: ReportFlowFormState } | null) ?? null
+  )?.formState;
   const { id, facilityType: facilityTypeParam } = useParams<{
     id: string;
     facilityType: FacilityTypeParam;
@@ -23,11 +28,9 @@ export default function PhotoReport() {
   const webcamRef = useRef<Webcam>(null);
 
   const videoConstraints = {
-    // Prefer rear camera on mobile; "ideal" prevents OverconstrainedError on
-    // devices without an environment camera.
     facingMode: { ideal: 'environment' },
-    width: { ideal: 1280 },
-    height: { ideal: 720 }
+    width: { ideal: 1920 },
+    height: { ideal: 1080 }
   };
 
   const takePhoto = () => {
@@ -61,7 +64,8 @@ export default function PhotoReport() {
 
     navigate(`/school/${id}/report/${facilityTypeParam}/form`, {
       state: {
-        photo: capturedImage
+        photo: capturedImage,
+        formState: previousFormState
       }
     });
   };
