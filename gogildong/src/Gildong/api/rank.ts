@@ -11,6 +11,21 @@ export const getMyRankingInMySchool = async () => {
 };
 
 export const getMySchoolRanking = async () => {
-    const {data} = await axiosInstance.get('/rank/schools/mine');
-    return data;
-}
+  const { data } = await axiosInstance.get('/rank/schools/mine');
+  return data;
+};
+
+export const getAllRankingInAllUser = async () => {
+  const { data } = await axiosInstance.get('/rank');
+  return data;
+};
+
+export const getAllRankingInMySchool = async () => {
+  const { data } = await axiosInstance.get('/rank/school');
+  return data;
+};
+
+export const getAllSchoolRanking = async () => {
+  const { data } = await axiosInstance.get('/rank/schools');
+  return data;
+};

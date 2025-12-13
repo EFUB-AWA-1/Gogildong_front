@@ -4,11 +4,13 @@ import RankingMenuBar from '@/Gildong/components/RankingMenuBar';
 import SmallArrow from '../assets/smallArraw.svg';
 import RankingBox from '@/Gildong/components/RankingBox';
 import MyRankingBox from '@/Gildong/components/MyRankingBox';
-import { useUserStore } from '@/Mypage/stores/useUserStore';
 import NavBar from '../../common/components/NavBar';
 import type { NavKey } from '../../common/components/NavBar';
-import { data, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
+  getAllRankingInAllUser,
+  getAllRankingInMySchool,
+  getAllSchoolRanking,
   getMyRankingInAllUser,
   getMyRankingInMySchool,
   getMySchoolRanking
@@ -20,16 +22,23 @@ type MyRanking = {
   percentile: number;
 };
 
+type RankingItem = {
+  rank: number;
+  name: string;
+  score: number;
+};
+
 export default function RankingPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [active, setActive] = React.useState<NavKey>('gildong');
   const type = searchParams.get('type') || 'all';
   const [myRanking, setMyRanking] = useState<MyRanking>({
-    name: "",
+    name: '',
     rank: 0,
     percentile: 0
   });
+  const [rankings, setRankings] = useState<RankingItem[]>([]);
 
   useEffect(() => {
     if (!searchParams.get('type')) {
@@ -47,6 +56,14 @@ export default function RankingPage() {
           percentile: data.global_percentile
         })
       );
+      getAllRankingInAllUser().then((data) => {
+        const top5 = data.rankings.slice(0, 5).map((item: any) => ({
+          rank: item.rank,
+          name: item.user_name,
+          score: item.total_score
+        }));
+        setRankings(top5);
+      });
     }
 
     if (type === 'campus') {
@@ -57,6 +74,14 @@ export default function RankingPage() {
           percentile: data.my_percentile
         })
       );
+      getAllRankingInMySchool().then((data) => {
+        const top5 = data.rankings.slice(0, 5).map((item: any) => ({
+          rank: item.rank,
+          name: item.user_name,
+          score: item.total_score
+        }));
+        setRankings(top5);
+      });
     }
 
     if (type === 'school') {
@@ -67,9 +92,15 @@ export default function RankingPage() {
           percentile: data.school_percentile
         })
       );
+      getAllSchoolRanking().then((data) => {
+        const top5 = data.rankings.slice(0, 5).map((item: any) => ({
+          rank: item.rank,
+          name: item.school_name,
+          score: item.total_score
+        }));
+        setRankings(top5);
+      });
     }
-
-    // type=campus, type=school API 추가
   }, [type]);
 
   const handleChangeType = (newType: string) => {
@@ -94,11 +125,14 @@ export default function RankingPage() {
           </div>
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-2 px-4">
-          <RankingBox ranking={1} nickname="안녕자두야" point={12} />
-          <RankingBox ranking={2} nickname="안녕자두야" point={1200} />
-          <RankingBox ranking={3} nickname="안녕자두야" point={12} />
-          <RankingBox ranking={4} nickname="안녕자두야" point={12} />
-          <RankingBox ranking={5} nickname="안녕자두야" point={12} />
+          {rankings.map((item) => (
+            <RankingBox
+              key={item.rank}
+              ranking={item.rank}
+              nickname={item.name}
+              point={item.score}
+            />
+          ))}
         </div>
       </div>
       <div className="mt-4 flex w-full flex-col items-center">
