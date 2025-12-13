@@ -5,14 +5,12 @@ import {
   getFacilitiesByFloor,
   getFloorsByBuilding
 } from '@/Report/api/getFacilities';
+import type { LocationData } from '@/Report/types/report';
 
 interface LocationSelectorGroupProps {
   schoolId?: number;
-  onChange: (data: {
-    building: string;
-    floor: string;
-    facility: string;
-  }) => void;
+  value?: LocationData;
+  onChange: (data: LocationData) => void;
   onFloorSelect?: (floorId: number | null) => void;
 }
 
@@ -20,6 +18,7 @@ type Option = { id: number; name: string };
 
 export default function LocationSelectorGroup({
   schoolId,
+  value,
   onChange,
   onFloorSelect
 }: LocationSelectorGroupProps) {
@@ -32,8 +31,51 @@ export default function LocationSelectorGroup({
     floor: '',
     facility: '',
     buildingId: null as number | null,
-    floorId: null as number | null
+    floorId: null as number | null,
+    facilityId: null as number | null
   });
+
+  const loadFloors = async (buildingId: number | null) => {
+    if (!buildingId) {
+      setFloors([]);
+      return;
+    }
+    try {
+      const data = await getFloorsByBuilding(buildingId);
+      const list = Array.isArray(data.floors)
+        ? data.floors.map((f: { floorId: number; floorName: string }) => ({
+            id: f.floorId,
+            name: f.floorName
+          }))
+        : [];
+      setFloors(list);
+    } catch (e) {
+      console.error('층 목록을 불러오지 못했습니다', e);
+      setFloors([]);
+    }
+  };
+
+  const loadFacilities = async (floorId: number | null) => {
+    if (!floorId) {
+      setFacilities([]);
+      return;
+    }
+    try {
+      const data = await getFacilitiesByFloor(floorId);
+      const list = Array.isArray(data.facilities)
+        ? data.facilities.map(
+            (f: { facilityId: number; facilityName: string }) => ({
+              id: f.facilityId,
+              name: f.facilityName
+            })
+          )
+        : [];
+      setFacilities(list);
+    } catch (e) {
+      console.error('시설 목록을 불러오지 못했습니다', e);
+      setFacilities([]);
+    }
+  };
 
   useEffect(() => {
     const fetchBuildings = async () => {
@@ -56,70 +98,104 @@ export default function LocationSelectorGroup({
     fetchBuildings();
   }, [schoolId]);
 
+  useEffect(() => {
+    if (!value) return;
+    setFormData({
+      building: value.building ?? '',
+      buildingId: value.buildingId ?? null,
+      floor: value.floor ?? '',
+      floorId: value.floorId ?? null,
+      facility: value.facility ?? '',
+      facilityId: value.facilityId ?? null
+    });
+
+    if (value.buildingId) {
+      loadFloors(value.buildingId);
+    } else {
+      setFloors([]);
+    }
+
+    if (value.floorId) {
+      loadFacilities(value.floorId);
+    } else {
+      setFacilities([]);
+    }
+  }, [
+    value?.building,
+    value?.buildingId,
+    value?.floor,
+    value?.floorId,
+    value?.facility,
+    value?.facilityId
+  ]);
+
   const handleBuildingChange = async (name: string, id: number | null) => {
     const updated = {
       building: name,
       buildingId: id,
       floor: '',
       facility: '',
-      floorId: null
+      floorId: null,
+      facilityId: null
     };
     setFormData(updated);
     setFloors([]);
     setFacilities([]);
-    onChange({ building: name, floor: '', facility: '' });
+    onChange({
+      building: name,
+      buildingId: id,
+      floor: '',
+      floorId: null,
+      facility: '',
+      facilityId: null
+    });
     onFloorSelect?.(null);
 
-    if (!id) return;
-    try {
-      const data = await getFloorsByBuilding(id);
-      const list = Array.isArray(data.floors)
-        ? data.floors.map((f: { floorId: number; floorName: string }) => ({
-            id: f.floorId,
-            name: f.floorName
-          }))
-        : [];
-      setFloors(list);
-    } catch (e) {
-      console.error('층 목록을 불러오지 못했습니다', e);
-      setFloors([]);
-    }
+    loadFloors(id);
   };
 
   const handleFloorChange = async (name: string, id: number | null) => {
-    const updated = { ...formData, floor: name, floorId: id, facility: '' };
+    const updated = {
+      ...formData,
+      floor: name,
+      floorId: id,
+      facility: '',
+      facilityId: null
+    };
     setFormData(updated);
     setFacilities([]);
-    onChange({ building: formData.building, floor: name, facility: '' });
+    onChange({
+      building: formData.building,
+      buildingId: formData.buildingId,
+      floor: name,
+      floorId: id,
+      facility: '',
+      facilityId: null
+    });
     onFloorSelect?.(id ?? null);
 
-    if (!id) return;
-    try {
-      const data = await getFacilitiesByFloor(id);
-      const list = Array.isArray(data.facilities)
-        ? data.facilities.map(
-            (f: { facilityId: number; facilityName: string }) => ({
-              id: f.facilityId,
-              name: f.facilityName
-            })
-          )
-        : [];
-      setFacilities(list);
-    } catch (e) {
-      console.error('시설 목록을 불러오지 못했습니다', e);
-      setFacilities([]);
-    }
+    loadFacilities(id);
   };
 
   const handleFacilityChange = (name: string) => {
-    const updated = { ...formData, facility: name };
+    const selected = facilities.find((f) => f.name === name);
+    const updated = {
+      ...formData,
+      facility: name,
+      facilityId: selected?.id ?? null
+    };
     setFormData(updated);
     onChange({
       building: formData.building,
+      buildingId: formData.buildingId,
       floor: formData.floor,
-      facility: name
+      floorId: formData.floorId,
+      facility: name,
+      facilityId: selected?.id ?? null
     });
   };
+
+  const facilityOptions = [...facilities.map((f) => f.name), '새 시설'];
 
   return (
     <div className="mt-2 flex w-full flex-1 justify-around gap-4">
@@ -147,7 +223,7 @@ export default function LocationSelectorGroup({
 
       <LocationDropDown
         label="시설"
-        options={facilities.map((f) => f.name)}
+        options={facilityOptions}
         value={formData.facility}
         onChange={handleFacilityChange}
         disabled={!formData.floor}
