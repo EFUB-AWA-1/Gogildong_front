@@ -7,6 +7,7 @@ import GildongHome from '@/Gildong/pages/GildongHome';
 import QuizCorrect from '@/Gildong/pages/QuizCorrect';
 import QuizPage from '@/Gildong/pages/QuizPage';
 import QuizWrong from '@/Gildong/pages/QuizWrong';
+import RankingPage from '@/Gildong/pages/RankingPage';
 import ProtectedRoute from '@/ProtectedRoute';
 import PublicRoute from '@/PublicRoute';
 import ReportFlow from '@/Report/pages/ReportFlow';
@@ -94,7 +95,8 @@ const router = createBrowserRouter([
           { path: '/gildong', element: <GildongHome /> },
           { path: '/quiz/:quizId', element: <QuizPage /> },
           { path: '/quiz/correct', element: <QuizCorrect /> },
-          { path: '/quiz/wrong', element: <QuizWrong /> }
+          { path: '/quiz/wrong', element: <QuizWrong /> },
+          { path: '/ranking', element: <RankingPage /> }
         ]
       }
     ]

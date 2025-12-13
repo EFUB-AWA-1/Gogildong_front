@@ -7,11 +7,18 @@ import PrevImgBtn from '../assets/btn_previmg.svg?react';
 import NextImgBtn from '../assets/btn_nextimg.svg?react';
 import SingleBtnModal from '../components/modals/SingleBtnModal';
 import DoubleBtnModal from '@/ReportView/components/modals/DoubleBtnModal';
+import ReportSummary from '@/ReportView/components/ReportSummary';
+import InfoIcon from '../assets/icon_infor.svg?react';
+import type { FacilityType } from '@/ReportView/types/reportSummary';
+import { getReportSummaryMock } from '@/ReportView/mocks/reportSummaryMock';
 
 type LocationState = {
   photos?: FacilityImageType[];
   initialReportId?: number;
 };
+
+const facilityType: FacilityType = 'restroom';
+const summaryMock = getReportSummaryMock(facilityType);
 
 export default function PhotoDetail() {
   const { state } = useLocation();
@@ -21,6 +28,7 @@ export default function PhotoDetail() {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [reportResultOpen, setReportResultOpen] = useState(false);
+  const [reportSummaryOpen, setReportSummaryOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(() => {
     if (!initialReportId) return 0;
     const idx = photos.findIndex((p) => p.reportId === initialReportId);
@@ -46,6 +54,10 @@ export default function PhotoDetail() {
 
   const handleOptionClick = () => {
     setShowReportButton((prev) => !prev);
+  };
+
+  const handleInfoIconClick = () => {
+    setReportSummaryOpen(true);
   };
 
   const handleReportClick = () => {
@@ -135,10 +147,12 @@ export default function PhotoDetail() {
           </div>
         </div>
 
-        {/* 제보 값 부분*/}
-        <div className="flex flex-col items-end text-[0.875rem] font-medium">
-          <span>폭: 108 cm</span>
-          <span>활동 공간: 120 cm</span>
+        <div className="font- flex flex-row items-center gap-1 text-[0.875rem] font-medium">
+          <span>제보 요약 정보</span>
+          <InfoIcon
+            className="h-5 w-5 cursor-pointer"
+            onClick={handleInfoIconClick}
+          />
         </div>
       </div>
 
@@ -156,6 +170,13 @@ export default function PhotoDetail() {
         message={'신고 3회 이상 누적 시 \n검토 후 사진이 차단됩니다.'}
         label="확인"
         onClose={() => setReportResultOpen(false)}
+      />
+
+      <ReportSummary
+        open={reportSummaryOpen}
+        title="제보 요약 정보"
+        data={summaryMock}
+        onClose={() => setReportSummaryOpen(false)}
       />
     </div>
   );
