@@ -7,7 +7,6 @@ import GildongHome from '@/Gildong/pages/GildongHome';
 import QuizCorrect from '@/Gildong/pages/QuizCorrect';
 import QuizPage from '@/Gildong/pages/QuizPage';
 import QuizWrong from '@/Gildong/pages/QuizWrong';
-import RankingPage from '@/Gildong/pages/RankingPage';
 import ProtectedRoute from '@/ProtectedRoute';
 import PublicRoute from '@/PublicRoute';
 import ReportFlow from '@/Report/pages/ReportFlow';
@@ -31,6 +30,9 @@ import SignupExternal from './Signup/pages/SignupExternal';
 import SignupInternal from './Signup/pages/SignupInternal';
 import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
+import RankingPage from '@/Gildong/pages/RankingPage';
+import AllRankingPage from '@/Gildong/pages/AllRankingPage';
+import ClosetPage from '@/Gildong/pages/ClosetPage';
 
 const router = createBrowserRouter([
   {
@@ -93,10 +95,12 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
-          { path: '/quiz/:quizId', element: <QuizPage /> },
-          { path: '/quiz/correct', element: <QuizCorrect /> },
-          { path: '/quiz/wrong', element: <QuizWrong /> },
-          { path: '/ranking', element: <RankingPage /> }
+          { path: '/quiz/:quizId', element: <QuizPage />},
+          { path: '/quiz/correct', element: <QuizCorrect />},
+          { path: '/quiz/wrong', element: <QuizWrong />},
+          { path: '/ranking', element: <RankingPage />},
+          { path: '/ranking/all', element: <AllRankingPage />},
+          { path: '/closet', element: <ClosetPage />},
         ]
       }
     ]
@@ -105,7 +109,7 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <DesktopLayout />,
     children: [
-      { index: true, element: <DashBoard /> },
+      { index: true, element: <Navigate to="stats" replace /> },
       { path: 'stats', element: <DashBoard /> },
       { path: 'schools', element: <RegisteredSchoolList /> },
       { path: 'reports', element: <div>제보 관리</div> },

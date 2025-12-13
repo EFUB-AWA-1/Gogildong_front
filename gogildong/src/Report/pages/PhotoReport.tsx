@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Header from '@/common/components/Header';
 import ActionButton from '@/common/components/ActionButton';
 import Webcam from 'react-webcam';
@@ -8,9 +8,19 @@ import {
   toFacilityLabel,
   type FacilityTypeParam
 } from '@/Report/types/facilityTypes';
+import type { ReportFlowFormState } from '@/Report/types/report';
+import {
+  dataUrlToFile,
+  getPresignedUrl,
+  uploadFileToPresignedUrl
+} from '@/Report/api/getPresignedUrl';
 
 export default function PhotoReport() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const previousFormState = (
+    (location.state as { formState?: ReportFlowFormState } | null) ?? null
+  )?.formState;
   const { id, facilityType: facilityTypeParam } = useParams<{
     id: string;
     facilityType: FacilityTypeParam;
@@ -20,35 +30,46 @@ export default function PhotoReport() {
     'capture' | 'processing' | 'captured' | 'failed'
   >('capture');
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [pendingFile, setPendingFile] = useState<{
+    file: File;
+    contentType: string;
+    filename: string;
+  } | null>(null);
   const webcamRef = useRef<Webcam>(null);
 
   const videoConstraints = {
-    // Prefer rear camera on mobile; "ideal" prevents OverconstrainedError on
-    // devices without an environment camera.
     facingMode: { ideal: 'environment' },
-    width: { ideal: 1280 },
-    height: { ideal: 720 }
+    width: { ideal: 1920 },
+    height: { ideal: 1080 }
   };
 
   const takePhoto = () => {
-    setStatus('processing');
-
     const imageData = webcamRef.current?.getScreenshot();
     if (!imageData) {
-      setStatus('failed');
+      alert('사진을 가져오지 못했습니다. 다시 시도해 주세요.');
+      setStatus('capture');
       return;
     }
 
-    setCapturedImage(imageData);
+    const contentType = imageData.startsWith('data:image/png')
+      ? 'image/png'
+      : 'image/jpeg';
+    const ext = contentType === 'image/png' ? 'png' : 'jpg';
+    const filename = `report-${Date.now()}.${ext}`;
+    const file = dataUrlToFile(imageData, filename, contentType);
 
-    setTimeout(() => {
-      setStatus('captured');
-    }, 1000);
+    setCapturedImage(imageData);
+    setPendingFile({ file, contentType, filename });
+    setUploadedUrl(null);
+    setStatus('captured');
   };
 
   const handleBack = () => {
     if (status === 'captured') {
       setCapturedImage(null);
+      setUploadedUrl(null);
+      setPendingFile(null);
       setStatus('capture');
       return;
     }
@@ -56,14 +77,47 @@ export default function PhotoReport() {
     navigate(-1);
   };
 
-  const handleGoToReportInfo = () => {
-    if (!capturedImage || !facilityTypeParam || !id) return;
+  const handleGoToReportInfo = async () => {
+    if (!facilityTypeParam || !id) return;
+    if (uploadedUrl) {
+      navigate(`/school/${id}/report/${facilityTypeParam}/form`, {
+        state: {
+          photo: uploadedUrl,
+          formState: previousFormState
+        }
+      });
+      return;
+    }
 
-    navigate(`/school/${id}/report/${facilityTypeParam}/form`, {
-      state: {
-        photo: capturedImage
-      }
-    });
+    if (!pendingFile) return;
+
+    try {
+      setStatus('processing');
+      const { data } = await getPresignedUrl(
+        pendingFile.filename,
+        pendingFile.contentType
+      );
+      await uploadFileToPresignedUrl(
+        data.uploadUrl,
+        pendingFile.file,
+        pendingFile.contentType
+      );
+
+      setUploadedUrl(data.fileUrl);
+
+      navigate(`/school/${id}/report/${facilityTypeParam}/form`, {
+        state: {
+          photo: data.fileUrl,
+          formState: previousFormState
+        }
+      });
+    } catch (err) {
+      console.error('이미지 업로드 실패', err);
+      alert('이미지 업로드에 실패했습니다. 다시 시도해 주세요.');
+      setStatus('capture');
+      setPendingFile(null);
+      setCapturedImage(null);
+    }
   };
 
   useEffect(() => {
@@ -106,7 +160,7 @@ export default function PhotoReport() {
           </div>
         )} */}
 
-        {status === 'captured' && capturedImage && (
+        {['captured', 'processing'].includes(status) && capturedImage && (
           <div className="relative flex w-full flex-col items-center">
             <img
               src={capturedImage}
@@ -141,6 +195,10 @@ export default function PhotoReport() {
             onClick={() => setStatus('capture')}
           />
         )} */}
+
+        {status === 'processing' && (
+          <ActionButton label="업로드 중..." disabled />
+        )}
 
         {status === 'captured' && (
           <ActionButton label="다음" onClick={handleGoToReportInfo} />

@@ -4,10 +4,10 @@ export interface Measurements {
   innerDoorWidth?: string;
   innerDoorHeight?: string;
   toiletHeight?: string;
-  elevatorDoorWidth?: string;
-  elevatorDepth?: string;
-  buttonHeight?: string;
+  doorWidth?: string;
+  interiorDepth?: string;
+  maxControlPanelHeight?: string;
   maxDoorWidth?: string;
   doorHandleHeight?: string;
-  passableWidth?: string;
+  minAisleWidth?: string;
 }

@@ -1,19 +1,26 @@
 import RankingMenu from '@/Gildong/components/RankingMenu';
-import { useState } from 'react';
 
-const menuTitles = ['전체', '교내', '학교'];
+const menuItems = [
+  { label: '전체', type: 'all' },
+  { label: '교내', type: 'campus' },
+  { label: '학교', type: 'school' }
+];
 
-export default function RankingMenuBar() {
-  const [selectedTitle, setSelectedTitle] = useState("전체");
-
+export default function RankingMenuBar({
+  activeType,
+  onChangeType
+}: {
+  activeType: string;
+  onChangeType: (type: string) => void;
+}) {
   return (
     <div className="flex w-full flex-row items-center justify-center gap-5 bg-white px-4">
-      {menuTitles.map((title) => (
+      {menuItems.map((item) => (
         <RankingMenu
-          key={title}
-          title={title}
-          selected={selectedTitle === title}
-          onClick={() => setSelectedTitle(title)}
+          key={item.type}
+          title={item.label}
+          selected={activeType === item.type}
+          onClick={() => onChangeType(item.type)}
         />
       ))}
     </div>
