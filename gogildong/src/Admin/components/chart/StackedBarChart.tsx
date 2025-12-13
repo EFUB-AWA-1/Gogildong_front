@@ -131,7 +131,7 @@ export default function StackedBarChart({ monthly, selectedMonth }: Props) {
                 },
                 titleFont: { family: 'Inter', size: 14, weight: 700 },
                 bodyFont: { family: 'Inter', size: 14, weight: 400 },
-                titleMarginBottom: 15,
+                titleMarginBottom: 12,
                 padding: 14
               }
             },

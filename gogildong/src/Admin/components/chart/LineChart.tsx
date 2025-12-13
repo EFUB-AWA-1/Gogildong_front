@@ -56,18 +56,11 @@ export default function LineChart({
               label: (ctx) =>
                 `${ctx.dataset.label} 건수:  ${ctx.formattedValue}`
             },
-            titleFont: {
-              family: 'Inter',
-              size: 14,
-              weight: 700
-            },
-            bodyFont: {
-              family: 'Inter',
-              size: 16,
-              weight: 400
-            },
+            titleFont: { family: 'Inter', size: 14, weight: 700 },
+            bodyFont: { family: 'Inter', size: 14, weight: 400 },
             titleSpacing: 6,
             bodySpacing: 8,
+            titleMarginBottom: 12,
             padding: 15
           }
         },
