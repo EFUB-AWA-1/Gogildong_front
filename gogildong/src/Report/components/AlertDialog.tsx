@@ -17,7 +17,7 @@ export default function AlertDialog({ onConfirm }: AlertDialogProps) {
 
         <button
           onClick={onConfirm}
-          className="mt-2 w-full rounded-[30px] bg-neon-100 py-2 text-body-sm text-white"
+          className="mx-20 mt-2 rounded-[30px] bg-neon-100 py-2 text-body-sm text-black"
         >
           확인
         </button>

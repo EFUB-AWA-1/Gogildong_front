@@ -5,14 +5,11 @@ import {
   getFacilitiesByFloor,
   getFloorsByBuilding
 } from '@/Report/api/getFacilities';
+import type { LocationData } from '@/Report/types/report';
 
 interface LocationSelectorGroupProps {
   schoolId?: number;
-  onChange: (data: {
-    building: string;
-    floor: string;
-    facility: string;
-  }) => void;
+  onChange: (data: LocationData) => void;
   onFloorSelect?: (floorId: number | null) => void;
 }
 
@@ -32,7 +29,8 @@ export default function LocationSelectorGroup({
     floor: '',
     facility: '',
     buildingId: null as number | null,
-    floorId: null as number | null
+    floorId: null as number | null,
+    facilityId: null as number | null
   });
 
   useEffect(() => {
@@ -62,12 +60,20 @@ export default function LocationSelectorGroup({
       buildingId: id,
       floor: '',
       facility: '',
-      floorId: null
+      floorId: null,
+      facilityId: null
     };
     setFormData(updated);
     setFloors([]);
     setFacilities([]);
-    onChange({ building: name, floor: '', facility: '' });
+    onChange({
+      building: name,
+      buildingId: id,
+      floor: '',
+      floorId: null,
+      facility: '',
+      facilityId: null
+    });
     onFloorSelect?.(null);
 
     if (!id) return;
@@ -87,10 +93,23 @@ export default function LocationSelectorGroup({
   };
 
   const handleFloorChange = async (name: string, id: number | null) => {
-    const updated = { ...formData, floor: name, floorId: id, facility: '' };
+    const updated = {
+      ...formData,
+      floor: name,
+      floorId: id,
+      facility: '',
+      facilityId: null
+    };
     setFormData(updated);
     setFacilities([]);
-    onChange({ building: formData.building, floor: name, facility: '' });
+    onChange({
+      building: formData.building,
+      buildingId: formData.buildingId,
+      floor: name,
+      floorId: id,
+      facility: '',
+      facilityId: null
+    });
     onFloorSelect?.(id ?? null);
 
     if (!id) return;
@@ -112,12 +131,20 @@ export default function LocationSelectorGroup({
   };
 
   const handleFacilityChange = (name: string) => {
-    const updated = { ...formData, facility: name };
+    const selected = facilities.find((f) => f.name === name);
+    const updated = {
+      ...formData,
+      facility: name,
+      facilityId: selected?.id ?? null
+    };
     setFormData(updated);
     onChange({
       building: formData.building,
+      buildingId: formData.buildingId,
       floor: formData.floor,
-      facility: name
+      floorId: formData.floorId,
+      facility: name,
+      facilityId: selected?.id ?? null
     });
   };
 
