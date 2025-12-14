@@ -55,6 +55,7 @@ export default function ReportForm1({
         <p className="text-body-bold-lg">위치 선택</p>
         <LocationSelectorGroup
           schoolId={schoolId}
+          value={locationData}
           onChange={onChange}
           onFloorSelect={onFloorSelect}
         />
@@ -75,6 +76,13 @@ export default function ReportForm1({
           type="text"
           placeholder="예) 교무실 앞 화장실"
           className="w-full rounded-[1.25rem] border border-gray-40 px-[23px] py-[19px] text-caption-lg text-black outline-none"
+          value={locationData.extraDescription ?? ''}
+          onChange={(e) =>
+            onChange({
+              ...locationData,
+              extraDescription: e.target.value
+            })
+          }
         />
       </div>
       <div className="sticky bottom-0 w-full py-4">

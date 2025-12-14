@@ -1,8 +1,8 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '@/common/components/Header';
 import React, { useEffect, useState } from 'react';
-import RankingMenuBar from '@/Gildong/components/RankingMenuBar';
-import RankingBox from '@/Gildong/components/RankingBox';
+import RankingMenuBar from '@/Gildong/components/ranking/RankingMenuBar';
+import RankingBox from '@/Gildong/components/ranking/RankingBox';
 import NavBar from '../../common/components/NavBar';
 import type { NavKey } from '../../common/components/NavBar';
 import {

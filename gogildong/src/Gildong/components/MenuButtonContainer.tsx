@@ -24,6 +24,7 @@ export default function MenuButtonContainer({
         selected={selected === 'shop'}
         buttonName="상점"
         buttonIcon={<img src={shopIcon} />}
+        onClick={() => navigate("/shop")}
       />
       <MenuButton
         selected={selected === 'ranking'}

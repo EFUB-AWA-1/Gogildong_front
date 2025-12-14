@@ -49,17 +49,17 @@ export default function ReportSummaryCard({
           {
             label: '엘리베이터 문 폭',
             type: 'single',
-            value: dimensions?.elevatorDoorWidth
+            value: dimensions?.doorWidth
           },
           {
             label: '엘리베이터 내부 깊이',
             type: 'single',
-            value: dimensions?.elevatorDepth
+            value: dimensions?.interiorDepth
           },
           {
             label: '버튼 높이',
             type: 'single',
-            value: dimensions?.buttonHeight
+            value: dimensions?.maxControlPanelHeight
           }
         ];
       case '교실':
@@ -77,7 +77,7 @@ export default function ReportSummaryCard({
           {
             label: '지나다닐 수 있는 문 폭',
             type: 'single',
-            value: dimensions?.passableWidth
+            value: dimensions?.minAisleWidth
           }
         ];
       case '기타':
@@ -104,7 +104,8 @@ export default function ReportSummaryCard({
       case '화장실':
         return [
           ...baseLocation,
-          { label: '위치 추가 설명', value: locationData?.extraDescription },
+
+          { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '칸 종류', value: detail?.stallType },
           { label: '문 종류', value: detail?.doorType },
           { label: '손잡이 유무', value: detail?.grabBar }
@@ -112,6 +113,8 @@ export default function ReportSummaryCard({
       case '엘리베이터':
         return [
           ...baseLocation,
+
+          { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '승인 없이 이용 여부', value: detail?.accessApproval },
           { label: '수업 중 이용 가능 여부', value: detail?.classUse },
           { label: '시설 추가 설명', value: detail?.extraDescription }
@@ -119,7 +122,8 @@ export default function ReportSummaryCard({
       case '교실':
         return [
           ...baseLocation,
-          { label: '위치 추가 설명', value: locationData?.extraDescription },
+
+          { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '교실 문턱 유무', value: detail?.threshold },
           { label: '교실 문 종류', value: detail?.doorType },
           { label: '시설 추가 설명', value: detail?.extraDescription }
@@ -138,12 +142,14 @@ export default function ReportSummaryCard({
           row.type === 'single' ? (
             <li
               key={row.label}
-              className="flex items-center justify-between text-body-md text-black"
+              className="flex items-center justify-between text-body-sm text-black"
             >
               <span className="text-gray-80">{row.label}</span>
-              <span className="text-right text-neon-100">
+              <span className="text-body-bold-md text-right text-neon-100">
                 {row.value ?? '-'}
-                {row.value ? <span className="ml-1 text-black">cm</span> : null}
+                {row.value ? (
+                  <span className="text-body-bold-sm ml-1 text-black">cm</span>
+                ) : null}
               </span>
             </li>
           ) : (
