@@ -129,7 +129,7 @@ export default function ReportSummaryCard({
           { label: '교실 문 종류', value: detail?.doorType }
         ];
       case '기타':
-        return [{ label: '제보 설명', value: locationData?.extraDescription }];
+        return [{ label: '제보 설명', value: detail?.note }];
     }
   })();
 
@@ -169,16 +169,18 @@ export default function ReportSummaryCard({
         )}
       </ul>
 
-      <div className="h-px w-full bg-gray-20" />
+      {facilityType !== '기타' && <div className="h-px w-full bg-gray-20" />}
 
       <ul className="flex flex-col gap-3">
         {textRows.map(({ label, value }) => (
           <li
             key={label}
-            className="flex items-center justify-between text-black"
+            className="flex items-center justify-between gap-2 text-black"
           >
-            <span className="text-body-sm text-gray-80">{label}</span>
-            <span className="text-body-bold-sm text-right text-black">
+            <span className="text-body-sm whitespace-nowrap text-gray-80">
+              {label}
+            </span>
+            <span className="text-body-bold-sm flex flex-1 text-right text-black">
               {value || '-'}
             </span>
           </li>
