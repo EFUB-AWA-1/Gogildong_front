@@ -1,57 +1,11 @@
 import Header from '@/common/components/Header';
 import ReviewCard from '@/FacilityView/components/ReviewCard';
 import type { Review } from '@/FacilityView/types/review';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react'; // 
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useUserStore } from '@/Mypage/stores/useUserStore';
+import { getFacilityReviews } from '@/FacilityView/api/getFacilityReviews';
 
-const mockReviews: Review[] = [
-  {
-    userId: 1,
-    userName: '불멸의 이순신',
-    reviewId: 23,
-    reviewText:
-      '입구에 택배가 비치되어 있어 진입 시 폭이 좁다고 느껴진다. 경사로 없이 턱이 존재한다.',
-    likeCount: 3,
-    commentCount: 1,
-    createdAt: '2025-09-21'
-  },
-  {
-    userId: 2,
-    userName: '닉네임',
-    reviewId: 24,
-    reviewText: '화장실 칸 폭이 넓어서 편해요.',
-    likeCount: 0,
-    commentCount: 1,
-    createdAt: '2025-09-21'
-  },
-  {
-    userId: 3,
-    userName: '닉네임',
-    reviewId: 25,
-    reviewText: '화장실 칸 폭이 넓어서 편해요.',
-    likeCount: 0,
-    commentCount: 1,
-    createdAt: '2025-09-21'
-  },
-  {
-    userId: 4,
-    userName: '닉네임',
-    reviewId: 26,
-    reviewText: '화장실 칸 폭이 넓어서 편해요.',
-    likeCount: 0,
-    commentCount: 1,
-    createdAt: '2025-09-21'
-  },
-  {
-    userId: 5,
-    userName: '닉네임',
-    reviewId: 27,
-    reviewText: '화장실 칸 폭이 넓어서 편해요.',
-    likeCount: 0,
-    commentCount: 1,
-    createdAt: '2025-09-21'
-  }
-];
 
 const mockAiSummary = ['🚧좁음', '🧼청결함', '😃긍정적', '♿이동편의'];
 
@@ -59,6 +13,7 @@ type LocationState = {
   reviews?: Review[];
   total?: number;
   facilityName?: string;
+  buildingName?: string;
   aiSummary?: string[];
 };
 
@@ -68,21 +23,62 @@ export default function FacilityReviewList() {
   const location = useLocation();
   const state = (location.state || {}) as LocationState;
 
-  const reviews =
-    state.reviews && state.reviews.length > 0 ? state.reviews : mockReviews;
+  const [reviewList, setReviewList] = useState<Review[]>(
+    state.reviews && state.reviews.length > 0 ? state.reviews : ([])
+  );
+
+  const user = useUserStore((state) => state.user);
+  const currentUserId = user?.userId;
+
   const aiSummary =
-    state.aiSummary && state.aiSummary.length > 0 ? state.aiSummary : mockAiSummary;
-  const total = state.total ?? reviews.length;
+    state.aiSummary && state.aiSummary.length > 0
+      ? state.aiSummary
+      : mockAiSummary;
+      
+  const total = reviewList.length;
+
   const facilityName = useMemo(
     () => state.facilityName ?? id ?? '1-A',
     [state.facilityName, id]
   );
+  const buildingName = state.buildingName ?? '본관';
+
+  // 화면에 진입할 때마다 최신 데이터 불러오기
+  useEffect(() => {
+    const fetchLatestReviews = async () => {
+      if (!id) return;
+      try {
+        const response = await getFacilityReviews(Number(id));
+        
+        if (response && response.reviews) {
+            setReviewList(response.reviews);
+        }
+      } catch (error) {
+        console.error("리뷰 목록 갱신 실패:", error);
+      }
+    };
+
+    fetchLatestReviews();
+  }, [id, location.key]); 
 
   const handleBack = () => navigate(-1);
-  const handleWriteClick = () => navigate('/school/view/review/write');
 
+  const handleWriteClick = () => {
+    navigate('/school/view/review/write', {
+      state: { facilityId: id, facilityName, buildingName }
+    });
+  };
+
+  // 상세 페이지 이동
   const handleReviewClick = (review: Review) => {
-    navigate('/school/view/review', { state: { reviewId: review.reviewId } });
+    navigate('/school/view/review', {
+      state: { review } // 전체 객체 전달
+    });
+  };
+
+  // 리스트에서 바로 삭제했을 때의 갱신 처리
+  const handleDeleteReview = (deletedReviewId: number) => {
+    setReviewList((prev) => prev.filter((r) => r.reviewId !== deletedReviewId));
   };
 
   return (
@@ -109,10 +105,12 @@ export default function FacilityReviewList() {
             리뷰 <span className="text-neon-100">{total}</span>
           </h2>
           <div className="flex flex-col gap-3">
-            {reviews.map((review) => (
+            {reviewList.map((review) => (
               <ReviewCard
                 key={review.reviewId}
                 review={review}
+                isMine={review.userId === currentUserId}
+                onDelete={handleDeleteReview}
                 onClick={() => handleReviewClick(review)}
               />
             ))}

@@ -11,7 +11,7 @@ export default function Login() {
           <Logo />
           <div className="flex flex-col items-center">
             <p>교내 배리어프리 시설을 한눈에</p>
-            <p>모두가 함께만드는 접근성</p>
+            <p>모두가 함께 만드는 접근성</p>
           </div>
         </div>
 

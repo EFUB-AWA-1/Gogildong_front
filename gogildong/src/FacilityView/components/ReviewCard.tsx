@@ -2,24 +2,48 @@ import ChatIcon from '@/FacilityView/assets/svgs/chat.svg?react';
 import ThumbsUpIcon from '@/FacilityView/assets/svgs/icon_thumb.svg?react';
 import MoreIcon from '@/FacilityView/assets/svgs/three_dots_vertical.svg?react';
 import type { Review } from '../types/review';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface ReviewCardProps {
   review: Review;
   onClick?: () => void;
+  isMine?: boolean;
+  onDelete?: (deletedReviewId: number) => void;
 }
 
-export default function ReviewCard({ review, onClick }: ReviewCardProps) {
+export default function ReviewCard({ review, onClick, isMine = false, onDelete }: ReviewCardProps) {
   const { userName, reviewText, likeCount, commentCount, createdAt } = review;
 
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(likeCount);
 
-  // ✅ 추천 버튼 클릭 핸들러
+  const [openMenu, setOpenMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!menuRef.current) return;
+      if (!menuRef.current.contains(event.target as Node)) {
+        setOpenMenu(false);
+      }
+    };
+    if (openMenu) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openMenu]);
+
   const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
+  };
+
+  const handleMenuClick = () => {
+    setOpenMenu((prev) => !prev);
+  };
+
+  const handleDelete = () => {
+    if (onDelete) onDelete(review.reviewId);
+    setOpenMenu(false);
   };
 
   const formattedDate = createdAt
@@ -45,7 +69,28 @@ export default function ReviewCard({ review, onClick }: ReviewCardProps) {
             </span>
           </div>
         </div>
-        <MoreIcon />
+        <div className="relative" ref={menuRef}>
+          {isMine && (
+            <>
+              <button
+                type="button"
+                onClick={handleMenuClick}
+                className="flex h-8 w-8 items-center justify-center"
+              >
+                <MoreIcon />
+              </button>
+              {openMenu && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="absolute top-full right-0 mt-1 flex w-16 items-center justify-center gap-2 rounded-md bg-white p-2 text-caption-md text-black shadow-md"
+                >
+                  삭제하기
+                </button>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <p className="mt-2 text-body-md text-black">{reviewText}</p>
