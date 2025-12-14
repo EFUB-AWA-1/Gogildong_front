@@ -41,7 +41,7 @@ const NavBar: React.FC<NavBarProps> = ({ active, onChange }) => {
         navigate("/login"); 
       }
     }
-    if (key === "gildong") navigate("/");
+    if (key === "gildong") navigate("/gildong");
     if (key === "mypage") navigate("/mypage");
   };
   
