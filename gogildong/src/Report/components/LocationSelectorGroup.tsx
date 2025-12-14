@@ -6,9 +6,11 @@ import {
   getFloorsByBuilding
 } from '@/Report/api/getFacilities';
 import type { LocationData } from '@/Report/types/report';
+import type { FacilityTypeParam } from '@/Report/types/facilityTypes';
 
 interface LocationSelectorGroupProps {
   schoolId?: number;
+  facilityType?: FacilityTypeParam;
   value?: LocationData;
   onChange: (data: LocationData) => void;
   onFloorSelect?: (floorId: number | null) => void;
@@ -18,6 +20,7 @@ type Option = { id: number; name: string };
 
 export default function LocationSelectorGroup({
   schoolId,
+  facilityType,
   value,
   onChange,
   onFloorSelect
@@ -55,13 +58,16 @@ export default function LocationSelectorGroup({
     }
   };
 
-  const loadFacilities = async (floorId: number | null) => {
-    if (!floorId) {
+  const loadFacilities = async (
+    floorId: number | null,
+    type?: FacilityTypeParam
+  ) => {
+    if (!floorId || !type) {
       setFacilities([]);
       return;
     }
     try {
-      const data = await getFacilitiesByFloor(floorId);
+      const data = await getFacilitiesByFloor(floorId, type);
       const list = Array.isArray(data.facilities)
         ? data.facilities.map(
             (f: { facilityId: number; facilityName: string }) => ({
@@ -116,11 +122,12 @@ export default function LocationSelectorGroup({
     }
 
     if (value.floorId) {
-      loadFacilities(value.floorId);
+      loadFacilities(value.floorId, facilityType);
     } else {
       setFacilities([]);
     }
   }, [
+    facilityType,
     value?.building,
     value?.buildingId,
     value?.floor,
@@ -174,7 +181,7 @@ export default function LocationSelectorGroup({
     });
     onFloorSelect?.(id ?? null);
 
-    loadFacilities(id);
+    loadFacilities(id, facilityType);
   };
 
   const handleFacilityChange = (name: string) => {

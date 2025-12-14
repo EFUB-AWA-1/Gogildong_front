@@ -60,7 +60,7 @@ export interface EtcFacilityReportPayload {
   floorId: number;
   facilityNickname: string;
   etcReportImage: string;
-  description?: string;
+  note?: string;
 }
 
 export type ReportPayload =
