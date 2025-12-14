@@ -1,5 +1,5 @@
 import ActionButton from '@/common/components/ActionButton';
-import ResetIcon from '../assets/resetIcon.svg';
+import ResetIcon from '../../assets/resetIcon.svg';
 import { useCharacterStore } from '@/Gildong/stores/useCharacterStore';
 import { updateMyCharacter } from '@/Gildong/api/closet';
 

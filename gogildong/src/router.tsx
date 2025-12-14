@@ -33,6 +33,7 @@ import SignupSuccess from './Signup/pages/SignupSuccess';
 import RankingPage from '@/Gildong/pages/RankingPage';
 import AllRankingPage from '@/Gildong/pages/AllRankingPage';
 import ClosetPage from '@/Gildong/pages/ClosetPage';
+import ShopPage from '@/Gildong/pages/ShopPage';
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,7 @@ const router = createBrowserRouter([
           { path: '/ranking', element: <RankingPage />},
           { path: '/ranking/all', element: <AllRankingPage />},
           { path: '/closet', element: <ClosetPage />},
+          {path: '/shop', element: <ShopPage />},
         ]
       }
     ]
