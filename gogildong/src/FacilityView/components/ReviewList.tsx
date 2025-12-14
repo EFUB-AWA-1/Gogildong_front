@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-
+import { useUserStore } from '@/Mypage/stores/useUserStore';
 import ReviewCard from './ReviewCard';
 import type { Review } from '../types/review';
 
@@ -20,6 +20,11 @@ export default function ReviewList({
 }: ReviewListProps) {
   const MIN_REVIEWS_FOR_MORE = 3;
   const navigate = useNavigate();
+  
+  // ★ 내 글 확인을 위해 user store 사용
+  const user = useUserStore((state) => state.user);
+  const currentUserId = user?.userId;
+
   const displayTotal = total ?? reviews.length;
 
   const handleNavigateMore = () => {
@@ -36,7 +41,6 @@ export default function ReviewList({
     );
   };
 
-  // 리뷰가 0개일 때도 작성하러 가기 버튼을 보여줌
   if (!reviews || reviews.length === 0) {
     return (
       <div className="flex flex-col gap-3">
@@ -56,12 +60,17 @@ export default function ReviewList({
     );
   }
 
-  // 3개가 넘어가면 자르고, 아니면 다 보여줌
-  const visibleReviews =
-    reviews.length > MIN_REVIEWS_FOR_MORE
-      ? reviews.slice(0, MIN_REVIEWS_FOR_MORE)
-      : reviews;
+  // 날짜 정렬 (오래된 순)
+  const sortedReviews = [...reviews].sort((a, b) => {
+    if (!a.createdAt) return 1; 
+    if (!b.createdAt) return -1;
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
 
+  const visibleReviews =
+    sortedReviews.length > MIN_REVIEWS_FOR_MORE
+      ? sortedReviews.slice(0, MIN_REVIEWS_FOR_MORE)
+      : sortedReviews;
 
   const shouldShowMoreButton = displayTotal > 0;
 
@@ -73,11 +82,15 @@ export default function ReviewList({
       <div className="flex flex-col items-center gap-3">
         <div className="flex w-full flex-col gap-4">
           {visibleReviews.map((review) => (
-            <ReviewCard key={review.reviewId} review={review} />
+            <ReviewCard 
+                key={review.reviewId} 
+                review={review}
+                // ★ isMine을 여기서 계산해서 전달
+                isMine={review.userId === currentUserId}
+            />
           ))}
         </div>
         
-        {/* 버튼이 항상 보입니다 (리뷰가 있다면) */}
         {shouldShowMoreButton && (
           <button
             type="button"

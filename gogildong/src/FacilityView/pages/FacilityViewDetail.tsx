@@ -26,8 +26,8 @@ export default function FacilityViewDetail() {
     total: 0,
     last: true, 
     reviews: [],
-    reviewSummary: '' // 초기값 추가
-  } as any); 
+    reviewSummary: '' 
+  } as any); // 타입 캐스팅 유지
   
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +54,6 @@ export default function FacilityViewDetail() {
         const [detailData, imageData, reviewsData] = await Promise.all([
           getFacilityDetail(Number(id)),
           getFacilityImages(Number(id)).catch(() => ({ total: 0, reportImages: [] } as FacilityImageResponse)),
-          // 에러 발생 시 빈 객체 반환 구조 맞춤
           getFacilityReviews(Number(id)).catch(() => ({ 
             total: 0, 
             last: true, 
@@ -82,7 +81,6 @@ export default function FacilityViewDetail() {
 
     fetchData();
   }, [id]);
-
 
   const summaryList = reviewData.reviewSummary ? [reviewData.reviewSummary] : [];
 
@@ -130,7 +128,7 @@ export default function FacilityViewDetail() {
             <FacilityHeader
               detail={facilityInfo.facilityDetail}
               images={displayImages}
-              isAccessible={facilityInfo.isAccessible}
+              isAccessible={facilityInfo.accessible} // accessible 키 사용
             />
             {renderFacilityDetailInfo()}
           </>

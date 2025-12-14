@@ -1,6 +1,7 @@
 import Header from "@/common/components/Header";
 import CommentInput from "../components/ReviewDetail/CommentInput";
-import ReviewCard from "../components/ReviewDetail/ReviewCard";
+// ★ [중요] 여기서는 '상세용' ReviewCard를 불러와야 합니다.
+import ReviewCard from "../components/ReviewDetail/ReviewCard"; 
 import CommentsList from "../components/ReviewDetail/CommentsList";
 import type { Comment } from "@/ReportView/types/reviewComment";
 import type { Review } from "@/FacilityView/types/review";
@@ -17,9 +18,6 @@ type LocationState = {
 };
 
 export default function ReviewDetail() {
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [openCompleteModal, setOpenCompleteModal] = useState(false);
-
   const location = useLocation();
   const navigate = useNavigate();
   const state = (location.state || {}) as LocationState;
@@ -27,7 +25,12 @@ export default function ReviewDetail() {
   const user = useUserStore((state) => state.user);
   const currentUserId = user?.userId;
 
-  const currentReview = state.review || state.reviewData;
+  const [currentReview, setCurrentReview] = useState<Review | undefined>(
+    state.review || state.reviewData
+  );
+
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [openCompleteModal, setOpenCompleteModal] = useState(false);
 
   useEffect(() => {
     if (state.fromWrite) {
@@ -39,11 +42,17 @@ export default function ReviewDetail() {
     }
   }, [state.fromWrite, navigate, location.pathname, state]);
 
-  // 댓글 목록 조회
   const fetchComments = useCallback(async () => {
-    if (!currentReview?.reviewId) return;
+    const targetId = currentReview?.reviewId || (state.review?.reviewId);
+    if (!targetId) return;
+
     try {
-      const data = await getComments(currentReview.reviewId);
+      const data = await getComments(targetId);
+      
+      if (data.review) {
+        setCurrentReview(data.review as Review);
+      }
+
       const mappedComments: Comment[] = data.reviewComments.map((item) => ({
         commentId: item.commentId,
         userId: item.userId,
@@ -53,7 +62,7 @@ export default function ReviewDetail() {
       }));
       setComments(mappedComments);
     } catch (error) {
-      console.error("댓글 조회 실패:", error);
+      console.error("상세 정보 조회 실패:", error);
     }
   }, [currentReview?.reviewId]);
 
@@ -88,13 +97,11 @@ export default function ReviewDetail() {
     }
   };
 
-  // 댓글 신고 
   const handleReportComment = async (commentId: number) => {
     if (!currentReview?.reviewId) return;
     try {
       await reportComment(currentReview.reviewId, commentId);
       console.log(`댓글 신고 성공: ${commentId}`);
-      fetchComments();
     } catch (error) {
       console.error("댓글 신고 실패:", error);
     }
@@ -119,7 +126,6 @@ export default function ReviewDetail() {
           </div>
         )}
 
-        {/* onReport 전달 */}
         <CommentsList 
           comments={comments} 
           currentUserId={currentUserId}

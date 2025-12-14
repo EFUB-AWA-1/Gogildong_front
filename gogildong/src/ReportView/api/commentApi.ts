@@ -1,16 +1,9 @@
 import axiosInstance from "@/common/api/axiosInstance";
+import type { Review } from "@/FacilityView/types/review";
 
-// API 명세에 따른 응답 타입 정의
 export interface CommentResponse {
   total: number;
-  review: {
-    userId: number;
-    userName: string;
-    reviewId: number;
-    reviewText: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  review: Review;
   reviewComments: Array<{
     commentId: number;
     userId: number;
@@ -43,7 +36,6 @@ export const deleteComment = async (reviewId: number, commentId: number) => {
 
 // 4. 댓글 신고
 export const reportComment = async (reviewId: number, commentId: number) => {
-  // POST /reviews/{review_id}/comments/{comments_id}/flag
   const { data } = await axiosInstance.post(`/reviews/${reviewId}/comments/${commentId}/flag`);
   return data;
 };
