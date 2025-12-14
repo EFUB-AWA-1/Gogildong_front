@@ -35,7 +35,9 @@ export default function School() {
   const viewingId = Number(id);
   const userSchoolId = useUserStore((state) => state.user?.schoolId ?? null);
   const { state } = useLocation();
-  const locationState = (state || {}) as SchoolInfoProps;
+  
+  // locationState가 없을 수도 있으므로 안전하게 처리
+  const locationState = (state || {}) as Partial<SchoolInfoProps>;
 
   // 상태 관리
   const [selectedTab, setSelectedTab] = useState('화장실');
@@ -78,7 +80,6 @@ export default function School() {
         
         // 층 정보가 로드되면 첫 번째 층을 기본값으로 선택
         if (data.floors.length > 0) {
-          // 수정됨: floorId 사용
           setSelectedFloorId(data.floors[0].floorId);
         }
       } catch (error) {
@@ -90,15 +91,11 @@ export default function School() {
 
   // 시설 리스트 조회
   useEffect(() => {
-    // floorId가 null이면 조회하지 않음
     if (!viewingId || !isInternal || selectedFloorId === null) return;
 
     const fetchFacilities = async () => {
       try {
-        // 탭 이름에 맞는 type 파라미터 가져오기 (교실 -> classroom)
         const typeParam = FACILITY_TYPE_MAP[selectedTab] || 'restroom';
-        
-        // API 호출 (이제 배열을 바로 리턴받음)
         const data = await getSchoolFacilities(viewingId, selectedFloorId, typeParam);
         setFacilityList(data);
       } catch (error) {
@@ -109,11 +106,23 @@ export default function School() {
     fetchFacilities();
   }, [viewingId, isInternal, selectedFloorId, selectedTab]);
 
-  // 화면 표시 데이터 구성
+
+
+  const isLoading = !schoolData && !locationState.name;
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-gray-20">
+        <p className="text-gray-500 text-body-sm">학교 정보를 불러오는 중입니다...</p>
+      </div>
+    );
+  }
+
   const displayData = {
-    name: schoolData?.schoolName ?? locationState.name ?? '학교 정보 로딩 중...',
+    name: schoolData?.schoolName ?? locationState.name ?? '',
     address: schoolData?.address ?? locationState.address ?? '',
-    latitude: schoolData?.latitude ?? locationState.latitude ?? 37.56115022,
+    // fallback 좌표는 실제 데이터가 실패했을 때만 사용
+    latitude: schoolData?.latitude ?? locationState.latitude ?? 37.56115022, 
     longitude: schoolData?.longitude ?? locationState.longitude ?? 126.9427504,
   };
 
