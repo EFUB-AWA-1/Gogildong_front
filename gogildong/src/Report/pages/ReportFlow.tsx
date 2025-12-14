@@ -18,6 +18,7 @@ import {
 import AlertDialog from '../components/AlertDialog';
 import ReportForm2 from '../components/ReportForm2';
 import ReportForm1 from '../components/ReportForm1';
+import EtcReportForm from '../components/EtcReportForm';
 import MeasurementInputSection from '@/Report/components/MeasurementInputSection';
 import {
   toFacilityLabel,
@@ -156,8 +157,10 @@ export default function ReportFlow() {
 
   if (!facilityType) return null;
 
-  const formSequence: Array<'location' | 'detail'> =
-    facilityType === '기타' ? ['location'] : ['location', 'detail'];
+  type StepKey = 'location' | 'detail' | 'etcDetail';
+
+  const formSequence: StepKey[] =
+    facilityType === '기타' ? ['etcDetail'] : ['location', 'detail'];
 
   const goToSuccess = (detail = detailData) => {
     if (!id || !facilityTypeParam) return;
@@ -261,7 +264,7 @@ export default function ReportFlow() {
       floorId: targetFloorId,
       facilityNickname,
       etcReportImage: photo,
-      description: detail.extraDescription ?? ''
+      note: detail.note ?? ''
     };
     return postEtcNewFacility(payload);
   };
@@ -355,6 +358,20 @@ export default function ReportFlow() {
           initialValues={detailData}
           onChange={setDetailData}
           onSubmit={handleSubmit}
+        />
+      );
+    }
+
+    if (current === 'etcDetail') {
+      return (
+        <EtcReportForm
+          initialNote={detailData.note}
+          onChange={(val) => setDetailData({ note: val })}
+          onSubmit={(note) => {
+            const data = { note };
+            setDetailData(data);
+            handleSubmit(data);
+          }}
         />
       );
     }
