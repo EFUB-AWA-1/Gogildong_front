@@ -48,7 +48,7 @@ export default function ReportSuccess() {
           </p>
           <div className="gap flex flex-col">
             <p className="text-gray-70 text-body-sm">
-              <span className="text-body-bold-sm">nn 포인트</span>가
+              <span className="text-body-bold-sm">20 포인트</span>가
               지급되었습니다.
             </p>
             <p className="text-body-sm text-black">

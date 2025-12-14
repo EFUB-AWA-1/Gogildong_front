@@ -6,14 +6,16 @@ import MenuButtonContainer from '@/Gildong/components/MenuButtonContainer';
 import { useUserStore } from '@/Mypage/stores/useUserStore';
 import { useCoinStore } from '@/Gildong/stores/useCoinStore';
 import Header from '@/common/components/Header';
-import ClosetBottomSheet from '@/Gildong/components/ClosetBottomSheet';
+import ClosetBottomSheet from '@/Gildong/components/closet/ClosetBottomSheet';
 import { mapItemsToClothes } from '@/Gildong/utils/mapItemsToClothes';
 import { getMyCharacterInfo, getMyClothes } from '@/Gildong/api/closet';
 import MyCharacter from '@/Gildong/components/MyCharacter';
 import { useCharacterStore } from '@/Gildong/stores/useCharacterStore';
-import UpdateClotheBtn from '@/Gildong/components/UpdateClotheBtn';
+import UpdateClotheBtn from '@/Gildong/components/closet/UpdateClotheBtn';
+import { useNavigate } from 'react-router-dom';
 
 export default function ClosetPage() {
+  const navigate = useNavigate();
   const username = useUserStore((state) => state.user?.username);
   const { coin, fetchCoin } = useCoinStore();
   const [clothes, setClothes] = React.useState<Clothing[]>([]);
@@ -36,7 +38,7 @@ export default function ClosetPage() {
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-linear-to-b from-lime-50 to-lime-200">
       {/* 작은 화면 대응 CSS */}
-      <Header title="내 옷장" transparentMode={true} />
+      <Header title="내 옷장" transparentMode={true} onBackClick={() => navigate("/gildong")} />
       {/* 상단 영역 */}
       <div className="flex flex-none flex-col space-y-5 px-6 pb-6">
         <UserInfo username={username} coin={coin ?? 0} />

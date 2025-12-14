@@ -3,11 +3,13 @@ import ActionButton from '@/common/components/ActionButton';
 import type { LocationData } from '../types/report';
 import LocationSelectorGroup from './LocationSelectorGroup';
 import { getFloorPlan } from '@/Report/api/getFacilities';
+import type { FacilityTypeParam } from '@/Report/types/facilityTypes';
 
 interface ReportForm1Props {
   locationData: LocationData;
   schoolId?: number;
   floorId?: number;
+  facilityTypeParam?: FacilityTypeParam;
   onChange: (data: LocationData) => void;
   onFloorSelect?: (floorId: number | null) => void;
   onNext: () => void;
@@ -17,6 +19,7 @@ export default function ReportForm1({
   locationData,
   schoolId,
   floorId,
+  facilityTypeParam,
   onChange,
   onFloorSelect,
   onNext
@@ -55,6 +58,8 @@ export default function ReportForm1({
         <p className="text-body-bold-lg">위치 선택</p>
         <LocationSelectorGroup
           schoolId={schoolId}
+          facilityType={facilityTypeParam}
+          value={locationData}
           onChange={onChange}
           onFloorSelect={onFloorSelect}
         />
@@ -74,7 +79,14 @@ export default function ReportForm1({
         <input
           type="text"
           placeholder="예) 교무실 앞 화장실"
-          className="w-full rounded-[1.25rem] border border-gray-40 px-[23px] py-[19px] text-caption-lg text-black outline-none"
+          className="w-full rounded-20 border border-gray-40 px-[23px] py-[19px] text-caption-lg text-black outline-none"
+          value={locationData.extraDescription ?? ''}
+          onChange={(e) =>
+            onChange({
+              ...locationData,
+              extraDescription: e.target.value
+            })
+          }
         />
       </div>
       <div className="sticky bottom-0 w-full py-4">

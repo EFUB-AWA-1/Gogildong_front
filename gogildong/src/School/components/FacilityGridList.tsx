@@ -1,54 +1,32 @@
 import FacilityCard from "./FacilityCard";
+import type { FacilityItem } from "@/School/api/schoolDetailApi";
 
-export default function FacilityGridList() {
-  const reports = [
-    {
-      id: 1,
-      title: "1-A",
-      date: "25.09.21",
-      location: "미술관 앞 여자 화장실",
-      isDisability: false
-    },
-    {
-      id: 2,
-      title: "1-B",
-      date: "25.09.21",
-      location: "미술관 앞 남자 화장실",
-      isDisability: true
-    },
-    {
-      id: 3,
-      title: "1-C",
-      date: "25.09.21",
-      location: "본관 복도 앞",
-      isDisability: false
-    },
-    {
-      id: 4,
-      title: "1-D",
-      date: "25.09.21",
-      location: "엘리베이터 옆",
-      isDisability: true
-    },
-    {
-      id: 5,
-      title: "1-E",
-      date: "25.09.21",
-      location: "엘리베이터 옆",
-      isDisability: true
-    }
-  ];
+interface FacilityGridListProps {
+  facilities: FacilityItem[];
+}
+
+export default function FacilityGridList({ facilities }: FacilityGridListProps) {
+  
+  const safeFacilities = Array.isArray(facilities) ? facilities : [];
+
+  if (safeFacilities.length === 0) {
+    return (
+        <div className="flex flex-col items-center justify-center w-full py-20">
+            <p className="text-gray-500 text-body-sm">시설 정보가 없습니다.</p>
+        </div>
+    );
+  }
 
   return (
     <div className="grid w-full grid-cols-2 gap-4">
-      {reports.map((r) => (
+      {safeFacilities.map((item) => (
         <FacilityCard
-          facilityId={r.id}
-          key={r.title}
-          title={r.title}
-          date={r.date}
-          location={r.location}
-          isDisability={r.isDisability}
+          key={item.facilityId}
+          facilityId={item.facilityId}
+          title={item.facilityName}
+          date={new Date(item.updateAt).toLocaleDateString()} 
+          location={item.facilityNickname}
+          isDisability={item.accessible} 
         />
       ))}
     </div>

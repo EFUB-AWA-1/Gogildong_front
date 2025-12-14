@@ -1,10 +1,12 @@
 import ActionButton from '@/common/components/ActionButton';
 import RadioOptionGroup from './RadioOptionGroup';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FacilityType } from '@/Report/types/facilityTypes';
 
 interface ReportForm2Props {
   facilityType: FacilityType;
+  initialValues?: Record<string, string>;
+  onChange?: (data: Record<string, string>) => void;
   onSubmit: (data: Record<string, string>) => void;
 }
 
@@ -61,43 +63,31 @@ const QUESTION_BY_TYPE: Record<FacilityType, QuestionConfig[]> = {
   기타: []
 };
 
-const EXTRA_TEXT_BY_TYPE: Partial<
-  Record<FacilityType, { name: string; label: string; placeholder?: string }>
-> = {
-  엘리베이터: {
-    name: 'extraDescription',
-    label: '시설 추가 설명',
-    placeholder: '예) 점심시간엔 장시간 대기, 앞에 문턱 있음 등'
-  },
-  교실: {
-    name: 'extraDescription',
-    label: '시설 추가 설명',
-    placeholder: '예) 앞문은 뻑뻑해서 잘 안 열림'
-  },
-  화장실: {
-    name: 'extraDescription',
-    label: '시설 추가 설명',
-    placeholder: '추가 설명을 입력해 주세요'
-  }
-};
-
 export default function ReportForm2({
   facilityType,
+  initialValues,
+  onChange,
   onSubmit
 }: ReportForm2Props) {
   const questions = useMemo(
     () => QUESTION_BY_TYPE[facilityType] ?? [],
     [facilityType]
   );
-  const extraText = useMemo(
-    () => EXTRA_TEXT_BY_TYPE[facilityType],
-    [facilityType]
+
+  const [formData, setFormData] = useState<Record<string, string>>(
+    initialValues ?? {}
   );
 
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  useEffect(() => {
+    setFormData(initialValues ?? {});
+  }, [facilityType, initialValues]);
 
   const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const next = { ...prev, [field]: value };
+      onChange?.(next);
+      return next;
+    });
   };
 
   const isComplete =
@@ -116,22 +106,10 @@ export default function ReportForm2({
           name={q.name}
           label={q.label}
           options={q.options}
+          selectedValue={formData[q.name]}
           onChange={(v) => handleChange(q.name, v)}
         />
       ))}
-
-      {extraText && (
-        <div className="flex flex-col gap-2">
-          <p className="text-body-bold-md text-black">{extraText.label}</p>
-          <input
-            type="text"
-            className="w-full rounded-[1.25rem] border border-gray-40 px-[23px] py-[19px] text-caption-lg text-black outline-none"
-            placeholder={extraText.placeholder ?? ''}
-            value={formData[extraText.name] ?? ''}
-            onChange={(e) => handleChange(extraText.name, e.target.value)}
-          />
-        </div>
-      )}
 
       <div className="sticky bottom-0 py-4">
         <ActionButton

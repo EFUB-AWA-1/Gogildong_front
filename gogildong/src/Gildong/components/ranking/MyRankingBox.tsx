@@ -1,4 +1,4 @@
-import ProgressBar from '@/Gildong/components/ProgressBar';
+import ProgressBar from '@/Gildong/components/ranking/ProgressBar';
 
 type MyRankingProps = {
   myRanking: number;

@@ -1,8 +1,8 @@
 import { useBottomSheet } from '@/Home/hooks/useBottomSheet';
 import { useMemo, useState } from 'react';
 import type { Clothing } from '@/Gildong/types/Clothing';
-import ClosetFilterSelector from '@/Gildong/components/ClosetFilterSelector';
-import ClothingGrid from '@/Gildong/components/ClothingGrid';
+import ClosetFilterSelector from '@/Gildong/components/closet/ClosetFilterSelector';
+import ClothingGrid from '@/Gildong/components/closet/ClothingGrid';
 import { useCharacterStore } from '@/Gildong/stores/useCharacterStore';
 
 type ClosetBottomSheetProps = {

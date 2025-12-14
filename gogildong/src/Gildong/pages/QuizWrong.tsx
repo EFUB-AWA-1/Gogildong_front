@@ -1,7 +1,7 @@
 import Header from '@/common/components/Header';
 import WrongQuizGildong from '../assets/WrongQuizGildong.png';
 import ActionButton from '@/common/components/ActionButton';
-import QuizOptionSol from '@/Gildong/components/QuizOptionSol';
+import QuizOptionSol from '@/Gildong/components/quiz/QuizOptionSol';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { goToNextUnsolvedQuiz } from '@/Gildong/utils/quizNavigation';
 

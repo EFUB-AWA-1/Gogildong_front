@@ -1,46 +1,59 @@
 import Header from '@/common/components/Header';
 import PhotoCard from '../components/PhotoCard';
-import { useNavigate } from 'react-router-dom';
-import type { FacilityImageType } from '../types/facilityImage';
+import { useNavigate, useLocation } from 'react-router-dom';
+import type { ReportImage } from '@/FacilityView/types/facilityImage';
 
-//이미지샘플
-import sample from '../assets/sample.png'; //정사각형 샘플
-import sample2 from '../assets/sample2.png'; //직사각형 샘플
-import sample3 from '../assets/sample3.png'; //다른 사진 (직사각)
+import sample from '../assets/sample.png';
+import sample2 from '../assets/sample2.png';
+import sample3 from '../assets/sample3.png';
 import sample4 from '../assets/sample4.jpg';
 
-const photoList = [
-  { userId: 1, reportId: 1, facilityImage: sample },
-  { userId: 2, reportId: 2, facilityImage: sample },
-  { userId: 3, reportId: 3, facilityImage: sample },
-  { userId: 3, reportId: 4, facilityImage: sample3 },
-  { userId: 3, reportId: 5, facilityImage: sample3 },
-  { userId: 3, reportId: 7, facilityImage: sample2 },
-  { userId: 3, reportId: 8, facilityImage: sample2 },
-  { userId: 3, reportId: 9, facilityImage: sample2 },
-  { userId: 3, reportId: 12, facilityImage: sample4 },
-  { userId: 3, reportId: 13, facilityImage: sample4 }
+const dummyPhotoList: ReportImage[] = [
+  { userId: 1, userName: '홍길동', reportId: 1, facilityImage: sample, createdAt: '2025-10-24T14:00:00' },
+  { userId: 2, userName: '김철수', reportId: 2, facilityImage: sample, createdAt: '2025-10-25T09:30:00' },
+  { userId: 3, userName: '이영희', reportId: 3, facilityImage: sample3, createdAt: '2025-10-26T18:20:00' },
+  { userId: 3, userName: '이영희', reportId: 4, facilityImage: sample3, createdAt: '2025-10-26T18:21:00' },
+  { userId: 3, userName: '이영희', reportId: 5, facilityImage: sample2, createdAt: '2025-10-26T18:22:00' },
+  { userId: 4, userName: '박민수', reportId: 6, facilityImage: sample4, createdAt: '2025-10-27T11:00:00' }
 ];
 
 export default function PhotoList() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleClickPhoto = (photo: FacilityImageType) => {
+  const state = location.state as { 
+    facilityName?: string; 
+    images?: ReportImage[];
+    facilityType?: string;
+    facilityId?: number; // [추가]
+  };
+
+  const facilityName = state?.facilityName || "1-A";
+  const passedImages = state?.images;
+  const facilityType = state?.facilityType || "etc";
+  const facilityId = state?.facilityId; // [추가]
+
+  const displayPhotos = passedImages && passedImages.length > 0
+    ? passedImages
+    : dummyPhotoList;
+
+  const handleClickPhoto = (photo: ReportImage) => {
     navigate('/school/view/photos/detail', {
       state: {
-        photos: photoList, // 현재 시설의 사진 리스트
-        initialReportId: photo.reportId
+        photos: displayPhotos,
+        initialReportId: photo.reportId,
+        facilityType,
+        facilityId // [추가] 상세 화면으로 전달
       }
     });
   };
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <Header title="1-A" />
-
+      <Header title={facilityName} />
       <div className="mb-14 flex justify-center overflow-y-auto">
-        <div className="grid grid-cols-2 gap-3">
-          {photoList.map((photo, idx) => (
+        <div className="grid grid-cols-2 gap-3 p-4">
+          {displayPhotos.map((photo, idx) => (
             <PhotoCard
               key={`${idx}`}
               userId={photo.userId}

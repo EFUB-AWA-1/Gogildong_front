@@ -3,6 +3,7 @@ export interface Review {
   userName: string;
   reviewId: number;
   reviewText: string;
+  likedByUser: boolean; 
   likeCount: number;
   commentCount: number;
   createdAt: string;
@@ -10,6 +11,7 @@ export interface Review {
 
 export interface ReviewResponse {
   total: number;
-  isLast: boolean;
+  reviewSummary?: string;
   reviews: Review[];
+  last: boolean;
 }

@@ -2,7 +2,7 @@ export const FACILITY_MAP = {
   restroom: '화장실',
   elevator: '엘리베이터',
   classroom: '교실',
-  other: '기타'
+  etc: '기타'
 } as const;
 
 export type FacilityTypeParam = keyof typeof FACILITY_MAP;

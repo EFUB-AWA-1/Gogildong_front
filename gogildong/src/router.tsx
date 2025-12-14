@@ -34,6 +34,7 @@ import RankingPage from '@/Gildong/pages/RankingPage';
 import AllRankingPage from '@/Gildong/pages/AllRankingPage';
 import ClosetPage from '@/Gildong/pages/ClosetPage';
 import BuildingPlan from '@/Admin/pages/BuildingPlan';
+import ShopPage from '@/Gildong/pages/ShopPage';
 
 const router = createBrowserRouter([
   {
@@ -96,12 +97,13 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
-          { path: '/quiz/:quizId', element: <QuizPage /> },
-          { path: '/quiz/correct', element: <QuizCorrect /> },
-          { path: '/quiz/wrong', element: <QuizWrong /> },
-          { path: '/ranking', element: <RankingPage /> },
-          { path: '/ranking/all', element: <AllRankingPage /> },
-          { path: '/closet', element: <ClosetPage /> }
+          { path: '/quiz/:quizId', element: <QuizPage />},
+          { path: '/quiz/correct', element: <QuizCorrect />},
+          { path: '/quiz/wrong', element: <QuizWrong />},
+          { path: '/ranking', element: <RankingPage />},
+          { path: '/ranking/all', element: <AllRankingPage />},
+          { path: '/closet', element: <ClosetPage />},
+          {path: '/shop', element: <ShopPage />},
         ]
       }
     ]
