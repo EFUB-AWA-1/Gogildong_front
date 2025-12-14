@@ -5,7 +5,7 @@ interface AlertDialogProps {
 export default function AlertDialog({ onConfirm }: AlertDialogProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="flex w-[300px] flex-col gap-4 rounded-2xl bg-white p-6 text-center shadow-lg">
+      <div className="flex w-[300px] flex-col gap-4 rounded-2xl bg-white p-6 text-center shadow-[0_0_12px_0_rgba(170,235,47,0.30)]">
         <p className="text-body-bold-lg text-black">등록 전 주의사항</p>
 
         <p className="text-gray-70 text-body-sm leading-relaxed">

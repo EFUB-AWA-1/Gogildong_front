@@ -15,7 +15,7 @@ export default function Step0({ selectedType, onSelect }: Step0Props) {
           <button
             key={t}
             onClick={() => onSelect(t)}
-            className={`flex h-[171px] w-full items-center justify-center rounded-3xl border-2 bg-white text-[18px] font-bold text-black transition ${selectedType === t ? 'shadow-neon border-neon-100' : 'border-gray-20'}`}
+            className={`flex h-[171px] w-full items-center justify-center rounded-3xl border-2 bg-white text-[18px] font-bold text-black transition ${selectedType === t ? 'shadow-neon border-neon-100 shadow-[0_0_12px_0_rgba(170,235,47,0.30)]' : 'border-gray-20'}`}
           >
             {t}
           </button>
