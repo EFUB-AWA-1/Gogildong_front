@@ -1,9 +1,9 @@
 import Header from '@/common/components/Header';
 import React, { useEffect, useState } from 'react';
-import RankingMenuBar from '@/Gildong/components/RankingMenuBar';
+import RankingMenuBar from '@/Gildong/components/ranking/RankingMenuBar';
 import SmallArrow from '../assets/smallArraw.svg';
-import RankingBox from '@/Gildong/components/RankingBox';
-import MyRankingBox from '@/Gildong/components/MyRankingBox';
+import RankingBox from '@/Gildong/components/ranking/RankingBox';
+import MyRankingBox from '@/Gildong/components/ranking/MyRankingBox';
 import NavBar from '../../common/components/NavBar';
 import type { NavKey } from '../../common/components/NavBar';
 import { useNavigate, useSearchParams } from 'react-router-dom';

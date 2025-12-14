@@ -1,4 +1,4 @@
-import RankingMenu from '@/Gildong/components/RankingMenu';
+import RankingMenu from '@/Gildong/components/ranking/RankingMenu';
 
 const menuItems = [
   { label: '전체', type: 'all' },

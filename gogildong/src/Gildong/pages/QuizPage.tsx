@@ -1,6 +1,6 @@
 import Header from '@/common/components/Header';
 import QuizImage from '../assets/quizImage.png';
-import QuizOption from '@/Gildong/components/QuizOption';
+import QuizOption from '@/Gildong/components/quiz/QuizOption';
 import { useEffect, useState } from 'react';
 import ActionButton from '@/common/components/ActionButton';
 import { getQuizList, getQuizById, submitQuizAnswer } from '@/Gildong/api/quiz';

@@ -1,8 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import Header from '@/common/components/Header';
-import SampleImg from '@/Report/assets/imgs/img_sample.png';
-import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 import {
   buildVerifyMetadata,
   postClassroomNewFacility,
@@ -14,10 +10,11 @@ import {
   postRestroomReport,
   verifyReportImage
 } from '@/Report/api/postReport';
+import SampleImg from '@/Report/assets/imgs/img_sample.png';
+import LocationIcon from '@/Report/assets/svgs/location.svg?react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import AlertDialog from '../components/AlertDialog';
-import ReportForm2 from '../components/ReportForm2';
-import ReportForm1 from '../components/ReportForm1';
 import MeasurementInputSection from '@/Report/components/MeasurementInputSection';
 import {
   toFacilityLabel,
@@ -26,15 +23,19 @@ import {
 } from '@/Report/types/facilityTypes';
 import type { Measurements } from '@/Report/types/measurement';
 import type { LocationData, ReportFlowFormState } from '@/Report/types/report';
-import {
-  genderLabelToEnum,
-  grabBarLabelToBool
-} from '@/Report/types/reportPayload';
 import type {
   DoorTypeEnum,
   GenderEnum,
   StaffApprovalEnum
 } from '@/Report/types/reportPayload';
+import {
+  genderLabelToEnum,
+  grabBarLabelToBool
+} from '@/Report/types/reportPayload';
+import AlertDialog from '../components/AlertDialog';
+import EtcReportForm from '../components/EtcReportForm';
+import ReportForm1 from '../components/ReportForm1';
+import ReportForm2 from '../components/ReportForm2';
 
 const createEmptyLocation = (): LocationData => ({
   building: '',
@@ -156,8 +157,10 @@ export default function ReportFlow() {
 
   if (!facilityType) return null;
 
-  const formSequence: Array<'location' | 'detail'> =
-    facilityType === '기타' ? ['location'] : ['location', 'detail'];
+  type StepKey = 'location' | 'detail' | 'etcDetail';
+
+  const formSequence: StepKey[] =
+    facilityType === '기타' ? ['etcDetail'] : ['location', 'detail'];
 
   const goToSuccess = (detail = detailData) => {
     if (!id || !facilityTypeParam) return;
@@ -189,20 +192,21 @@ export default function ReportFlow() {
   const submitReport = async (detail: Record<string, string>) => {
     if (!facilityType) throw new Error('시설 타입을 선택해 주세요');
     if (!photo) throw new Error('제보 사진을 다시 촬영해 주세요');
-    const targetFloorId = floorId ?? locationData.floorId ?? null;
+    const targetFloorId: number | null = floorId ?? locationData.floorId ?? null;
     if (!targetFloorId) throw new Error('층 정보를 선택해 주세요');
     if (!locationData.facility) throw new Error('시설을 선택해 주세요');
 
-    const isNewFacility = !locationData.facilityId;
+    const isNewFacility =
+      facilityType === '기타' ? true : !locationData.facilityId;
     const facilityNickname =
-      locationData.extraDescription?.trim() || locationData.facility;
+      locationData.extraDescription?.trim() || locationData.facility || '기타 시설';
 
     if (facilityType === '화장실') {
       const gender = getGenderValue(detail.gender);
       const grabBar = getGrabBarValue(detail.grabBar);
-      const payload = {
-        facilityId: locationData.facilityId ?? undefined,
-        floorId: targetFloorId,
+        const payload = {
+          facilityId: locationData.facilityId ?? undefined,
+          floorId: targetFloorId,
         facilityNickname,
         restRoomReportImage: photo,
         gender,
@@ -221,8 +225,8 @@ export default function ReportFlow() {
     }
 
     if (facilityType === '엘리베이터') {
-      const payload = {
-        facilityId: locationData.facilityId ?? undefined,
+        const payload = {
+          facilityId: locationData.facilityId ?? undefined,
         floorId: targetFloorId,
         facilityNickname,
         elevatorReportImage: photo,
@@ -240,8 +244,8 @@ export default function ReportFlow() {
     }
 
     if (facilityType === '교실') {
-      const payload = {
-        facilityId: locationData.facilityId ?? undefined,
+        const payload = {
+          facilityId: locationData.facilityId ?? undefined,
         floorId: targetFloorId,
         facilityNickname,
         classroomReportImage: photo,
@@ -261,7 +265,7 @@ export default function ReportFlow() {
       floorId: targetFloorId,
       facilityNickname,
       etcReportImage: photo,
-      description: detail.extraDescription ?? ''
+      note: detail.note ?? ''
     };
     return postEtcNewFacility(payload);
   };
@@ -338,6 +342,7 @@ export default function ReportFlow() {
       return (
         <ReportForm1
           locationData={locationData}
+          facilityTypeParam={facilityTypeParam}
           schoolId={id ? Number(id) : undefined}
           floorId={floorId ?? undefined}
           onFloorSelect={setFloorId}
@@ -354,6 +359,25 @@ export default function ReportFlow() {
           initialValues={detailData}
           onChange={setDetailData}
           onSubmit={handleSubmit}
+        />
+      );
+    }
+
+    if (current === 'etcDetail') {
+      return (
+        <EtcReportForm
+          initialNote={detailData.note}
+          locationData={locationData}
+          facilityTypeParam={facilityTypeParam}
+          schoolId={id ? Number(id) : undefined}
+          onLocationChange={handleLocationChange}
+          onFloorSelect={setFloorId}
+          onChange={(val) => setDetailData({ note: val })}
+          onSubmit={(note) => {
+            const data = { note };
+            setDetailData(data);
+            handleSubmit(data);
+          }}
         />
       );
     }
@@ -411,13 +435,15 @@ export default function ReportFlow() {
           )}
         </div>
 
-        <div className="mt-8">
-          <MeasurementInputSection
-            facilityType={facilityType}
-            value={measurements}
-            onChange={setMeasurements}
-          />
-        </div>
+        {facilityType !== '기타' && (
+          <div className="mt-8">
+            <MeasurementInputSection
+              facilityType={facilityType}
+              value={measurements}
+              onChange={setMeasurements}
+            />
+          </div>
+        )}
 
         <div className="mt-10">{renderStep()}</div>
 

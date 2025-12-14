@@ -89,9 +89,14 @@ export default function ReportSummaryCard({
   const baseLocation = [
     {
       label: '위치',
+
       value: [
         locationData?.building,
-        locationData?.floor,
+        locationData?.floor
+          ? locationData.floor.includes('층')
+            ? locationData.floor
+            : `${locationData.floor}층`
+          : undefined,
         locationData?.facility
       ]
         .filter(Boolean)
@@ -104,7 +109,6 @@ export default function ReportSummaryCard({
       case '화장실':
         return [
           ...baseLocation,
-
           { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '칸 종류', value: detail?.stallType },
           { label: '문 종류', value: detail?.doorType },
@@ -113,23 +117,19 @@ export default function ReportSummaryCard({
       case '엘리베이터':
         return [
           ...baseLocation,
-
           { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '승인 없이 이용 여부', value: detail?.accessApproval },
-          { label: '수업 중 이용 가능 여부', value: detail?.classUse },
-          { label: '시설 추가 설명', value: detail?.extraDescription }
+          { label: '수업 중 이용 가능 여부', value: detail?.classUse }
         ];
       case '교실':
         return [
           ...baseLocation,
-
           { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '교실 문턱 유무', value: detail?.threshold },
-          { label: '교실 문 종류', value: detail?.doorType },
-          { label: '시설 추가 설명', value: detail?.extraDescription }
+          { label: '교실 문 종류', value: detail?.doorType }
         ];
       case '기타':
-        return [{ label: '제보 설명', value: locationData?.extraDescription }];
+        return [{ label: '제보 설명', value: detail?.note }];
     }
   })();
 
@@ -148,7 +148,7 @@ export default function ReportSummaryCard({
               <span className="text-body-bold-md text-right text-neon-100">
                 {row.value ?? '-'}
                 {row.value ? (
-                  <span className="text-body-bold-sm ml-1 text-black">cm</span>
+                  <span className="text-body-bold-sm pl-4 text-black">cm</span>
                 ) : null}
               </span>
             </li>
@@ -158,27 +158,29 @@ export default function ReportSummaryCard({
               className="flex items-center justify-between text-body-sm text-black"
             >
               <span className="text-gray-80">{row.label}</span>
-              <span className="text-body-bold-sm flex items-center gap-1 text-neon-100">
+              <span className="text-body-bold-md flex items-center gap-4 text-neon-100">
                 <span>{row.width ?? '-'}</span>
-                <span className="text-black">x</span>
+                <span className="text-body-bold-sm text-black">x</span>
                 <span>{row.height ?? '-'}</span>
-                <span className="text-black">cm</span>
+                <span className="text-body-bold-sm text-black">cm</span>
               </span>
             </li>
           )
         )}
       </ul>
 
-      <div className="h-px w-full bg-gray-20" />
+      {facilityType !== '기타' && <div className="h-px w-full bg-gray-20" />}
 
       <ul className="flex flex-col gap-3">
         {textRows.map(({ label, value }) => (
           <li
             key={label}
-            className="flex items-center justify-between text-black"
+            className="flex items-center justify-between gap-2 text-black"
           >
-            <span className="text-body-sm text-gray-80">{label}</span>
-            <span className="text-body-bold-sm text-right text-black">
+            <span className="text-body-sm whitespace-nowrap text-gray-80">
+              {label}
+            </span>
+            <span className="text-body-bold-sm flex flex-1 text-right text-black">
               {value || '-'}
             </span>
           </li>

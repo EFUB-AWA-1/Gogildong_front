@@ -5,8 +5,8 @@ type BuyItemRequest = {
 };
 
 export const getAllItem = async (type: string) => {
-  const { data } = await axiosInstance.get(`/itmes?type=${type}`);
-  return data;
+  const { data } = await axiosInstance.get(`/items?type=${type}`);
+  return data.items;
 };
 
 export const buyItem = async (payload: BuyItemRequest) => {
