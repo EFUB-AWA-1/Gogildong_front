@@ -13,8 +13,7 @@ interface FacilityHeaderProps {
 export default function FacilityHeader({
   detail,
   isAccessible,
-  images = [],
-  onImageClick
+  images = []
 }: FacilityHeaderProps) {
   const navigate = useNavigate();
   
