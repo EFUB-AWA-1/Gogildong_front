@@ -150,7 +150,7 @@ export default function ReportSummaryCard({
               <span className="text-body-bold-md text-right text-neon-100">
                 {row.value ?? '-'}
                 {row.value ? (
-                  <span className="text-body-bold-sm ml-1 text-black">cm</span>
+                  <span className="text-body-bold-sm pl-4 text-black">cm</span>
                 ) : null}
               </span>
             </li>
@@ -160,11 +160,11 @@ export default function ReportSummaryCard({
               className="flex items-center justify-between text-body-sm text-black"
             >
               <span className="text-gray-80">{row.label}</span>
-              <span className="text-body-bold-sm flex items-center gap-1 text-neon-100">
+              <span className="text-body-bold-md flex items-center gap-4 text-neon-100">
                 <span>{row.width ?? '-'}</span>
-                <span className="text-black">x</span>
+                <span className="text-body-bold-sm text-black">x</span>
                 <span>{row.height ?? '-'}</span>
-                <span className="text-black">cm</span>
+                <span className="text-body-bold-sm text-black">cm</span>
               </span>
             </li>
           )
