@@ -22,29 +22,44 @@ export default function SchoolInfo({
   const [liked, setLiked] = useState(false);
   const toggleLike = () => setLiked((prev) => !prev);
 
-  const roadviewRef = useRef<HTMLDivElement | null>(null);
+  // DOM 요소(div)를 위한 Ref
+  const roadviewContainerRef = useRef<HTMLDivElement | null>(null);
+  // 로드뷰 객체(Instance) 저장해두기 위한 Ref
+  const roadviewInstanceRef = useRef<any>(null);
 
+  // 로드뷰 객체 생성 (컴포넌트 로딩 시 딱 한 번만 실행)
   useEffect(() => {
-    if (!roadviewRef.current || !kakao?.maps) return;
+    if (!roadviewContainerRef.current || !kakao?.maps) return;
 
-    // 로드뷰 컨테이너 / 객체 / 클라이언트 생성
-    const roadview = new kakao.maps.Roadview(roadviewRef.current);
+    // 이미 만들어져 있으면 중복 생성 방지
+    if (roadviewInstanceRef.current) return;
+
+    // 로드뷰 객체를 생성하고 Ref에 저장
+    const roadview = new kakao.maps.Roadview(roadviewContainerRef.current);
+    roadviewInstanceRef.current = roadview;
+  }, []); // 의존성 배열 비움 -> 최초 1회만 실행
+
+  // 좌표가 바뀔 때 "위치만 이동" (리렌더링 시 이 부분만 실행됨)
+  useEffect(() => {
+    // 만들어둔 로드뷰 객체를 꺼내옴
+    const roadview = roadviewInstanceRef.current;
+    if (!roadview || !kakao?.maps) return;
+
     const roadviewClient = new kakao.maps.RoadviewClient();
-
     const position = new kakao.maps.LatLng(latitude, longitude);
 
-    // 특정 위치 기준으로 가장 가까운 panoId 가져와서 로드뷰 띄우기
+    // 좌표값으로 파노라마 ID를 찾아서 "이동(setPanoId)"만 시킴
     roadviewClient.getNearestPanoId(position, 100, (panoId: number) => {
       if (!panoId) return;
       roadview.setPanoId(panoId, position);
     });
-  }, [latitude, longitude]);
+  }, [latitude, longitude]); // 좌표가 바뀔 때 실행
 
   return (
     <div className="w-full">
       <div className="relative">
         <div
-          ref={roadviewRef}
+          ref={roadviewContainerRef} // 이름 변경: roadviewRef -> roadviewContainerRef
           className="h-90 object-cover"
           onTouchStart={() => {
             document.body.style.overflow = "hidden";
