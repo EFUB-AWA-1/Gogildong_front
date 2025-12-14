@@ -1,6 +1,5 @@
 import Header from "@/common/components/Header";
 import CommentInput from "../components/ReviewDetail/CommentInput";
-// ★ [중요] 여기서는 '상세용' ReviewCard를 불러와야 합니다.
 import ReviewCard from "../components/ReviewDetail/ReviewCard"; 
 import CommentsList from "../components/ReviewDetail/CommentsList";
 import type { Comment } from "@/ReportView/types/reviewComment";

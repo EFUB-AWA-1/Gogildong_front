@@ -3,7 +3,7 @@ export interface Review {
   userName: string;
   reviewId: number;
   reviewText: string;
-  likedByUser: boolean; // ★ 필수: 좋아요 여부
+  likedByUser: boolean; 
   likeCount: number;
   commentCount: number;
   createdAt: string;

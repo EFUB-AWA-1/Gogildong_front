@@ -27,7 +27,7 @@ export default function FacilityViewDetail() {
     last: true, 
     reviews: [],
     reviewSummary: '' 
-  } as any); // 타입 캐스팅 유지
+  } as any); 
   
   const [loading, setLoading] = useState(true);
 
@@ -128,7 +128,7 @@ export default function FacilityViewDetail() {
             <FacilityHeader
               detail={facilityInfo.facilityDetail}
               images={displayImages}
-              isAccessible={facilityInfo.accessible} // accessible 키 사용
+              isAccessible={facilityInfo.accessible}
             />
             {renderFacilityDetailInfo()}
           </>

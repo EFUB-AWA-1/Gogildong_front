@@ -21,7 +21,7 @@ export default function ReviewList({
   const MIN_REVIEWS_FOR_MORE = 3;
   const navigate = useNavigate();
   
-  // ★ 내 글 확인을 위해 user store 사용
+  // 내 글 확인을 위해 user store 사용
   const user = useUserStore((state) => state.user);
   const currentUserId = user?.userId;
 
@@ -85,7 +85,6 @@ export default function ReviewList({
             <ReviewCard 
                 key={review.reviewId} 
                 review={review}
-                // ★ isMine을 여기서 계산해서 전달
                 isMine={review.userId === currentUserId}
             />
           ))}
