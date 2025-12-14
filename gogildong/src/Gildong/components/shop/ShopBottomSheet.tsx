@@ -78,7 +78,7 @@ export default function ShopBottomSheet() {
         <div className="px-4">
           <ClosetFilterSelector
             selectedFilter={selectedFilter}
-            onSelect={setSelectedFilter}
+            onSelect={(filter) => setSelectedFilter(filter as '얼굴' | '옷')}
           />
         </div>
       )}

@@ -49,7 +49,7 @@ export default function ShopItemDetail({ item, onBack, onBuySuccess }: Props) {
         <p className="mt-1 text-sm text-zinc-500">{item.price} 코인</p>
       </div>
 
-      <ActionButton label="구매하기" type="button" onClick={handleBuy} />
+      <ActionButton label={isLoading ? "구매 중..." : "구매하기"} type="button" onClick={handleBuy} />
 
       <button onClick={onBack} className="text-sm text-zinc-400">
         목록으로 돌아가기
