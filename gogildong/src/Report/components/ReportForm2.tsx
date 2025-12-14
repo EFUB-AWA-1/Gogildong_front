@@ -140,7 +140,7 @@ export default function ReportForm2({
           <p className="text-body-bold-md text-black">{extraText.label}</p>
           <input
             type="text"
-            className="w-full rounded-[1.25rem] border border-gray-40 px-[23px] py-[19px] text-caption-lg text-black outline-none"
+            className="w-full rounded-20 border border-gray-40 px-[23px] py-[19px] text-caption-lg text-black outline-none"
             placeholder={extraText.placeholder ?? ''}
             value={formData[extraText.name] ?? ''}
             onChange={(e) => handleChange(extraText.name, e.target.value)}

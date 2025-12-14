@@ -44,7 +44,7 @@ export default function StatsCardSmall({
   }
 
   return (
-    <div className="flex shrink-0 items-center justify-center gap-2 rounded-[1.25rem] bg-white p-8 shadow-[0_0_12px_0_rgba(170,235,47,0.3)]">
+    <div className="flex shrink-0 items-center justify-center gap-2 rounded-20 bg-white p-8 shadow-[0_0_12px_0_rgba(170,235,47,0.3)]">
       <div className="flex w-full flex-col items-start gap-12">
         {/* 제목 */}
         <div className="self-stretch text-display-md font-bold text-black">

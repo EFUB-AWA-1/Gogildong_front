@@ -19,7 +19,7 @@ export default function RequestForm({
   const effectivePlaceholder = isFocused ? '' : placeholder;
 
   const baseStyle = `
-    w-full border border-[#E4E4E4] rounded-[1.25rem] outline-none bg-white 
+    w-full border border-[#E4E4E4] rounded-20 outline-none bg-white 
     placeholder:text-[#9E9E9E] font-[Pretendard Variable]
   `;
 

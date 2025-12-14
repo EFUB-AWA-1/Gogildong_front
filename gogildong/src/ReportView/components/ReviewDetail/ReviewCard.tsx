@@ -4,18 +4,23 @@ import ThumbIconOn from '../../assets/icon_thumb_on.svg?react';
 import { useEffect, useRef, useState } from 'react';
 import DoubleBtnModal from '../modals/DoubleBtnModal';
 import SingleBtnModal from '@/ReportView/components/modals/SingleBtnModal';
-import { deleteReview } from '@/ReportView/api/deleteReview'; 
-import { reportReview } from '@/ReportView/api/reportReview'; 
-import type { Review } from '@/FacilityView/types/review'; 
+import { deleteReview } from '@/ReportView/api/deleteReview';
+import { reportReview } from '@/ReportView/api/reportReview';
+import type { Review } from '@/FacilityView/types/review';
 
 interface ReviewCardProps {
   review: Review;
-  isMine?: boolean;                // 내 글 여부
-  onDelete?: (id: number) => void; 
-  onClick?: () => void;            
+  isMine?: boolean; // 내 글 여부
+  onDelete?: (id: number) => void;
+  onClick?: () => void;
 }
 
-export default function ReviewCard({ review, isMine = false, onDelete, onClick }: ReviewCardProps) {
+export default function ReviewCard({
+  review,
+  isMine = false,
+  onDelete,
+  onClick
+}: ReviewCardProps) {
   const { userName, reviewText, likeCount, createdAt, reviewId } = review;
 
   const [isLiked, setIsLiked] = useState(false);
@@ -88,8 +93,8 @@ export default function ReviewCard({ review, isMine = false, onDelete, onClick }
     try {
       await reportReview(reviewId);
       console.log(`리뷰 신고 성공: ${reviewId}`);
-      setOpenReportConfirm(false); 
-      setReportResultOpen(true);   
+      setOpenReportConfirm(false);
+      setReportResultOpen(true);
     } catch (error) {
       console.error('리뷰 신고 실패:', error);
       setOpenReportConfirm(false);
@@ -112,7 +117,9 @@ export default function ReviewCard({ review, isMine = false, onDelete, onClick }
             <span className="text-[0.875rem] leading-150 font-bold text-black">
               {userName}
             </span>
-            <span className="text-caption-md text-gray-60">{formattedDate}</span>
+            <span className="text-caption-md text-gray-60">
+              {formattedDate}
+            </span>
           </div>
 
           {/* 옵션 메뉴 */}
@@ -139,7 +146,7 @@ export default function ReviewCard({ review, isMine = false, onDelete, onClick }
 
         {/* 리뷰 텍스트 */}
         <div className="flex w-full items-center justify-center gap-2 self-stretch px-[1.72rem]">
-          <p className="w-full text-body-sm text-black break-all whitespace-pre-wrap">
+          <p className="w-full text-body-sm break-all whitespace-pre-wrap text-black">
             {reviewText}
           </p>
         </div>
@@ -149,7 +156,7 @@ export default function ReviewCard({ review, isMine = false, onDelete, onClick }
           <button
             type="button"
             onClick={handleLikeClick}
-            className={`flex h-6.5 items-center gap-2.5 rounded-[1.25rem] border ${
+            className={`flex h-6.5 items-center gap-2.5 rounded-20 border ${
               isLiked ? 'border-neon-100' : 'border-gray-20'
             } bg-white px-2.5`}
           >

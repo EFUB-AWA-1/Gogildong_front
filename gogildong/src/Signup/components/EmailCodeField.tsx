@@ -29,10 +29,10 @@ export default function EmailCodeField({
               value={value}
               placeholder="인증 코드를 입력해주세요."
               onChange={(e) => onChange(e.target.value)}
-              className={`w-full rounded-[1.25rem] border px-6 py-4 pr-12 text-body-sm text-black placeholder:text-gray-40 focus:outline-none ${
+              className={`w-full rounded-20 border px-6 py-4 pr-12 text-body-sm text-black placeholder:text-gray-40 focus:outline-none ${
                 error
-                  ? "border-warning-100 focus:ring-0"
-                  : "border-gray-20 focus:border-transparent focus:ring-1 focus:ring-neon-100"
+                  ? 'border-warning-100 focus:ring-0'
+                  : 'border-gray-20 focus:border-transparent focus:ring-1 focus:ring-neon-100'
               }`}
             />
           </div>
@@ -40,7 +40,7 @@ export default function EmailCodeField({
           {hint && (
             <span
               className={`pl-4 text-body-xs ${
-                error ? "text-warning-100" : "text-gray-60"
+                error ? 'text-warning-100' : 'text-gray-60'
               }`}
             >
               {hint}
@@ -52,13 +52,13 @@ export default function EmailCodeField({
           type="button"
           onClick={onVerifyClick}
           disabled={disabled}
-          className={`text-body-bold-sm h-14 shrink-0 rounded-[1.25rem] px-4 py-3 ${
+          className={`text-body-bold-sm h-14 shrink-0 rounded-20 px-4 py-3 ${
             isVerified
-              ? "cursor-not-allowed bg-gray-200 text-gray-500"
-              : "bg-neon-100 text-black"
+              ? 'cursor-not-allowed bg-gray-200 text-gray-500'
+              : 'bg-neon-100 text-black'
           } `}
         >
-          {isVerified ? '인증 완료': '코드 확인'}
+          {isVerified ? '인증 완료' : '코드 확인'}
         </button>
       </div>
     </label>
