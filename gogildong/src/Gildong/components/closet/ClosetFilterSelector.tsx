@@ -1,4 +1,3 @@
-// components/ClosetFilterSelector.tsx
 interface Props {
   selectedFilter: string;
   onSelect: (filter: string) => void;
