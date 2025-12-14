@@ -28,6 +28,13 @@ export default function SchoolSearchFilterSection() {
   const [selectedSchoolType, setSelectedSchoolType] = useState<string | null>(
     null
   );
+  const [keyword, setKeyword] = useState('');
+
+  const handleReset = () => {
+    setSelectedRegion(null);
+    setSelectedSchoolType(null);
+    setKeyword('');
+  };
 
   return (
     <div className="flex gap-4">
@@ -43,7 +50,18 @@ export default function SchoolSearchFilterSection() {
         value={selectedSchoolType}
         onChange={(value) => setSelectedSchoolType(value)}
       />
-      <SchoolSearchBar />
+      <SchoolSearchBar
+        value={keyword}
+        onChange={setKeyword}
+        onSearch={(kw) => setKeyword(kw)}
+      />
+      <button
+        type="button"
+        onClick={handleReset}
+        className="rounded-20 bg-neon-60 px-5 py-2 text-heading-lg whitespace-nowrap text-black"
+      >
+        초기화
+      </button>
     </div>
   );
 }
