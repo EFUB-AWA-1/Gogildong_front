@@ -119,16 +119,14 @@ export default function ReportSummaryCard({
           ...baseLocation,
           { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '승인 없이 이용 여부', value: detail?.accessApproval },
-          { label: '수업 중 이용 가능 여부', value: detail?.classUse },
-          { label: '시설 추가 설명', value: detail?.extraDescription }
+          { label: '수업 중 이용 가능 여부', value: detail?.classUse }
         ];
       case '교실':
         return [
           ...baseLocation,
           { label: '위치 추가 설명 ', value: locationData?.extraDescription },
           { label: '교실 문턱 유무', value: detail?.threshold },
-          { label: '교실 문 종류', value: detail?.doorType },
-          { label: '시설 추가 설명', value: detail?.extraDescription }
+          { label: '교실 문 종류', value: detail?.doorType }
         ];
       case '기타':
         return [{ label: '제보 설명', value: locationData?.extraDescription }];

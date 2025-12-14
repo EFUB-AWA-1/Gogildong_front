@@ -338,6 +338,7 @@ export default function ReportFlow() {
       return (
         <ReportForm1
           locationData={locationData}
+          facilityTypeParam={facilityTypeParam}
           schoolId={id ? Number(id) : undefined}
           floorId={floorId ?? undefined}
           onFloorSelect={setFloorId}
