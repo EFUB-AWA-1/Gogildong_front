@@ -33,6 +33,7 @@ import SignupSuccess from './Signup/pages/SignupSuccess';
 import RankingPage from '@/Gildong/pages/RankingPage';
 import AllRankingPage from '@/Gildong/pages/AllRankingPage';
 import ClosetPage from '@/Gildong/pages/ClosetPage';
+import BuildingPlan from '@/Admin/pages/BuildingPlan';
 
 const router = createBrowserRouter([
   {
@@ -95,12 +96,12 @@ const router = createBrowserRouter([
           },
           { path: '/mypage', element: <Mypage /> },
           { path: '/gildong', element: <GildongHome /> },
-          { path: '/quiz/:quizId', element: <QuizPage />},
-          { path: '/quiz/correct', element: <QuizCorrect />},
-          { path: '/quiz/wrong', element: <QuizWrong />},
-          { path: '/ranking', element: <RankingPage />},
-          { path: '/ranking/all', element: <AllRankingPage />},
-          { path: '/closet', element: <ClosetPage />},
+          { path: '/quiz/:quizId', element: <QuizPage /> },
+          { path: '/quiz/correct', element: <QuizCorrect /> },
+          { path: '/quiz/wrong', element: <QuizWrong /> },
+          { path: '/ranking', element: <RankingPage /> },
+          { path: '/ranking/all', element: <AllRankingPage /> },
+          { path: '/closet', element: <ClosetPage /> }
         ]
       }
     ]
@@ -114,7 +115,7 @@ const router = createBrowserRouter([
       { path: 'schools', element: <RegisteredSchoolList /> },
       { path: 'reports', element: <div>제보 관리</div> },
       { path: 'requests', element: <div>열람 요청 관리</div> },
-      { path: 'buildings', element: <div>건물 도면 관리</div> }
+      { path: 'buildings', element: <BuildingPlan /> }
     ]
   }
 ]);
