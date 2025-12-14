@@ -10,6 +10,7 @@ export interface Review {
 
 export interface ReviewResponse {
   total: number;
-  isLast: boolean;
+  reviewSummary?: string;
+  last: boolean;
   reviews: Review[];
 }

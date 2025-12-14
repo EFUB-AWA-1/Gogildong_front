@@ -22,12 +22,12 @@ export default function FacilityViewDetail() {
   const [facilityInfo, setFacilityInfo] = useState<FacilityInfo | null>(null);
   const [facilityImages, setFacilityImages] = useState<ReportImage[]>([]);
   
-  // 뷰 데이터 State (초기값: 빈 목록)
   const [reviewData, setReviewData] = useState<ReviewResponse>({
     total: 0,
-    isLast: true,
-    reviews: []
-  });
+    last: true, 
+    reviews: [],
+    reviewSummary: '' // 초기값 추가
+  } as any); 
   
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +54,13 @@ export default function FacilityViewDetail() {
         const [detailData, imageData, reviewsData] = await Promise.all([
           getFacilityDetail(Number(id)),
           getFacilityImages(Number(id)).catch(() => ({ total: 0, reportImages: [] } as FacilityImageResponse)),
-          getFacilityReviews(Number(id)).catch(() => ({ total: 0, isLast: true, reviews: [] } as ReviewResponse)) // 실패 시 빈 목록 처리
+          // 에러 발생 시 빈 객체 반환 구조 맞춤
+          getFacilityReviews(Number(id)).catch(() => ({ 
+            total: 0, 
+            last: true, 
+            reviews: [], 
+            reviewSummary: '' 
+          } as unknown as ReviewResponse))
         ]);
 
         setFacilityInfo(detailData);
@@ -77,8 +83,8 @@ export default function FacilityViewDetail() {
     fetchData();
   }, [id]);
 
-  // AI 요약은 아직 API가 없으므로 Mock 유지
-  const mockAiSummary = ['🚧좁음', '🧼청결함', '😃긍정적', '♿이동편의'];
+
+  const summaryList = reviewData.reviewSummary ? [reviewData.reviewSummary] : [];
 
   const displayImages: ReportImage[] = 
     facilityImages.length > 0 
@@ -133,17 +139,23 @@ export default function FacilityViewDetail() {
         <div className="flex flex-col gap-6 rounded-[20px] border border-gray-20 bg-linear-to-b from-white to-[#f2f2f2] px-4 py-6">
           <div className="flex flex-col gap-2">
             <p className="text-heading-sm text-black">AI 분석 요약</p>
-            <div className="flex flex-1 justify-evenly gap-2">
-              {mockAiSummary.map((item) => (
-                <span key={item} className="text-caption-lg text-black">{item}</span>
-              ))}
+            <div className="flex flex-col gap-1">
+              {summaryList.length > 0 ? (
+                summaryList.map((item, index) => (
+                  <p key={index} className="text-body-md text-black leading-150 break-keep whitespace-pre-wrap">
+                    {item}
+                  </p>
+                ))
+              ) : (
+                <p className="text-body-md text-gray-60">분석된 요약이 없습니다.</p>
+              )}
             </div>
           </div>
           
           <ReviewList
             facilityId={facilityInfo?.facilityDetail.facilityId}
             facilityName={facilityInfo?.facilityDetail.facilityName}
-            aiSummary={mockAiSummary}
+            aiSummary={summaryList}
             reviews={reviewData.reviews}
             total={reviewData.total}     
           />
