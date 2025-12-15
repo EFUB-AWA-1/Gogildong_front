@@ -33,7 +33,7 @@ export default function ReportsTable({
       <table className="w-full table-fixed border-collapse text-body-md text-black">
         <thead className="h-20 border-b text-center text-heading-md text-black">
           <tr className="h-12">
-            <th className="w-16 text-center align-middle">
+            <th className="w-16 pl-10 text-center align-middle">
               <label className="relative inline-flex h-5 w-5 cursor-pointer items-center justify-center">
                 <input
                   type="checkbox"
@@ -70,7 +70,7 @@ export default function ReportsTable({
                 key={row.id}
                 className={`border-b border-gray-20 text-center ${stripe}`}
               >
-                <td className="px-5 py-4 text-center align-middle">
+                <td className="py-4 pl-10 text-center align-middle">
                   <label className="relative flex w-full cursor-pointer items-center justify-center">
                     <input
                       type="checkbox"

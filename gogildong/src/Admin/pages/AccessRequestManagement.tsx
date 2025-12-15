@@ -6,6 +6,7 @@ import VisibilityActions from '@/Admin/components/VisibilityActions';
 import Pagination from '@/Admin/components/Pagination';
 import AccessRequestDetailModal from '@/Admin/components/AccessRequestDetailModal';
 import AccessBlockModal from '@/Admin/components/AccessBlockModal';
+import BulkConfirmModal from '@/Admin/components/BulkConfirmModal';
 
 type AccessRow = {
   id: number;
@@ -36,6 +37,7 @@ export default function AccessRequestManagement() {
   const [detailMemo, setDetailMemo] = useState('');
   const [blockOpen, setBlockOpen] = useState(false);
   const [blockName, setBlockName] = useState<string>('요청자');
+  const [confirmType, setConfirmType] = useState<'primary' | 'secondary' | null>(null);
 
   const handleSelectAll = (selected: boolean) => {
     setSelectedIds(selected ? rows.map((r) => r.id) : []);
@@ -83,8 +85,10 @@ export default function AccessRequestManagement() {
           totalCount={totalCount}
           onSelectAll={() => handleSelectAll(true)}
           onSelectNone={handleClearSelection}
-          onSetPublic={() => console.log('승인 처리', selectedIds)}
-          onSetPrivate={() => console.log('거절 처리', selectedIds)}
+          primaryLabel="승인"
+          secondaryLabel="거절"
+          onPrimary={() => setConfirmType('primary')}
+          onSecondary={() => setConfirmType('secondary')}
         />
         <ReportSearchFilterSection />
       </div>
@@ -128,6 +132,24 @@ export default function AccessRequestManagement() {
         onConfirm={() => {
           console.log('요청자 차단', blockName);
           setBlockOpen(false);
+        }}
+      />
+
+      <BulkConfirmModal
+        open={confirmType !== null}
+        title={confirmType === 'primary' ? '전체 승인' : '전체 거절'}
+        message={
+          confirmType === 'primary'
+            ? '선택된 항목을 전체 승인하시겠습니까?'
+            : '선택된 항목을 전체 거절하시겠습니까?'
+        }
+        onCancel={() => setConfirmType(null)}
+        onConfirm={() => {
+          console.log(
+            confirmType === 'primary' ? '승인 처리' : '거절 처리',
+            selectedIds
+          );
+          setConfirmType(null);
         }}
       />
     </div>

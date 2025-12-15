@@ -33,14 +33,16 @@ export default function AccessRequestsTable({
   onBlock
 }: AccessRequestsTableProps) {
   const allSelected = rows.length > 0 && selectedIds.length === rows.length;
-  const [openStatusId, setOpenStatusId] = useState<string | number | null>(null);
+  const [openStatusId, setOpenStatusId] = useState<string | number | null>(
+    null
+  );
 
   return (
     <div className="w-full overflow-hidden rounded-20 border border-gray-20 bg-white shadow-[0_0_12px_rgba(170,235,47,0.3)]">
       <table className="w-full table-fixed border-collapse text-body-md text-black">
         <thead className="h-20 border-b text-center text-heading-md text-black">
           <tr className="h-12">
-            <th className="w-16 text-center align-middle">
+            <th className="w-16 pl-10 text-center align-middle">
               <label className="relative inline-flex h-5 w-5 cursor-pointer items-center justify-center">
                 <input
                   type="checkbox"
@@ -77,7 +79,7 @@ export default function AccessRequestsTable({
                 key={row.id}
                 className={`h-20 border-b border-gray-20 text-center ${stripe}`}
               >
-                <td className="px-5 text-center align-middle">
+                <td className="pl-10 text-center align-middle">
                   <label className="relative flex w-full cursor-pointer items-center justify-center">
                     <input
                       type="checkbox"
@@ -112,11 +114,13 @@ export default function AccessRequestsTable({
                       }
                       className="flex items-center gap-1"
                     >
-                      <span className="text-body-md text-black">{row.status}</span>
-                      <DownIcon className="h-4 w-4 text-gray-70" />
+                      <span className="text-body-md text-black">
+                        {row.status}
+                      </span>
+                      <DownIcon className="text-gray-70 h-4 w-4" />
                     </button>
                     {openStatusId === row.id && (
-                      <div className="absolute left-1/2 top-8 z-20 w-32 -translate-x-1/2 overflow-hidden rounded-xl border border-gray-30 bg-white shadow-lg">
+                      <div className="border-gray-30 absolute top-8 left-1/2 z-20 w-32 -translate-x-1/2 overflow-hidden rounded-xl border bg-white shadow-lg">
                         <button
                           type="button"
                           className="flex w-full items-center justify-center px-3 py-2 text-body-md text-black hover:bg-gray-10"
