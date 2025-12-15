@@ -37,7 +37,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="flex h-full w-full flex-col bg-white">
+    <aside className="z-9995 flex h-full w-full flex-col bg-white">
       {/* 로고 */}
       <div className="flex items-center py-9 pl-10">
         <LogoIcon role="img" aria-label="서비스 로고" />

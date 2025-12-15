@@ -3,12 +3,21 @@ import EditIcon from '@/Admin/assets/svgs/icon_edit.svg?react';
 type Props = {
   floorName: string;
   imageUrl: string;
-  onEdit: () => void;
+  onOpenDetail: () => void;
+  onOpenEdit: () => void;
 };
 
-export default function PlanCard({ floorName, imageUrl, onEdit }: Props) {
+export default function PlanCard({
+  floorName,
+  imageUrl,
+  onOpenDetail,
+  onOpenEdit
+}: Props) {
   return (
-    <div className="flex h-71 w-109.5 flex-col items-center justify-center gap-2 rounded-20 bg-gray-10 p-4">
+    <div
+      onClick={onOpenDetail}
+      className="flex h-71 w-109.5 cursor-pointer flex-col items-center justify-center gap-2 rounded-20 bg-gray-10 p-4"
+    >
       <div className="relative h-48 self-stretch overflow-hidden rounded-[0.625rem]">
         <img
           src={imageUrl}
@@ -23,7 +32,15 @@ export default function PlanCard({ floorName, imageUrl, onEdit }: Props) {
           {floorName}
         </div>
 
-        <button type="button" onClick={onEdit} className="flex">
+        {/* EditIcon 클릭 시에만 수정 모달 */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenEdit();
+          }}
+          className="flex"
+        >
           <EditIcon className="aspect-square h-11 w-11" />
         </button>
       </div>
