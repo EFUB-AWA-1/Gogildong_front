@@ -63,7 +63,7 @@ export default function CustomDropdown({
                     onClick={() => handleSelect(opt)}
                     className={`flex w-full items-center justify-center px-3 py-2 ${
                       isActive
-                        ? 'bg-neon-10 text-neon-100'
+                        ? 'bg-neon-15 text-neon-100'
                         : 'bg-white text-black hover:bg-gray-10'
                     }`}
                   >
