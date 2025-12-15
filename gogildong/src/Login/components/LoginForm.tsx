@@ -35,8 +35,9 @@ export default function LoginForm() {
       };
       const res = await signInUser(payload);
       useAuthStore.getState().setTokens(res.accessToken, res.refreshToken);
-      await getUserInfo();
-      navigate('/home');
+      const user = await getUserInfo();
+      const nextPath = user?.role === 'ADMIN' ? '/admin' : '/home';
+      navigate(nextPath, { replace: true });
     } catch (err) {
       setError('아이디 또는 비밀번호가 일치하지 않습니다.');
       console.log(err);
