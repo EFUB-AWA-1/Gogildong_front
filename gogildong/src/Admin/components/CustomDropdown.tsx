@@ -32,12 +32,18 @@ export default function CustomDropdown({
 
   const selectedLabel = options.find((opt) => getValue(opt) === value) ?? null;
 
+  const isSelected = Boolean(selectedLabel);
+
   return (
     <div className="relative">
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className={`flex h-[54px] items-center gap-2 rounded-2xl bg-white px-4 py-2 text-heading-md whitespace-nowrap text-black ${className}`}
+        className={`flex h-[54px] items-center gap-2 rounded-2xl px-4 py-2 text-heading-md whitespace-nowrap text-black ${
+          isSelected
+            ? 'border border-neon-100 bg-[#F2FCE0] shadow-[0_0_12px_rgba(170,235,47,0.3)]'
+            : 'bg-white'
+        } ${className ?? ''}`}
       >
         <span>{selectedLabel ? getLabel(selectedLabel) : label}</span>
         <DownIcon />

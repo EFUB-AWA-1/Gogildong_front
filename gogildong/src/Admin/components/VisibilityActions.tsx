@@ -19,23 +19,23 @@ export default function VisibilityActions({
   const allSelected = totalCount > 0 && selectedCount === totalCount;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-4">
       <button
         type="button"
         onClick={allSelected ? (onSelectNone ?? onSelectAll) : onSelectAll}
-        className="text-body-bold-sm rounded-full bg-white px-4 py-2 text-black shadow"
+        className="rounded-20 bg-white px-4 py-2 text-heading-lg text-black shadow"
       >
         {allSelected
           ? '전체취소'
           : hasSelection
-            ? `전체선택 (선택 ${selectedCount})`
+            ? `전체선택 (${selectedCount}/${totalCount})`
             : `전체선택 (${selectedCount}/${totalCount})`}
       </button>
       <button
         type="button"
         onClick={onSetPublic}
         disabled={!hasSelection}
-        className={`rounded-full px-4 py-2 text-body-sm ${
+        className={`rounded-20 px-4 py-2 text-heading-lg ${
           hasSelection ? 'bg-neon-100 text-black' : 'bg-gray-20 text-gray-60'
         }`}
       >
@@ -45,7 +45,7 @@ export default function VisibilityActions({
         type="button"
         onClick={onSetPrivate}
         disabled={!hasSelection}
-        className={`rounded-full px-4 py-2 text-body-sm ${
+        className={`rounded-20 px-4 py-2 text-heading-lg ${
           hasSelection ? 'bg-neon-100 text-black' : 'bg-gray-20 text-gray-60'
         }`}
       >
