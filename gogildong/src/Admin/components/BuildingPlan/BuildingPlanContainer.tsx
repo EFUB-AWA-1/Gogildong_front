@@ -6,6 +6,7 @@ import type { Building, FloorPlan } from '@/Admin/types/buildingTypes';
 import AddPlanModal from '@/Admin/components/BuildingPlan/AddPlanModal';
 import PlanDetailModal from '@/Admin/components/BuildingPlan/PlanDetailModal';
 import ImagePreviewModal from '@/Admin/components/BuildingPlan/ImagePreviewModal';
+import BuildingModal from '@/Admin/components/BuildingPlan/BuildingModal';
 
 export default function BuildingPlanContainer() {
   const [buildings, setBuildings] = useState<Building[]>([]);
@@ -210,8 +211,8 @@ export default function BuildingPlanContainer() {
             key={`${activeBuildingId}-${p.floorId}`}
             floorName={p.floorName}
             imageUrl={p.floorPlanImage}
-            onOpenDetail={() => openDetail(p)} // ✅ 카드 클릭
-            onOpenEdit={() => openEdit(p)} // ✅ EditIcon 클릭
+            onOpenDetail={() => openDetail(p)} // 카드 클릭
+            onOpenEdit={() => openEdit(p)} // EditIcon 클릭
           />
         ))}
 
@@ -246,13 +247,27 @@ export default function BuildingPlanContainer() {
         />
       )}
 
-      {/* 수정/등록 모달 (AddPlanModal 재사용) */}
+      {/* 수정/등록 모달 */}
       {editOpen && (
         <AddPlanModal
           onClose={closeEdit}
           mode={selectedPlan ? 'edit' : 'create'}
           initialFloor={selectedPlan?.floorName ?? ''}
           initialImageUrl={selectedPlan?.floorPlanImage}
+        />
+      )}
+
+      {createOpen && (
+        <BuildingModal
+          open={createOpen}
+          title="새 건물 등록"
+          inputTitle="건물 이름"
+          submitLabel="등록하기"
+          onClose={() => setCreateOpen(false)}
+          onSubmit={(name) => {
+            handleCreateBuilding(name);
+            setCreateOpen(false);
+          }}
         />
       )}
     </div>

@@ -24,14 +24,14 @@ export default function ConfirmModal({
         <div className="flex w-145.75 gap-4">
           <button
             type="button"
-            className="flex h-16 w-71 items-center justify-center rounded-[1.25rem] bg-gray-20 text-heading-md font-semibold text-black"
+            className="flex h-16 w-71 items-center justify-center rounded-20 bg-gray-20 text-heading-md font-semibold text-black"
             onClick={() => onClose()}
           >
             취소
           </button>
           <button
             type="button"
-            className="flex h-16 w-71 items-center justify-center rounded-[1.25rem] bg-neon-100 text-heading-md font-semibold text-black"
+            className="flex h-16 w-71 items-center justify-center rounded-20 bg-neon-100 text-heading-md font-semibold text-black"
             onClick={() => onClose()}
           >
             확인
