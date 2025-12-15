@@ -63,7 +63,7 @@ const SearchBar: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex h-12 w-83 shrink-0 items-center justify-between rounded-[1.25rem] bg-white px-2 shadow-[0_0_12px_rgba(0,0,0,0.10)]">
+    <div className="flex h-12 w-83 shrink-0 items-center justify-between rounded-20 bg-white px-2 shadow-[0_0_12px_rgba(0,0,0,0.10)]">
       {/*로고 및 뒤로가기*/}
       {variant === 'detail' ? (
         <img

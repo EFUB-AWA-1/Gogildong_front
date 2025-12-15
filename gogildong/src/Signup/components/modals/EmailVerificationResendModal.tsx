@@ -19,7 +19,7 @@ export default function EmailVerificationResendModal({
       aria-modal="true"
     >
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[1.25rem] bg-white px-8 py-6 text-center shadow-[0_0_12px_rgba(170,235,47,0.30)]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-20 bg-white px-8 py-6 text-center shadow-[0_0_12px_rgba(170,235,47,0.30)]"
         onClick={(e) => e.stopPropagation()}
       >
         <p className="text-body-bold-lg whitespace-nowrap text-black">
