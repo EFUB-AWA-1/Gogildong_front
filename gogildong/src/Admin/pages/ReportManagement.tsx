@@ -4,6 +4,7 @@ import ReportSearchFilterSection from '@/Admin/components/ReportSearchFilterSect
 import ReportDetailModal from '@/Admin/components/ReportDetailModal';
 import ReportsTable from '@/Admin/components/ReportsTable';
 import VisibilityActions from '@/Admin/components/VisibilityActions';
+import BulkConfirmModal from '@/Admin/components/BulkConfirmModal';
 import { useState } from 'react';
 
 export default function ReportManagement() {
@@ -22,6 +23,7 @@ export default function ReportManagement() {
   const [viewedIds, setViewedIds] = useState<Array<number | string>>([]);
   const [detailOpen, setDetailOpen] = useState(false);
   const [, setDetailId] = useState<number | string | null>(null);
+  const [confirmType, setConfirmType] = useState<'primary' | 'secondary' | null>(null);
 
   const handleSelectAll = (selected: boolean) => {
     setSelectedIds(selected ? mockRows.map((row) => row.id) : []);
@@ -54,8 +56,10 @@ export default function ReportManagement() {
           totalCount={totalCount}
           onSelectAll={() => handleSelectAll(true)}
           onSelectNone={handleClearSelection}
-          onSetPublic={() => console.log('공개 설정', selectedIds)}
-          onSetPrivate={() => console.log('비공개 설정', selectedIds)}
+          primaryLabel="공개"
+          secondaryLabel="비공개"
+          onPrimary={() => setConfirmType('primary')}
+          onSecondary={() => setConfirmType('secondary')}
         />
         <ReportSearchFilterSection />
       </div>
@@ -90,6 +94,24 @@ export default function ReportManagement() {
         reportCount={2}
         status="공개"
       ></ReportDetailModal>
+
+      <BulkConfirmModal
+        open={confirmType !== null}
+        title={confirmType === 'primary' ? '전체 공개' : '전체 비공개'}
+        message={
+          confirmType === 'primary'
+            ? '선택된 항목을 전체 공개하시겠습니까?'
+            : '선택된 항목을 전체 비공개하시겠습니까?'
+        }
+        onCancel={() => setConfirmType(null)}
+        onConfirm={() => {
+          console.log(
+            confirmType === 'primary' ? '공개 설정' : '비공개 설정',
+            selectedIds
+          );
+          setConfirmType(null);
+        }}
+      />
     </div>
   );
 }

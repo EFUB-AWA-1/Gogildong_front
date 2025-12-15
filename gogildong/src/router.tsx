@@ -37,6 +37,7 @@ import SignupInternal from './Signup/pages/SignupInternal';
 import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
 import ReportManagement from '@/Admin/pages/ReportManagement';
+import AccessRequestManagement from '@/Admin/pages/AccessRequestManagement';
 
 const router = createBrowserRouter([
   {
@@ -118,7 +119,7 @@ const router = createBrowserRouter([
       { path: 'stats', element: <DashBoard /> },
       { path: 'schools', element: <RegisteredSchoolList /> },
       { path: 'reports', element: <ReportManagement /> },
-      { path: 'requests', element: <div>열람 요청 관리</div> },
+      { path: 'requests', element: <AccessRequestManagement /> },
       { path: 'buildings', element: <BuildingPlan /> }
     ]
   }
