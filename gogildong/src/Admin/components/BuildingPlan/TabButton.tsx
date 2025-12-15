@@ -70,8 +70,6 @@ export default function TabButton({
 
   const closeDropdown = () => setIsOpen(false);
 
-  // ⚠️ dropdown 때문에 body 스크롤 막는 건 모달이랑 충돌 가능해서,
-  // "다른 모달들과 동일하게" 하려면 이 로직은 나중에 공통 모달로 옮기는 게 안전합니다.
   useEffect(() => {
     const original = document.body.style.overflow;
     if (isOpen) {
