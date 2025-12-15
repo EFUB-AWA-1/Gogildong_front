@@ -7,6 +7,9 @@ import MapIcon from '@/Admin/assets/svgs/icon_pc_map.svg?react';
 import StatsIcon from '@/Admin/assets/svgs/icon_pc_statistics.svg?react';
 import LogoutIcon from '@/Admin/assets/svgs/icon_pc_logout.svg?react';
 import LogoIcon from '@/Admin/assets/svgs/destop-logo.svg?react';
+import { useAuthStore } from '@/Login/stores/useAuthStore';
+import { useUserStore } from '@/Mypage/stores/useUserStore';
+import { useNavigate } from 'react-router-dom';
 
 type NavItem = {
   to: string;
@@ -23,6 +26,16 @@ const MAIN_ITEMS: NavItem[] = [
 ];
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const clearTokens = useAuthStore((state) => state.clearTokens);
+  const logoutUser = useUserStore((state) => state.logout);
+
+  const handleLogout = () => {
+    clearTokens();
+    logoutUser();
+    navigate('/login', { replace: true });
+  };
+
   return (
     <aside className="flex h-full w-full flex-col bg-white">
       {/* 로고 */}
@@ -61,6 +74,7 @@ export default function Sidebar() {
       <div className="flex w-full justify-center pt-5">
         <button
           type="button"
+          onClick={handleLogout}
           className="flex h-[72px] w-[210px] items-center gap-6 rounded-[20px] bg-white px-2"
         >
           <LogoutIcon className="h-10 w-10" />
