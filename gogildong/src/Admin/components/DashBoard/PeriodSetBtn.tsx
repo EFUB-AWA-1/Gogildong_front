@@ -36,7 +36,7 @@ export default function PeriodSetBtn({ value, onChange }: PeriodSetBtnProps) {
     <div className="relative inline-block">
       <div
         onClick={handleOpen}
-        className="flex cursor-pointer items-center justify-center gap-4 rounded-[1.25rem] bg-white px-[1.12rem] py-2"
+        className="flex cursor-pointer items-center justify-center gap-4 rounded-20 bg-white px-[1.12rem] py-2"
       >
         <div className="text-heading-md text-black">{label}</div>
         <CalenderIcon className="h-12 w-12" />

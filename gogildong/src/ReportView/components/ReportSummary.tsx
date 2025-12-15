@@ -78,7 +78,7 @@ export default function ReportSummary({
       onClick={onClose}
     >
       <div
-        className="relative flex w-75 flex-col rounded-[1.25rem] bg-white px-[2.12rem] py-[1.44rem] shadow-[0_0_12px_rgba(170,235,47,0.30)]"
+        className="relative flex w-75 flex-col rounded-20 bg-white px-[2.12rem] py-[1.44rem] shadow-[0_0_12px_rgba(170,235,47,0.30)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}

@@ -192,21 +192,24 @@ export default function ReportFlow() {
   const submitReport = async (detail: Record<string, string>) => {
     if (!facilityType) throw new Error('시설 타입을 선택해 주세요');
     if (!photo) throw new Error('제보 사진을 다시 촬영해 주세요');
-    const targetFloorId: number | null = floorId ?? locationData.floorId ?? null;
+    const targetFloorId: number | null =
+      floorId ?? locationData.floorId ?? null;
     if (!targetFloorId) throw new Error('층 정보를 선택해 주세요');
     if (!locationData.facility) throw new Error('시설을 선택해 주세요');
 
     const isNewFacility =
       facilityType === '기타' ? true : !locationData.facilityId;
     const facilityNickname =
-      locationData.extraDescription?.trim() || locationData.facility || '기타 시설';
+      locationData.extraDescription?.trim() ||
+      locationData.facility ||
+      '기타 시설';
 
     if (facilityType === '화장실') {
       const gender = getGenderValue(detail.gender);
       const grabBar = getGrabBarValue(detail.grabBar);
-        const payload = {
-          facilityId: locationData.facilityId ?? undefined,
-          floorId: targetFloorId,
+      const payload = {
+        facilityId: locationData.facilityId ?? undefined,
+        floorId: targetFloorId,
         facilityNickname,
         restRoomReportImage: photo,
         gender,
@@ -225,8 +228,8 @@ export default function ReportFlow() {
     }
 
     if (facilityType === '엘리베이터') {
-        const payload = {
-          facilityId: locationData.facilityId ?? undefined,
+      const payload = {
+        facilityId: locationData.facilityId ?? undefined,
         floorId: targetFloorId,
         facilityNickname,
         elevatorReportImage: photo,
@@ -244,8 +247,8 @@ export default function ReportFlow() {
     }
 
     if (facilityType === '교실') {
-        const payload = {
-          facilityId: locationData.facilityId ?? undefined,
+      const payload = {
+        facilityId: locationData.facilityId ?? undefined,
         floorId: targetFloorId,
         facilityNickname,
         classroomReportImage: photo,
@@ -392,7 +395,7 @@ export default function ReportFlow() {
     <div className="relative">
       {flowStatus !== 'idle' && (
         <div
-          className={`absolute inset-0 z-40 bg-black/80 ${
+          className={`fixed inset-0 z-40 bg-black/80 ${
             flowStatus === 'failed' ? 'cursor-pointer' : 'pointer-events-none'
           }`}
           onClick={flowStatus === 'failed' ? handleRetryCapture : undefined}

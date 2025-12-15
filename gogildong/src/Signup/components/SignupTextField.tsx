@@ -1,11 +1,11 @@
-import { useState } from "react";
-import type { InputHTMLAttributes } from "react";
-import EyeIcon from "@/Signup/assets/icon_eye.svg?react";
-import EyeOffIcon from "@/Signup/assets/icon_eye_disabled.svg?react";
-import ClearIcon from "@/Signup/assets/close.svg?react";
+import { useState } from 'react';
+import type { InputHTMLAttributes } from 'react';
+import EyeIcon from '@/Signup/assets/icon_eye.svg?react';
+import EyeOffIcon from '@/Signup/assets/icon_eye_disabled.svg?react';
+import ClearIcon from '@/Signup/assets/close.svg?react';
 
 interface SignupTextFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value: string;
   label: string;
   hint?: string;
@@ -21,22 +21,22 @@ export default function SignupTextField({
   value,
   onChange,
   onBlur,
-  type = "text",
+  type = 'text',
   ...rest
 }: SignupTextFieldProps) {
-  const isPasswordField = label === "비밀번호" || label === "비밀번호 확인";
+  const isPasswordField = label === '비밀번호' || label === '비밀번호 확인';
   const [showPassword, setShowPassword] = useState(false);
 
   const inputType = isPasswordField
     ? showPassword
-      ? "text"
-      : "password"
+      ? 'text'
+      : 'password'
     : type;
 
   const showClearButton = !isPasswordField && value && value.length > 0;
 
   const handleClear = () => {
-    onChange("");
+    onChange('');
   };
 
   return (
@@ -50,10 +50,10 @@ export default function SignupTextField({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           onBlur={() => onBlur?.()}
-          className={`w-full rounded-[1.25rem] border px-6 py-4 pr-12 text-body-sm text-black placeholder:text-gray-40 focus:outline-none ${
+          className={`w-full rounded-20 border px-6 py-4 pr-12 text-body-sm text-black placeholder:text-gray-40 focus:outline-none ${
             error
-              ? "border-warning-100 focus:ring-0"
-              : "border-gray-20 focus:border-transparent focus:ring-1 focus:ring-neon-100"
+              ? 'border-warning-100 focus:ring-0'
+              : 'border-gray-20 focus:border-transparent focus:ring-1 focus:ring-neon-100'
           }`}
         />
 
@@ -81,7 +81,7 @@ export default function SignupTextField({
       {hint && (
         <span
           className={`pl-4 text-body-xs ${
-            error ? "text-warning-100" : "text-gray-60"
+            error ? 'text-warning-100' : 'text-gray-60'
           }`}
         >
           {hint}

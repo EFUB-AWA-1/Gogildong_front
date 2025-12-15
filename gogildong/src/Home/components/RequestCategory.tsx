@@ -39,7 +39,7 @@ export default function RequestCategory({
       <button
         type="button"
         onClick={handleToggle}
-        className="flex h-15 w-full items-center justify-between rounded-[1.25rem] border border-[#E4E4E4] bg-white px-4"
+        className="flex h-15 w-full items-center justify-between rounded-20 border border-[#E4E4E4] bg-white px-4"
       >
         <span
           className={`text-body-md ${hasValue ? 'text-black' : 'text-gray-40'}`}
@@ -53,7 +53,7 @@ export default function RequestCategory({
 
       {/* 드롭다운 리스트 */}
       {open && (
-        <div className="absolute z-20 mt-2 flex w-full flex-col items-center rounded-[1.25rem] border border-[#E4E4E4] bg-white shadow-[0_4px_10px_rgba(0,0,0,0.10)]">
+        <div className="absolute z-20 mt-2 flex w-full flex-col items-center rounded-20 border border-[#E4E4E4] bg-white shadow-[0_4px_10px_rgba(0,0,0,0.10)]">
           {PURPOSE_OPTIONS.map((option, index) => (
             <button
               key={option}

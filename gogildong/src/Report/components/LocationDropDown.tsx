@@ -22,7 +22,7 @@ export default function LocationDropDown({
       <button
         disabled={disabled}
         onClick={() => !disabled && setOpen((prev) => !prev)}
-        className={`z-50 flex w-full flex-1 items-center justify-between rounded-[1.25rem] border border-gray-40 py-[18px] pr-[13px] pl-4 whitespace-nowrap transition ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'} `}
+        className={`z-50 flex w-full flex-1 items-center justify-between rounded-20 border border-gray-40 py-[18px] pr-[13px] pl-4 whitespace-nowrap transition ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'} `}
       >
         <span>{value || label}</span>
         <DownIcon />

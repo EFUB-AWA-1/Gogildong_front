@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 type DoubleBtnModalProps = {
   open: boolean;
@@ -18,14 +18,14 @@ export default function DoubleBtnModal({
   onConfirm
 }: DoubleBtnModalProps) {
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     if (open) {
-      document.addEventListener("keydown", onKey);
-      document.body.classList.add("overflow-hidden");
+      document.addEventListener('keydown', onKey);
+      document.body.classList.add('overflow-hidden');
     }
     return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.classList.remove("overflow-hidden");
+      document.removeEventListener('keydown', onKey);
+      document.body.classList.remove('overflow-hidden');
     };
   }, [open, onClose]);
 
@@ -40,7 +40,7 @@ export default function DoubleBtnModal({
     >
       {/* 모달 카드 */}
       <div
-        className="flex w-75 flex-col items-center rounded-[1.25rem] bg-white pt-5.25 pr-11 pb-5 pl-10.75 shadow-[0_0_12px_rgba(170,235,47,0.30)]"
+        className="flex w-75 flex-col items-center rounded-20 bg-white pt-5.25 pr-11 pb-5 pl-10.75 shadow-[0_0_12px_rgba(170,235,47,0.30)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 제목+내용*/}
@@ -56,7 +56,7 @@ export default function DoubleBtnModal({
         </div>
         <div className="mt-5 flex items-start gap-4">
           <button
-            className="flex h-9 w-27 cursor-pointer items-center justify-center gap-2 rounded-[1.25rem] bg-gray-20 px-4.25 py-2.5 text-[0.875rem] leading-5.25 font-bold text-black"
+            className="flex h-9 w-27 cursor-pointer items-center justify-center gap-2 rounded-20 bg-gray-20 px-4.25 py-2.5 text-[0.875rem] leading-5.25 font-bold text-black"
             onClick={() => {
               onClose();
             }}
@@ -64,7 +64,7 @@ export default function DoubleBtnModal({
             취소
           </button>
           <button
-            className="flex h-9 w-27 cursor-pointer items-center justify-center gap-2 rounded-[1.25rem] bg-neon-100 px-4.25 py-2.5 text-[0.875rem] leading-5.25 font-bold text-black"
+            className="flex h-9 w-27 cursor-pointer items-center justify-center gap-2 rounded-20 bg-neon-100 px-4.25 py-2.5 text-[0.875rem] leading-5.25 font-bold text-black"
             onClick={() => {
               onConfirm?.();
               onClose();
