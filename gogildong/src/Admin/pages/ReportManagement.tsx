@@ -21,7 +21,7 @@ export default function ReportManagement() {
   const [selectedIds, setSelectedIds] = useState<Array<number | string>>([]);
   const [viewedIds, setViewedIds] = useState<Array<number | string>>([]);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [detailId, setDetailId] = useState<number | string | null>(null);
+  const [, setDetailId] = useState<number | string | null>(null);
 
   const handleSelectAll = (selected: boolean) => {
     setSelectedIds(selected ? mockRows.map((row) => row.id) : []);
