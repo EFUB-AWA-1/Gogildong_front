@@ -3,8 +3,10 @@ interface VisibilityActionsProps {
   totalCount: number;
   onSelectAll: () => void;
   onSelectNone?: () => void;
-  onSetPublic: () => void;
-  onSetPrivate: () => void;
+  primaryLabel?: string;
+  secondaryLabel?: string;
+  onPrimary: () => void;
+  onSecondary: () => void;
 }
 
 export default function VisibilityActions({
@@ -12,8 +14,10 @@ export default function VisibilityActions({
   totalCount,
   onSelectAll,
   onSelectNone,
-  onSetPublic,
-  onSetPrivate
+  primaryLabel = '공개',
+  secondaryLabel = '비공개',
+  onPrimary,
+  onSecondary
 }: VisibilityActionsProps) {
   const hasSelection = selectedCount > 0;
   const allSelected = totalCount > 0 && selectedCount === totalCount;
@@ -33,23 +37,23 @@ export default function VisibilityActions({
       </button>
       <button
         type="button"
-        onClick={onSetPublic}
+        onClick={onPrimary}
         disabled={!hasSelection}
         className={`rounded-20 px-4 py-2 text-heading-lg ${
           hasSelection ? 'bg-neon-100 text-black' : 'bg-gray-20 text-gray-60'
         }`}
       >
-        공개
+        {primaryLabel}
       </button>
       <button
         type="button"
-        onClick={onSetPrivate}
+        onClick={onSecondary}
         disabled={!hasSelection}
         className={`rounded-20 px-4 py-2 text-heading-lg ${
           hasSelection ? 'bg-neon-100 text-black' : 'bg-gray-20 text-gray-60'
         }`}
       >
-        비공개
+        {secondaryLabel}
       </button>
     </div>
   );
