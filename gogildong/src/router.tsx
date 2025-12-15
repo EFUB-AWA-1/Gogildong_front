@@ -33,6 +33,7 @@ import SignupSuccess from './Signup/pages/SignupSuccess';
 import RankingPage from '@/Gildong/pages/RankingPage';
 import AllRankingPage from '@/Gildong/pages/AllRankingPage';
 import ClosetPage from '@/Gildong/pages/ClosetPage';
+import BuildingPlan from '@/Admin/pages/BuildingPlan';
 import ShopPage from '@/Gildong/pages/ShopPage';
 
 const router = createBrowserRouter([
@@ -116,7 +117,7 @@ const router = createBrowserRouter([
       { path: 'schools', element: <RegisteredSchoolList /> },
       { path: 'reports', element: <div>제보 관리</div> },
       { path: 'requests', element: <div>열람 요청 관리</div> },
-      { path: 'buildings', element: <div>건물 도면 관리</div> }
+      { path: 'buildings', element: <BuildingPlan /> }
     ]
   }
 ]);
