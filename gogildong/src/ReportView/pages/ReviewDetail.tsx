@@ -1,13 +1,14 @@
 import Header from "@/common/components/Header";
 import CommentInput from "../components/ReviewDetail/CommentInput";
-import ReviewCard from "../components/ReviewDetail/ReviewCard"; // 경로 확인 필요
+import ReviewCard from "../components/ReviewDetail/ReviewCard"; 
 import CommentsList from "../components/ReviewDetail/CommentsList";
-import type { Comment } from "../types/reviewComment";
+import type { Comment } from "@/ReportView/types/reviewComment";
 import type { Review } from "@/FacilityView/types/review";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SingleBtnModal from "../components/modals/SingleBtnModal";
 import { useUserStore } from "@/Mypage/stores/useUserStore";
+import { getComments, postComment, deleteComment, reportComment } from "@/ReportView/api/commentApi";
 
 type LocationState = {
   fromWrite?: boolean;
@@ -16,15 +17,19 @@ type LocationState = {
 };
 
 export default function ReviewDetail() {
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [openCompleteModal, setOpenCompleteModal] = useState(false);
-
   const location = useLocation();
   const navigate = useNavigate();
   const state = (location.state || {}) as LocationState;
+  
   const user = useUserStore((state) => state.user);
-  const currentReview = state.review || state.reviewData;
   const currentUserId = user?.userId;
+
+  const [currentReview, setCurrentReview] = useState<Review | undefined>(
+    state.review || state.reviewData
+  );
+
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [openCompleteModal, setOpenCompleteModal] = useState(false);
 
   useEffect(() => {
     if (state.fromWrite) {
@@ -36,21 +41,69 @@ export default function ReviewDetail() {
     }
   }, [state.fromWrite, navigate, location.pathname, state]);
 
-  // 상세 페이지에서 삭제 성공 시 뒤로가기
-  const handleDeleteSuccess = () => {
+  const fetchComments = useCallback(async () => {
+    const targetId = currentReview?.reviewId || (state.review?.reviewId);
+    if (!targetId) return;
+
+    try {
+      const data = await getComments(targetId);
+      
+      if (data.review) {
+        setCurrentReview(data.review as Review);
+      }
+
+      const mappedComments: Comment[] = data.reviewComments.map((item) => ({
+        commentId: item.commentId,
+        userId: item.userId,
+        userName: item.userName,
+        date: item.createdAt ? item.createdAt.split("T")[0] : "",
+        commentText: item.commentText,
+      }));
+      setComments(mappedComments);
+    } catch (error) {
+      console.error("상세 정보 조회 실패:", error);
+    }
+  }, [currentReview?.reviewId]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
+
+  const handleReviewDeleteSuccess = () => {
     alert("리뷰가 삭제되었습니다.");
     navigate(-1);
   };
 
-  const handleAddComment = (text: string) => {
-    const newComment: Comment = {
-      commentId: Date.now(),
-      userId: 0,
-      userName: "내 닉네임",
-      date: new Date().toISOString().slice(0, 10),
-      commentText: text
-    };
-    setComments((prev) => [...prev, newComment]);
+  const handleAddComment = async (text: string) => {
+    if (!currentReview?.reviewId) return;
+    try {
+      await postComment(currentReview.reviewId, text);
+      await fetchComments();
+    } catch (error) {
+      console.error("댓글 작성 실패:", error);
+      alert("댓글 작성에 실패했습니다.");
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    if (!currentReview?.reviewId) return;
+    try {
+      await deleteComment(currentReview.reviewId, commentId);
+      await fetchComments();
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+      alert("댓글 삭제에 실패했습니다.");
+    }
+  };
+
+  const handleReportComment = async (commentId: number) => {
+    if (!currentReview?.reviewId) return;
+    try {
+      await reportComment(currentReview.reviewId, commentId);
+      console.log(`댓글 신고 성공: ${commentId}`);
+    } catch (error) {
+      console.error("댓글 신고 실패:", error);
+    }
   };
 
   const handleBack = () => navigate(-1);
@@ -64,7 +117,7 @@ export default function ReviewDetail() {
           <ReviewCard
             review={currentReview}
             isMine={currentReview.userId === currentUserId}
-            onDelete={handleDeleteSuccess}
+            onDelete={handleReviewDeleteSuccess}
           />
         ) : (
           <div className="p-8 text-center text-gray-40">
@@ -72,7 +125,12 @@ export default function ReviewDetail() {
           </div>
         )}
 
-        <CommentsList comments={comments} />
+        <CommentsList 
+          comments={comments} 
+          currentUserId={currentUserId}
+          onDelete={handleDeleteComment}
+          onReport={handleReportComment} 
+        />
       </div>
 
       <div className="fixed bottom-[env(safe-area-inset-bottom)] left-1/2 z-10 w-full max-w-[480px] -translate-x-1/2 bg-white p-4 border-t border-gray-10">

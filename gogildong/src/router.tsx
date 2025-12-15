@@ -1,7 +1,8 @@
 import DesktopLayout from '@/Admin/layout/DesktopLayout';
+import BuildingPlan from '@/Admin/pages/BuildingPlan';
 import DashBoard from '@/Admin/pages/DashBoard';
 import RegisteredSchoolList from '@/Admin/pages/RegisteredSchoolList';
-import ReportManagement from '@/Admin/pages/ReportManagement';
+
 import FacilityReviewList from '@/FacilityView/pages/FacilityReviewList';
 import FacilityViewDetail from '@/FacilityView/pages/FacilityViewDetail';
 import AllRankingPage from '@/Gildong/pages/AllRankingPage';
@@ -115,9 +116,9 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="stats" replace /> },
       { path: 'stats', element: <DashBoard /> },
       { path: 'schools', element: <RegisteredSchoolList /> },
-      { path: 'reports', element: <ReportManagement /> },
+      // { path: 'reports', element: <ReportManagement /> },
       { path: 'requests', element: <div>열람 요청 관리</div> },
-      { path: 'buildings', element: <div>건물 도면 관리</div> }
+      { path: 'buildings', element: <BuildingPlan /> }
     ]
   }
 ]);

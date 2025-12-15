@@ -1,4 +1,5 @@
 import axiosInstance from '@/common/api/axiosInstance';
+import type { FacilityTypeParam } from '@/Report/types/facilityTypes';
 
 export const getBuildings = async () => {
   const { data } = await axiosInstance.get('/buildings');
@@ -10,8 +11,13 @@ export const getFloorsByBuilding = async (buildingId: number) => {
   return data;
 };
 
-export const getFacilitiesByFloor = async (floorId: number) => {
-  const { data } = await axiosInstance.get(`/floors/${floorId}/facilities`);
+export const getFacilitiesByFloor = async (
+  floorId: number,
+  type: FacilityTypeParam
+) => {
+  const { data } = await axiosInstance.get(`/floors/${floorId}/facilities`, {
+    params: { type } // 쿼리 추가 - 타입별 시설조회로 변경
+  });
   return data;
 };
 

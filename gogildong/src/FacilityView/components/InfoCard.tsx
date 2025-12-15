@@ -5,7 +5,7 @@ interface InfoCardProps {
 }
 
 export default function InfoCard({ data }: InfoCardProps) {
-  const { gender, isAccessible, doorType, doorWidth } = data;
+  const { gender, accessible, doorType, doorWidth } = data;
 
   // 성별 처리
   const isFemale = gender && gender.toUpperCase() === 'FEMALE';
@@ -13,8 +13,8 @@ export default function InfoCard({ data }: InfoCardProps) {
   const genderEmoji = isFemale ? '🚺' : '🚹';
 
   // 접근성 처리
-  const accessibilityText = isAccessible ? '장애인 칸 있음' : '일반 화장실';
-  const accessibilityEmoji = isAccessible ? '🟢' : '⚪️';
+  const accessibilityText = accessible ? '장애인 칸 있음' : '일반 화장실';
+  const accessibilityEmoji = accessible ? '🟢' : '⚪️';
 
   // 문 타입 매핑
   const doorTypeMap: Record<string, string> = {

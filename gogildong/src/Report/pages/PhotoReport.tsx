@@ -40,8 +40,17 @@ export default function PhotoReport() {
 
   const videoConstraints = {
     facingMode: { ideal: 'environment' },
-    width: { ideal: 1920 },
-    height: { ideal: 1080 }
+    //* 모바일 브라우저 후면카메라 기준 지원하는 최대 해상도 설정 
+    advanced: [
+      { width: { exact: 2560 }, height: { exact: 1440 } }, // QHD
+      { width: { exact: 1920 }, height: { exact: 1080 } }, // Full HD
+      { width: { exact: 1280 }, height: { exact: 720 } }, // HD
+      { width: { exact: 1024 }, height: { exact: 576 } }, // 1024x576
+      { width: { exact: 900 }, height: { exact: 506 } }, // 900x506
+      { width: { exact: 800 }, height: { exact: 450 } }, // 800x450
+      { width: { exact: 640 }, height: { exact: 360 } }, // nHD
+      { width: { exact: 320 }, height: { exact: 180 } } // QVGA
+    ]
   };
 
   const takePhoto = () => {
@@ -153,13 +162,6 @@ export default function PhotoReport() {
           />
         )}
 
-        {/* {status === 'processing' && (
-          <div className="flex aspect-9/16 w-[90%] max-w-sm flex-col items-center justify-center rounded-2xl border border-neon-60 whitespace-nowrap">
-            <p className="text-body-bold-md mb-2 text-neon-100">인식 중...</p>
-            <div className="h-0.5 w-1/2 animate-pulse bg-neon-100" />
-          </div>
-        )} */}
-
         {['captured', 'processing'].includes(status) && capturedImage && (
           <div className="relative flex w-full flex-col items-center">
             <img
@@ -169,17 +171,6 @@ export default function PhotoReport() {
             />
           </div>
         )}
-
-        {/* {status === 'failed' && (
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex aspect-9/16 w-[90%] max-w-sm flex-col items-center justify-center rounded-2xl border border-neon-60 px-20">
-              <p className="text-body-bold-md mb-2 text-neon-100">인식 실패</p>
-              <p className="text-center text-body-sm leading-tight text-white">
-                가이드에 맞춰 <br /> 다시 촬영해 주세요
-              </p>
-            </div>
-          </div>
-        )} */}
       </div>
 
       <div className="sticky bottom-0 flex w-full items-center justify-center p-4">
@@ -188,13 +179,6 @@ export default function PhotoReport() {
             <ShotBtn />
           </button>
         )}
-
-        {/* {status === 'failed' && (
-          <ActionButton
-            label="다시 촬영하기"
-            onClick={() => setStatus('capture')}
-          />
-        )} */}
 
         {status === 'processing' && (
           <ActionButton label="업로드 중..." disabled />

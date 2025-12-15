@@ -8,13 +8,17 @@ type CommentItemProps = {
   date: string;
   content: string;
   isMine?: boolean;
+  onDelete?: () => void; // 삭제 핸들러 prop
+  onReport?: () => void; // 신고 핸들러 prop
 };
 
 export default function CommentItem({
   nickname,
   date,
   content,
-  isMine = false
+  isMine = false,
+  onDelete,
+  onReport // 추가
 }: CommentItemProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -23,47 +27,42 @@ export default function CommentItem({
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  // isMine에 따라 라벨 변경
   const optionLabel = isMine ? '삭제하기' : '신고하기';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!menuRef.current) return;
-
-      // 메뉴 영역 밖을 클릭하면 닫기
       if (!menuRef.current.contains(event.target as Node)) {
         setOpenMenu(false);
       }
     };
-
-    if (openMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    if (openMenu) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [openMenu]);
 
   const handleModalOption = () => {
     if (isMine) {
-      // 삭제하기
       setOpenMenu(false);
       setOpenDeleteModal(true);
     } else {
-      // 신고하기
       setOpenMenu(false);
       setOpenReportModal(true);
     }
   };
 
   const handleConfirmDelete = () => {
-    // TODO: 댓글 삭제 API 호출
-    console.log('댓글 삭제');
+    if (onDelete) onDelete();
+    setOpenDeleteModal(false);
   };
 
-  const handleReportConfirm = () => {
-    // TODO: 신고 API 붙일 때 여기에서 처리
-    setReportResultOpen(true);
+  // 신고 함수
+  const handleReportConfirm = async () => {
+    if (onReport) {
+      await onReport();
+    }
+    setOpenReportModal(false);
+    setReportResultOpen(true); 
   };
 
   return (
@@ -77,6 +76,7 @@ export default function CommentItem({
           <span className="text-caption-md text-gray-60">{date}</span>
         </div>
 
+        {/* 옵션 메뉴 버튼 */}
         <div className="relative" ref={menuRef}>
           <button
             type="button"
@@ -98,12 +98,11 @@ export default function CommentItem({
         </div>
       </div>
 
-      {/* 댓글 내용*/}
       <div className="flex items-center justify-center gap-2 self-stretch px-[2.56rem]">
-        <p className="w-full text-body-sm text-black">{content}</p>
+        <p className="w-full text-body-sm text-black break-all whitespace-pre-wrap">{content}</p>
       </div>
 
-      {/* 댓글 삭제 모달 */}
+      {/* 삭제 모달 */}
       <DoubleBtnModal
         open={openDeleteModal}
         title="이 댓글을 삭제할까요?"
@@ -112,7 +111,7 @@ export default function CommentItem({
         onConfirm={handleConfirmDelete}
       />
 
-      {/* 댓글 신고 모달 (라디오 선택) */}
+      {/* 신고 모달 */}
       <DoubleBtnModal
         open={openReportModal}
         title="댓글 신고하기"
@@ -122,6 +121,7 @@ export default function CommentItem({
         onConfirm={handleReportConfirm}
       />
 
+      {/* 신고 결과 모달 */}
       <SingleBtnModal
         open={reportResultOpen}
         title="신고가 제출되었습니다"

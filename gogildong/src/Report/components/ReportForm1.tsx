@@ -3,11 +3,13 @@ import ActionButton from '@/common/components/ActionButton';
 import type { LocationData } from '../types/report';
 import LocationSelectorGroup from './LocationSelectorGroup';
 import { getFloorPlan } from '@/Report/api/getFacilities';
+import type { FacilityTypeParam } from '@/Report/types/facilityTypes';
 
 interface ReportForm1Props {
   locationData: LocationData;
   schoolId?: number;
   floorId?: number;
+  facilityTypeParam?: FacilityTypeParam;
   onChange: (data: LocationData) => void;
   onFloorSelect?: (floorId: number | null) => void;
   onNext: () => void;
@@ -17,6 +19,7 @@ export default function ReportForm1({
   locationData,
   schoolId,
   floorId,
+  facilityTypeParam,
   onChange,
   onFloorSelect,
   onNext
@@ -55,6 +58,7 @@ export default function ReportForm1({
         <p className="text-body-bold-lg">위치 선택</p>
         <LocationSelectorGroup
           schoolId={schoolId}
+          facilityType={facilityTypeParam}
           value={locationData}
           onChange={onChange}
           onFloorSelect={onFloorSelect}
