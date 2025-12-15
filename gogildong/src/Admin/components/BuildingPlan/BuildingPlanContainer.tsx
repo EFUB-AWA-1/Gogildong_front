@@ -3,7 +3,6 @@ import AddPlanCard from '@/Admin/components/BuildingPlan/AddPlanCard';
 import TopBar from '@/Admin/components/BuildingPlan/TopBar';
 import PlanCard from '@/Admin/components/BuildingPlan/PlanCard';
 import type { Building, FloorPlan } from '@/Admin/types/buildingTypes';
-import BuildingModal from '@/Admin/components/BuildingPlan/BuildingModal';
 import AddPlanModal from '@/Admin/components/BuildingPlan/AddPlanModal';
 import PlanDetailModal from '@/Admin/components/BuildingPlan/PlanDetailModal';
 import ImagePreviewModal from '@/Admin/components/BuildingPlan/ImagePreviewModal';
@@ -15,7 +14,6 @@ export default function BuildingPlanContainer() {
     Record<number, FloorPlan[]>
   >({});
   const [createOpen, setCreateOpen] = useState(false);
-  const [addPlanOpen, setAddPlanOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
