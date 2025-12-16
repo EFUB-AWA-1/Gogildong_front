@@ -3,6 +3,10 @@ import AddPlanCard from '@/Admin/components/BuildingPlan/AddPlanCard';
 import TopBar from '@/Admin/components/BuildingPlan/TopBar';
 import PlanCard from '@/Admin/components/BuildingPlan/PlanCard';
 import type { Building, FloorPlan } from '@/Admin/types/buildingTypes';
+import AddPlanModal from '@/Admin/components/BuildingPlan/AddPlanModal';
+import PlanDetailModal from '@/Admin/components/BuildingPlan/PlanDetailModal';
+import ImagePreviewModal from '@/Admin/components/BuildingPlan/ImagePreviewModal';
+import BuildingModal from '@/Admin/components/BuildingPlan/BuildingModal';
 
 export default function BuildingPlanContainer() {
   const [buildings, setBuildings] = useState<Building[]>([]);
@@ -10,6 +14,27 @@ export default function BuildingPlanContainer() {
   const [floorPlansByBuilding, setFloorPlansByBuilding] = useState<
     Record<number, FloorPlan[]>
   >({});
+  const [createOpen, setCreateOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<FloorPlan | null>(null);
+
+  const openDetail = (plan: FloorPlan) => {
+    setSelectedPlan(plan);
+    setDetailOpen(true);
+  };
+
+  const openEdit = (plan: FloorPlan) => {
+    setSelectedPlan(plan);
+    setEditOpen(true);
+  };
+
+  const closeDetail = () => setDetailOpen(false);
+  const closeEdit = () => setEditOpen(false);
+
+  const openPreview = () => setPreviewOpen(true);
+  const closePreview = () => setPreviewOpen(false);
 
   useEffect(() => {
     const mock = {
@@ -148,9 +173,26 @@ export default function BuildingPlanContainer() {
 
   const hasPlans = floorPlans.length > 0;
 
-  const handleDeleteAll = () => {
-    if (activeBuildingId == null) return;
-    setFloorPlansByBuilding((prev) => ({ ...prev, [activeBuildingId]: [] }));
+  const handleRenameBuilding = (buildingId: number, nextName: string) => {
+    setBuildings((prev) =>
+      prev.map((b) =>
+        b.buildingId === buildingId ? { ...b, buildingName: nextName } : b
+      )
+    );
+  };
+
+  const handleCreateBuilding = (name: string) => {
+    const newBuilding: Building = {
+      buildingId: Date.now(),
+      buildingName: name
+    };
+
+    setBuildings((prev) => [...prev, newBuilding]);
+    setFloorPlansByBuilding((prev) => ({
+      ...prev,
+      [newBuilding.buildingId]: []
+    }));
+    setActiveBuildingId(newBuilding.buildingId);
   };
 
   return (
@@ -159,8 +201,8 @@ export default function BuildingPlanContainer() {
         buildings={buildings}
         activeBuildingId={activeBuildingId}
         onChangeBuilding={setActiveBuildingId}
-        onDeleteAll={handleDeleteAll}
-        onCreateBuilding={() => {}}
+        onCreateBuilding={() => setCreateOpen(true)}
+        onRenameBuilding={handleRenameBuilding}
       />
 
       <div className={hasPlans ? 'grid w-full grid-cols-3 gap-[1.88rem]' : ''}>
@@ -169,12 +211,65 @@ export default function BuildingPlanContainer() {
             key={`${activeBuildingId}-${p.floorId}`}
             floorName={p.floorName}
             imageUrl={p.floorPlanImage}
-            onEdit={() => {}}
+            onOpenDetail={() => openDetail(p)} // 카드 클릭
+            onOpenEdit={() => openEdit(p)} // EditIcon 클릭
           />
         ))}
 
-        <AddPlanCard onClick={() => {}} />
+        {/* 새 등록 */}
+        <AddPlanCard
+          onClick={() => {
+            setSelectedPlan(null);
+            setEditOpen(true);
+          }}
+        />
       </div>
+
+      {/* 상세조회 */}
+      {detailOpen && selectedPlan && (
+        <PlanDetailModal
+          floorName={selectedPlan.floorName}
+          imageUrl={selectedPlan.floorPlanImage}
+          onClose={closeDetail}
+          onPreviewImage={openPreview}
+          onEdit={() => {
+            closeDetail();
+            openEdit(selectedPlan);
+          }}
+        />
+      )}
+
+      {/* 이미지 확대 */}
+      {previewOpen && selectedPlan && (
+        <ImagePreviewModal
+          imageUrl={selectedPlan.floorPlanImage}
+          onClose={closePreview}
+        />
+      )}
+
+      {/* 수정/등록 모달 */}
+      {editOpen && (
+        <AddPlanModal
+          onClose={closeEdit}
+          mode={selectedPlan ? 'edit' : 'create'}
+          initialFloor={selectedPlan?.floorName ?? ''}
+          initialImageUrl={selectedPlan?.floorPlanImage}
+        />
+      )}
+
+      {createOpen && (
+        <BuildingModal
+          open={createOpen}
+          title="새 건물 등록"
+          inputTitle="건물 이름"
+          submitLabel="등록하기"
+          onClose={() => setCreateOpen(false)}
+          onSubmit={(name) => {
+            handleCreateBuilding(name);
+            setCreateOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }
