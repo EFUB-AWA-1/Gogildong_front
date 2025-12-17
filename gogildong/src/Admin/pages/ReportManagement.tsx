@@ -8,11 +8,11 @@ import BulkConfirmModal from '@/Admin/components/BulkConfirmModal';
 import { useState } from 'react';
 
 export default function ReportManagement() {
-  const mockRows = Array.from({ length: 10 }, (_, idx) => ({
+  const mockRows = Array.from({ length: 1 }, (_, idx) => ({
     id: idx + 1,
-    reporter: '김민지',
-    facility: '본관 1층',
-    title: '교무실 옆 화장실',
+    reporter: '이화연',
+    facility: '아산공학관 1층',
+    title: '125-1 옆 화장실',
     reportedAt: '2025.10.10',
     status: idx % 4 === 2 ? '반려' : idx % 3 === 0 ? '비공개' : '공개'
   }));
@@ -23,7 +23,9 @@ export default function ReportManagement() {
   const [viewedIds, setViewedIds] = useState<Array<number | string>>([]);
   const [detailOpen, setDetailOpen] = useState(false);
   const [, setDetailId] = useState<number | string | null>(null);
-  const [confirmType, setConfirmType] = useState<'primary' | 'secondary' | null>(null);
+  const [confirmType, setConfirmType] = useState<
+    'primary' | 'secondary' | null
+  >(null);
 
   const handleSelectAll = (selected: boolean) => {
     setSelectedIds(selected ? mockRows.map((row) => row.id) : []);
@@ -84,12 +86,12 @@ export default function ReportManagement() {
         open={detailOpen}
         onClose={() => setDetailOpen(false)}
         title="제보 상세"
-        reporter={{ name: '김민지', email: 'mingi@naver.com' }}
-        facility={{ name: '본관 1층', title: '교무실 옆 화장실' }}
+        reporter={{ name: '이화연', email: 'ewhain@ewhain.net' }}
+        facility={{ name: '아산공학관 1층', title: '125-1 옆 화장실' }}
         measurements={{
-          entranceDoor: '108 x 120 cm',
-          innerDoor: '108 x 120 cm',
-          toiletHeight: '50 cm'
+          entranceDoor: '90 x 200 cm',
+          innerDoor: '60 x 200 cm',
+          toiletHeight: '60 cm'
         }}
         reportCount={2}
         status="공개"

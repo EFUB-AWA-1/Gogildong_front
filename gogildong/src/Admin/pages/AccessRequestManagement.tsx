@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DesktopHeader from '@/Admin/components/DesktopHeader';
 import ReportSearchFilterSection from '@/Admin/components/ReportSearchFilterSection';
 import AccessRequestsTable from '@/Admin/components/AccessRequestsTable';
@@ -7,6 +7,9 @@ import Pagination from '@/Admin/components/Pagination';
 import AccessRequestDetailModal from '@/Admin/components/AccessRequestDetailModal';
 import AccessBlockModal from '@/Admin/components/AccessBlockModal';
 import BulkConfirmModal from '@/Admin/components/BulkConfirmModal';
+
+// API 함수
+import { getAccessRequests } from '@/Admin/api/adminApi';
 
 type AccessRow = {
   id: number;
@@ -18,26 +21,62 @@ type AccessRow = {
 };
 
 export default function AccessRequestManagement() {
-  const mockRows: AccessRow[] = Array.from({ length: 10 }, (_, idx) => ({
-    id: idx + 1,
-    requester: '김민지',
-    email: 'mingi@naver.com',
-    phone: '010-xxxx-xxxx',
-    requestedAt: '2025.10.10',
-    status: idx % 3 === 0 ? '미승인' : idx % 3 === 1 ? '승인' : '거절'
-  }));
-  const [rows, setRows] = useState<AccessRow[]>(mockRows);
+  const [rows, setRows] = useState<AccessRow[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   const [selectedIds, setSelectedIds] = useState<Array<number | string>>([]);
   const [viewedIds, setViewedIds] = useState<Array<number | string>>([]);
-  const [page, setPage] = useState(1);
+  
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailId, setDetailId] = useState<number | string | null>(null);
   const [detailStatus, setDetailStatus] = useState<'승인' | '거절'>('승인');
   const [detailMemo, setDetailMemo] = useState('');
+  
   const [blockOpen, setBlockOpen] = useState(false);
   const [blockName, setBlockName] = useState<string>('요청자');
   const [confirmType, setConfirmType] = useState<'primary' | 'secondary' | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAccessRequests(page - 1, 10);
+        
+        // 데이터 매핑
+        const mappedRows: AccessRow[] = data.viewRequests.map((item) => ({
+          id: item.requestId,
+          requester: item.username,
+          email: item.email,
+          phone: '-',
+          requestedAt: formatDate(item.createdAt),
+          status: convertStatus(item.status),
+        }));
+
+        setRows(mappedRows);
+        setTotalItems(mappedRows.length); 
+      } catch (error) {
+        console.error("열람 요청 목록 조회 실패", error);
+        setRows([]);
+      }
+    };
+    fetchData();
+  }, [page]);
+
+
+  const convertStatus = (status: string): AccessRow['status'] => {
+    switch (status) {
+      case 'PENDING': return '미승인';
+      case 'APPROVED': return '승인';
+      case 'REJECTED': return '거절';
+      default: return '미승인';
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+  };
 
   const handleSelectAll = (selected: boolean) => {
     setSelectedIds(selected ? rows.map((r) => r.id) : []);
@@ -53,6 +92,7 @@ export default function AccessRequestManagement() {
     setDetailId(id);
     setDetailOpen(true);
     setViewedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+    
     const row = rows.find((r) => r.id === id);
     if (row?.status === '거절') setDetailStatus('거절');
     else setDetailStatus('승인');
@@ -60,7 +100,7 @@ export default function AccessRequestManagement() {
 
   const handleStatusChange = (id: number | string, status: '승인' | '거절') => {
     setRows((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status } : r))
+      prev.map((r) => (r.id === id ? { ...r, status: status === '승인' ? '승인' : '미승인' } : r))
     );
   };
 
@@ -70,8 +110,6 @@ export default function AccessRequestManagement() {
     setBlockOpen(true);
   };
 
-
-  const totalItems = rows.length;
   const totalCount = rows.length;
   const selectedCount = selectedIds.length;
 
@@ -113,11 +151,12 @@ export default function AccessRequestManagement() {
         onClose={() => setDetailOpen(false)}
         title="승인 요청 상세"
         requester={{
-          name: '김민지',
-          phone: '010-1234-5678',
-          email: '1234@naver.com'
+          // 상세 정보는 rows에서 찾아서 전달
+          name: rows.find(r => r.id === detailId)?.requester || '-',
+          phone: rows.find(r => r.id === detailId)?.phone || '-',
+          email: rows.find(r => r.id === detailId)?.email || '-'
         }}
-        purpose="기타 열람 목적 텍스트..."
+        purpose="기타 열람 목적..."
         status={detailStatus}
         memo={detailMemo}
         onStatusChange={(next) => setDetailStatus(next)}
