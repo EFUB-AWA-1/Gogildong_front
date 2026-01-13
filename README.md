@@ -77,7 +77,7 @@ gogildong
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/yepot"><strong>@otwaylee</strong></a></td>
-    <td align="center"><a href="https://github.com/oooooming"><strong>@</strong></a></td>
+    <td align="center"><a href="https://github.com/oooooming"><strong>@wys0530</strong></a></td>
     <td align="center"><a href="https://github.com/gimye"><strong>@gimye</strong></a></td>
     <td align="center"><a href="https://github.com/topograp2"><strong>@topograp2</strong></a></td>
   </tr>
