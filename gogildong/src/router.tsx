@@ -24,6 +24,10 @@ import Home from './Home/pages/Home';
 import InfoRequest from './Home/pages/InfoRequest';
 import SearchDetail from './Home/pages/SearchDetail';
 import Login from './Login/pages/Login';
+import EditProfile from './Mypage/pages/EditProfile';
+import EditPassword from './Mypage/pages/EditPassword';
+import ManageViewApplication from './Mypage/pages/ManageViewApplication';
+import ManageViewApplicationDetail from './Mypage/pages/ManageViewApplicationDetail';
 import Mypage from './Mypage/pages/Mypage';
 import PhotoReport from './Report/pages/PhotoReport';
 import PhotoDetail from './ReportView/pages/PhotoDetail';
@@ -99,6 +103,16 @@ const router = createBrowserRouter([
             element: <ReportSuccess />
           },
           { path: '/mypage', element: <Mypage /> },
+          { path: '/mypage/edit-profile', element: <EditProfile /> },
+          { path: '/mypage/edit-password', element: <EditPassword /> },
+          {
+            path: '/mypage/manage-view-application',
+            element: <ManageViewApplication />
+          },
+          {
+            path: '/mypage/manage-view-application/:id',
+            element: <ManageViewApplicationDetail />
+          },
           { path: '/gildong', element: <GildongHome /> },
           { path: '/quiz/:quizId', element: <QuizPage /> },
           { path: '/quiz/correct', element: <QuizCorrect /> },
