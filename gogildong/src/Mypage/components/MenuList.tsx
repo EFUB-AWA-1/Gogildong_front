@@ -12,8 +12,14 @@ export default function MenuList({ loginId, onClickLogout }: MenuListProps) {
 
   return (
     <div className="flex w-full flex-col items-center bg-white p-4">
-      <MenuItem label="프로필 관리" onClick={() => navigate('/mypage/edit-profile')} />
-      <MenuItem label="내 학교 관리" />
+      <MenuItem
+        label="프로필 관리"
+        onClick={() => navigate('/mypage/edit-profile')}
+      />
+      <MenuItem
+        label="내 학교 관리"
+        onClick={() => navigate('/mypage/myschool')}
+      />
       <MenuItem
         label="내 열람 신청 관리"
         onClick={() => navigate('/mypage/manage-view-application')}
