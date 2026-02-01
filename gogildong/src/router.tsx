@@ -42,6 +42,10 @@ import SignupSelectRole from './Signup/pages/SignupSelectRole';
 import SignupSuccess from './Signup/pages/SignupSuccess';
 import ReportManagement from '@/Admin/pages/ReportManagement';
 import AccessRequestManagement from '@/Admin/pages/AccessRequestManagement';
+import ManageMySchool from '@/Mypage/pages/ManageMySchool';
+import ConfirmMySchoolChange from '@/Mypage/pages/ConfirmMySchoolChange';
+import ManageMyReport from '@/Mypage/pages/ManageMyReport';
+import MyReportDetail from '@/Mypage/pages/MyReportDetail';
 
 const router = createBrowserRouter([
   {
@@ -113,6 +117,13 @@ const router = createBrowserRouter([
             path: '/mypage/manage-view-application/:id',
             element: <ManageViewApplicationDetail />
           },
+          { path: '/mypage/myschool', element: <ManageMySchool /> },
+          {
+            path: '/mypage/myschool/confirm',
+            element: <ConfirmMySchoolChange />
+          },
+          { path: '/mypage/myreports', element: <ManageMyReport /> },
+          { path: '/mypage/myreports/:reportId', element: <MyReportDetail /> },
           { path: '/gildong', element: <GildongHome /> },
           { path: '/quiz/:quizId', element: <QuizPage /> },
           { path: '/quiz/correct', element: <QuizCorrect /> },

@@ -175,12 +175,12 @@ export default function ReportSummaryCard({
         {textRows.map(({ label, value }) => (
           <li
             key={label}
-            className="flex items-center justify-between gap-2 text-black"
+            className="grid grid-cols-[auto_1fr] items-start gap-2 text-black"
           >
             <span className="text-body-sm whitespace-nowrap text-gray-80">
               {label}
             </span>
-            <span className="text-body-bold-sm flex flex-1 text-right text-black">
+            <span className="text-body-bold-sm text-right text-black">
               {value || '-'}
             </span>
           </li>

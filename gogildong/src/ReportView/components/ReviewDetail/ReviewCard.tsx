@@ -130,7 +130,7 @@ export default function ReviewCard({
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onClick={onClick}
-      className={`rounded-2xl border border-gray-20 bg-white p-4 shadow-sm ${
+      className={`mx-4 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm ${
         onClick ? 'cursor-pointer transition hover:shadow-md' : ''
       }`}
     >

@@ -7,7 +7,7 @@ import type { Review } from '@/FacilityView/types/review';
 import { postReviewLike, deleteReviewLike } from '@/ReportView/api/reviewLike';
 import { reportReview } from '@/ReportView/api/reportReview';
 
-import DoubleBtnModal from '@/ReportView/components/modals/DoubleBtnModal'; 
+import DoubleBtnModal from '@/ReportView/components/modals/DoubleBtnModal';
 import SingleBtnModal from '@/ReportView/components/modals/SingleBtnModal';
 
 interface ReviewCardProps {
@@ -17,8 +17,21 @@ interface ReviewCardProps {
   onDelete?: (deletedReviewId: number) => void;
 }
 
-export default function ReviewCard({ review, onClick, isMine = false, onDelete }: ReviewCardProps) {
-  const { userName, reviewText, likeCount, commentCount, createdAt, reviewId, likedByUser } = review;
+export default function ReviewCard({
+  review,
+  onClick,
+  isMine = false,
+  onDelete
+}: ReviewCardProps) {
+  const {
+    userName,
+    reviewText,
+    likeCount,
+    commentCount,
+    createdAt,
+    reviewId,
+    likedByUser
+  } = review;
 
   const [isLiked, setIsLiked] = useState(likedByUser);
   const [likes, setLikes] = useState(likeCount);
@@ -26,8 +39,8 @@ export default function ReviewCard({ review, onClick, isMine = false, onDelete }
   // 모달 상태
   const [openMenu, setOpenMenu] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [openReportConfirm, setOpenReportConfirm] = useState(false); 
-  const [reportResultOpen, setReportResultOpen] = useState(false); 
+  const [openReportConfirm, setOpenReportConfirm] = useState(false);
+  const [reportResultOpen, setReportResultOpen] = useState(false);
 
   // (추가) 이미 신고된 경우 알림 모달 상태
   const [duplicateReportOpen, setDuplicateReportOpen] = useState(false);
@@ -95,8 +108,8 @@ export default function ReviewCard({ review, onClick, isMine = false, onDelete }
     try {
       await reportReview(reviewId);
       console.log(`리뷰 신고 성공: ${reviewId}`);
-      setOpenReportConfirm(false); 
-      setReportResultOpen(true);   
+      setOpenReportConfirm(false);
+      setReportResultOpen(true);
     } catch (error: any) {
       console.error('리뷰 신고 실패:', error);
       setOpenReportConfirm(false);
@@ -126,10 +139,12 @@ export default function ReviewCard({ review, onClick, isMine = false, onDelete }
           <div className="h-8 w-8 rounded-full bg-gray-20" />
           <div className="flex items-center gap-2">
             <p className="text-body-bold-md text-black">{userName}</p>
-            <span className="text-caption-md text-gray-80">{formattedDate}</span>
+            <span className="text-caption-md text-gray-80">
+              {formattedDate}
+            </span>
           </div>
         </div>
-        
+
         <div className="relative" ref={menuRef}>
           <button
             type="button"
@@ -143,7 +158,7 @@ export default function ReviewCard({ review, onClick, isMine = false, onDelete }
             <button
               type="button"
               onClick={handleModalOption}
-              className="absolute top-full right-0 mt-1 flex w-16 items-center justify-center gap-2 rounded-md bg-white p-2 text-caption-md text-black shadow-md z-10"
+              className="absolute top-full right-0 z-10 mt-1 flex w-16 items-center justify-center gap-2 rounded-md bg-white p-2 text-caption-md text-black shadow-md"
             >
               {optionLabel}
             </button>
@@ -151,7 +166,7 @@ export default function ReviewCard({ review, onClick, isMine = false, onDelete }
         </div>
       </div>
 
-      <p className="mt-2 text-body-md text-black break-all whitespace-pre-wrap">
+      <p className="mt-2 text-body-md break-all whitespace-pre-wrap text-black">
         {reviewText}
       </p>
 
@@ -164,7 +179,9 @@ export default function ReviewCard({ review, onClick, isMine = false, onDelete }
               : 'border-gray-20 bg-white text-gray-80'
           }`}
         >
-          <ThumbsUpIcon className={isLiked ? 'fill-neon-100 text-neon-100' : 'text-gray-80'} />
+          <ThumbsUpIcon
+            className={isLiked ? 'fill-neon-100 text-neon-100' : 'text-gray-80'}
+          />
           <span>추천 {likes}</span>
         </button>
         <div className="flex items-center gap-2.5 rounded-[20px] border border-gray-20 px-2.5 py-[2.5px] text-gray-80">
@@ -194,7 +211,7 @@ export default function ReviewCard({ review, onClick, isMine = false, onDelete }
         label="확인"
         onClose={() => setReportResultOpen(false)}
       />
-      
+
       {/* [추가] 중복 신고 알림 모달 */}
       <SingleBtnModal
         open={duplicateReportOpen}
