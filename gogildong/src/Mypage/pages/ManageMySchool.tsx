@@ -34,7 +34,7 @@ export default function ManageMySchool() {
       <CodeInputDialog
         open={isCodeDialogOpen}
         onClose={() => setIsCodeDialogOpen(false)}
-        onConfirm={(code) => {
+        onConfirm={() => {
           // TODO: 여기서 code로 학교 조회/검증 API 연결
           // 예) fetchSchoolByCode(code)
           setIsCodeDialogOpen(false);
