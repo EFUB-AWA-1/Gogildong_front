@@ -21,7 +21,7 @@ type ReportDetailState = {
 
 export default function MyReportDetail() {
   const navigate = useNavigate();
-  const { reportId } = useParams<{ reportId: string }>();
+  //const { reportId } = useParams<{ reportId: string }>();
   const { state } = useLocation();
 
   //더미
