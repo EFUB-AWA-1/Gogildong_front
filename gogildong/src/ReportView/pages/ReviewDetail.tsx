@@ -1,14 +1,19 @@
-import Header from "@/common/components/Header";
-import CommentInput from "../components/ReviewDetail/CommentInput";
-import ReviewCard from "../components/ReviewDetail/ReviewCard"; 
-import CommentsList from "../components/ReviewDetail/CommentsList";
-import type { Comment } from "@/ReportView/types/reviewComment";
-import type { Review } from "@/FacilityView/types/review";
-import { useEffect, useState, useCallback } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import SingleBtnModal from "../components/modals/SingleBtnModal";
-import { useUserStore } from "@/Mypage/stores/useUserStore";
-import { getComments, postComment, deleteComment, reportComment } from "@/ReportView/api/commentApi";
+import Header from '@/common/components/Header';
+import CommentInput from '../components/ReviewDetail/CommentInput';
+import ReviewCard from '../components/ReviewDetail/ReviewCard';
+import CommentsList from '../components/ReviewDetail/CommentsList';
+import type { Comment } from '@/ReportView/types/reviewComment';
+import type { Review } from '@/FacilityView/types/review';
+import { useEffect, useState, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import SingleBtnModal from '../components/modals/SingleBtnModal';
+import { useUserStore } from '@/Mypage/stores/useUserStore';
+import {
+  getComments,
+  postComment,
+  deleteComment,
+  reportComment
+} from '@/ReportView/api/commentApi';
 
 type LocationState = {
   fromWrite?: boolean;
@@ -20,7 +25,7 @@ export default function ReviewDetail() {
   const location = useLocation();
   const navigate = useNavigate();
   const state = (location.state || {}) as LocationState;
-  
+
   const user = useUserStore((state) => state.user);
   const currentUserId = user?.userId;
 
@@ -42,12 +47,12 @@ export default function ReviewDetail() {
   }, [state.fromWrite, navigate, location.pathname, state]);
 
   const fetchComments = useCallback(async () => {
-    const targetId = currentReview?.reviewId || (state.review?.reviewId);
+    const targetId = currentReview?.reviewId || state.review?.reviewId;
     if (!targetId) return;
 
     try {
       const data = await getComments(targetId);
-      
+
       if (data.review) {
         setCurrentReview(data.review as Review);
       }
@@ -56,12 +61,12 @@ export default function ReviewDetail() {
         commentId: item.commentId,
         userId: item.userId,
         userName: item.userName,
-        date: item.createdAt ? item.createdAt.split("T")[0] : "",
-        commentText: item.commentText,
+        date: item.createdAt ? item.createdAt.split('T')[0] : '',
+        commentText: item.commentText
       }));
       setComments(mappedComments);
     } catch (error) {
-      console.error("상세 정보 조회 실패:", error);
+      console.error('상세 정보 조회 실패:', error);
     }
   }, [currentReview?.reviewId]);
 
@@ -70,7 +75,7 @@ export default function ReviewDetail() {
   }, [fetchComments]);
 
   const handleReviewDeleteSuccess = () => {
-    alert("리뷰가 삭제되었습니다.");
+    alert('리뷰가 삭제되었습니다.');
     navigate(-1);
   };
 
@@ -80,8 +85,8 @@ export default function ReviewDetail() {
       await postComment(currentReview.reviewId, text);
       await fetchComments();
     } catch (error) {
-      console.error("댓글 작성 실패:", error);
-      alert("댓글 작성에 실패했습니다.");
+      console.error('댓글 작성 실패:', error);
+      alert('댓글 작성에 실패했습니다.');
     }
   };
 
@@ -91,8 +96,8 @@ export default function ReviewDetail() {
       await deleteComment(currentReview.reviewId, commentId);
       await fetchComments();
     } catch (error) {
-      console.error("댓글 삭제 실패:", error);
-      alert("댓글 삭제에 실패했습니다.");
+      console.error('댓글 삭제 실패:', error);
+      alert('댓글 삭제에 실패했습니다.');
     }
   };
 
@@ -102,7 +107,7 @@ export default function ReviewDetail() {
       await reportComment(currentReview.reviewId, commentId);
       console.log(`댓글 신고 성공: ${commentId}`);
     } catch (error) {
-      console.error("댓글 신고 실패:", error);
+      console.error('댓글 신고 실패:', error);
     }
   };
 
@@ -110,7 +115,7 @@ export default function ReviewDetail() {
 
   return (
     <div className="flex h-full w-full flex-col items-center">
-      <Header title="댓글" onBackClick={handleBack} />
+      <Header title="리뷰" onBackClick={handleBack} />
 
       <div className="flex h-full w-full flex-col overflow-y-auto pb-[80px]">
         {currentReview ? (
@@ -125,22 +130,24 @@ export default function ReviewDetail() {
           </div>
         )}
 
-        <CommentsList 
-          comments={comments} 
+        <CommentsList
+          comments={comments}
           currentUserId={currentUserId}
           onDelete={handleDeleteComment}
-          onReport={handleReportComment} 
+          onReport={handleReportComment}
         />
       </div>
 
-      <div className="fixed bottom-[env(safe-area-inset-bottom)] left-1/2 z-10 w-full max-w-[480px] -translate-x-1/2 bg-white p-4 border-t border-gray-10">
+      <div className="fixed bottom-[env(safe-area-inset-bottom)] left-1/2 z-10 w-full max-w-[480px] -translate-x-1/2 border-t border-gray-10 bg-white p-4">
         <CommentInput onSubmit={handleAddComment} />
       </div>
 
       <SingleBtnModal
         open={openCompleteModal}
         title="리뷰 작성 완료"
-        message={"5포인트가 적립되었습니다. \n마이페이지에서 확인할 수 있습니다."}
+        message={
+          '5포인트가 적립되었습니다. \n마이페이지에서 확인할 수 있습니다.'
+        }
         label="확인"
         onClose={() => setOpenCompleteModal(false)}
         onConfirm={() => setOpenCompleteModal(false)}

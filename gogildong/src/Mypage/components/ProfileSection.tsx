@@ -1,6 +1,7 @@
-import DefaultProfileImg from "../assets/profile_default.svg?react";
-import ReportIcon from "../assets/icon_report.svg?react";
-import AlertIcon from "../assets/icon_alert.svg?react";
+import DefaultProfileImg from '../assets/profile_default.svg?react';
+import ReportIcon from '../assets/icon_report.svg?react';
+import AlertIcon from '../assets/icon_alert.svg?react';
+import { useNavigate } from 'react-router-dom';
 
 type ProfileSectionProps = {
   nickname: string;
@@ -13,6 +14,8 @@ export default function ProfileSection({
   joinedDays,
   profileImageUrl
 }: ProfileSectionProps) {
+  const navigate = useNavigate();
+
   return (
     <section className="flex flex-col items-center justify-center gap-3.75 border-b border-gray-20 bg-[#fff] px-7.75 py-10">
       {/* 프로필 이미지 */}
@@ -38,7 +41,10 @@ export default function ProfileSection({
 
       {/* 내 제보 / 신고  버튼 영역 */}
       <div className="flex items-center gap-6">
-        <div className="flex flex-col items-center">
+        <div
+          className="flex cursor-pointer flex-col items-center"
+          onClick={() => navigate('/mypage/myreports')}
+        >
           <ReportIcon className="h-11 w-11" />
           <span className="text-body-sm text-black">내 제보</span>
         </div>
