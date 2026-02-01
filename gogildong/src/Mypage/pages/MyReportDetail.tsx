@@ -2,7 +2,7 @@
 import Header from '@/common/components/Header';
 import LocationIcon from '@/Report/assets/svgs/location.svg?react';
 import ReportSummaryCard from '@/Report/components/ReportSummaryCard';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type ReportDetailState = {
   id: number;
